@@ -9,7 +9,10 @@ module.exports = {
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
       },
-    },
+      colors: {
+        'regal-green': '#15272a',
+      },
+    }
   },
   plugins: [
     require('@tailwindcss/forms')

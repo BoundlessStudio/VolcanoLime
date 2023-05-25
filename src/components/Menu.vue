@@ -1,22 +1,11 @@
-
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
-const route = useRoute()
-const visable = ref(false);
-watch(
-  () => route.path,
-  async path => {
-    visable.value = path != '/'
-  }
-)
 </script>
 
 <template>
-  <div v-if="visable" class="absolute top-0 left-0">
+  <div class="fixed top-0 left-0 z-10">
     <RouterLink to="/">
-      <img class="h-24 w-24" src="https://i.imgur.com/39VOU8x.png" alt="Volcano Lime" />
+      <img class="2xl:h-32 2xl:w-32 xl:h-24 xl:w-24 lg:h-20 lg:w-20 md:h-16 md:w-16 h-12 w-12 rounded-full transition-all duration-500 ease-in-out" src="https://i.imgur.com/39VOU8x.png" alt="Volcano Lime" />
     </RouterLink>
   </div>
 </template>
-  
+
