@@ -22,3 +22,11 @@
   ::-webkit-scrollbar-thumb:hover {
     background: #555; 
   }
+
+  sup {
+    margin: 2px;
+    color: blue;
+    padding: 2px;
+    border-radius: 2px;
+    background: skyblue;
+  }

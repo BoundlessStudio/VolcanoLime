@@ -4,7 +4,7 @@ import { RouterLink } from 'vue-router';
 const resources = [
   { name: 'Skills', description: 'User created semantic skills', href: '/skills', icon: 'fa-wand-magic-sparkles', color: 'text-indigo-500' },
   { name: 'Integrations', description: 'Connect external providers for memories and skills', href: '/integrations', icon: 'fa-circle-nodes', color: 'text-teal-500' },
-  { name: 'Memory', description: 'Store memories for congitive search', href: '/memory', icon: 'fa-book-bookmark', color: 'text-red-500' },
+  { name: 'Memory', description: 'Store memories for congitive search', href: '/memory', icon: 'fa-brain', color: 'text-red-500' },
 ]
 const recentPosts = [
   { id: 1, title: 'Chat 1 - Test', href: '/chat/1', date: 'Mar 5, 2023', datetime: '2023-03-05' },
@@ -14,7 +14,7 @@ const recentPosts = [
   { id: 5, title: 'Chat 5 - Archived', href: '/chat/5', date: 'Jan 14, 2023', datetime: '2023-01-14' },
 ]
 const tabs = [
-  { name: 'Chat', description: 'Chat with your Ai assiant', href: '/chat', icon: 'fa-comment', color: 'text-sky-500'  },
+  { name: 'Chat', description: 'Chat with your Ai assistant', href: '/chat', icon: 'fa-comment', color: 'text-sky-500'  },
   { name: 'Search', description: 'Search memories to recall the past', href: '/ask', icon: 'fa-magnifying-glass', color: 'text-green-500'  },
   { name: 'Plan', description: 'Plan a goal using skills', href: '/plan', icon: 'fa-list-check', color: 'text-amber-500'  },
 ]
@@ -25,8 +25,11 @@ const tabs = [
     <div class="absolute left-1/2 -translate-x-1/2 w-screen max-w-max">
       <div class="flex justify-center items-center">
         <RouterLink to="/">
-          <img class="h-24 w-24" src="https://i.imgur.com/39VOU8x.png" alt="Volcano Lime" />
+          <img class="h-32 w-32" src="https://i.imgur.com/39VOU8x.png" alt="Volcano Lime" />
         </RouterLink>
+      </div>
+      <div class="w-screen max-w-md flex-auto overflow-hidden text-sm leading-6 ">
+        <img class="w-full" src="https://i.imgur.com/hoGx2Ce.png" />
       </div>
       <div class="w-screen max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5 ">
         <div class="p-4">
@@ -43,14 +46,6 @@ const tabs = [
             </div>
           </div>
         </div>
-        <hr />
-        <div class="grid grid-cols-3 divide-x divide-gray-900/5 bg-gray-50">
-          <a v-for="item in resources" :key="item.name" :href="item.href" class="flex items-center justify-center gap-x-2.5 p-3 font-semibold text-gray-900 hover:bg-gray-100">
-            <font-awesome-icon :icon="item.icon" :class="[item.color, 'h-5 w-5']" />
-            {{ item.name }}
-          </a>
-        </div>
-        <hr />
         <div class="bg-gray-50 p-8">
           <div class="flex justify-between">
             <h3 class="text-sm font-semibold leading-6 text-gray-500">Recent History</h3>
@@ -65,6 +60,12 @@ const tabs = [
               </a>
             </li>
           </ul>
+        </div>
+        <div class="grid grid-cols-3 divide-x divide-gray-900/5 bg-gray-50">
+          <a v-for="item in resources" :key="item.name" :href="item.href" class="flex items-center justify-center gap-x-2.5 p-3 font-semibold text-gray-900 hover:bg-gray-100">
+            <font-awesome-icon :icon="item.icon" :class="[item.color, 'h-5 w-5']" />
+            {{ item.name }}
+          </a>
         </div>
       </div>
     </div>
