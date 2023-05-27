@@ -1,88 +1,24 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import type { PlanMessage } from '@/types/thread';
 
-const plan = {
-  "state": [
-    {
-      "Key": "INPUT",
-      "Value": ""
-    }
-  ],
-  "steps": [
-    {
-      "parameters": [
-        {
-          "Key": "SPECIALTY",
-          "Value": "Mustard Sauce"
-        },
-        {
-          "Key": "BUSINESS",
-          "Value": "BBQ Pit"
-        },
-        {
-          "Key": "INPUT",
-          "Value": ""
-        },
-        {
-          "Key": "CITY",
-          "Value": "London"
-        }
-      ],
-      "outputs": [
-        "SLOGAN"
-      ],
-      "icon": "fa-check",
-      "name": "SloganMaker",
-      "skill_name": "WriterSkill",
-      "description": "a function that generates marketing slogans"
-    },
-    {
-      
-      "parameters": [
-        {
-          "Key": "subject",
-          "Value": "New Marketing Slogan"
-        },
-        {
-          "Key": "recipients",
-          "Value": "amjohnson86@gmail.com"
-        },
-        {
-          "Key": "INPUT",
-          "Value": "$SLOGAN"
-        }
-      ],
-      "icon": "fa-check",
-      "name": "SendEmailAsync",
-      "skill_name": "EmailSkill",
-      "description": "Send an email to one or more recipients."
-    }
-  ],
-  "parameters": [
-    {
-      "Key": "INPUT",
-      "Value": ""
-    }
-  ],
-  "next_step_index": 0,
-  "name": "Sequential Plan Test 1",
-  "description": "Create a slogan for the BBQ Pit in London that specializes in Mustard Sauce then email it to amjohnson86@gmail.com with the subject \u0027New Marketing Slogan\u0027"
-};
+const props = defineProps<PlanMessage>()
 
-const ts = new Date()
+const onPlay = () => {
+  if(props.plan.next_step_index === props.plan.steps.length)  {
+    props.plan.next_step_index = 0;
+  } else {
+    props.plan.next_step_index = props.plan.steps.length;
+  }
+}
 
 const tabs = [
-  { name: 'Steps', href: '#', icon: 'fa-shoe-prints', current: true },
-  { name: 'State', href: '#', icon: 'fa-circle-info', current: false },
+  { name: 'Steps', href: '#', icon: 'shoe-prints', current: true }, 
+  { name: 'Data', href: '#', icon: 'database', current: false },
 ]
 </script>
 
 <template>
   <div class="relative">
-    <div class="p-5">
-      <font-awesome-icon title="Goal" icon="flag-checkered" class="h-6 w-6" /> 
-      <span class="align-top">{{ plan.description }}</span>
-    </div>
     <div>
       <div class="pl-10 border-b border-gray-200">
         <nav class="-mb-px flex space-x-8" aria-label="Tabs">
@@ -96,28 +32,43 @@ const tabs = [
     <div class="p-5">
       <div class="flow-root">
         <ul role="list" class="-mb-8">
-          <li v-for="(event, eventIdx) in plan.steps" :key="eventIdx">
+          <li v-for="(event, eventIdx) in props.plan.steps" :key="eventIdx">
             <div class="relative pb-8">
-              <span v-if="eventIdx !== plan.steps.length - 1" class="absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true" />
-              <div class="relative flex space-x-3">
+              <span class="absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true" />
+              <div class="w-full relative flex space-x-3">
                 <div>
                   <span :class="[eventIdx >= plan.next_step_index ? 'bg-indigo-500' : 'bg-green-500', 'h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white']">
                     <font-awesome-icon :icon="eventIdx >= plan.next_step_index ? 'fa-flag' : 'fa-check'" class="h-5 w-5 text-white" aria-hidden="true" />
                   </span>
                 </div>
-                <div class="flex flex-col pt-1.5">
+                <div class="w-full flex flex-col pt-1.5">
                   <div>
                     <p class="text-sm text-gray-500">
                       <a :href="'/skill/'+event.skill_name+'/fn/'+event.name" class="font-medium text-gray-900">{{ event.name }}</a> {{ event.description }} 
                     </p>
                   </div>
-                  <div class="p-5">
-                    <div v-for="(parameter) in event.parameters">
-                      <label :for="parameter.Key" class="block text-sm font-medium leading-6 text-gray-900">{{parameter.Key}}</label>
-                      <div class="mt-2">
-                        <input v-model="parameter.Value" :name="parameter.Key" :id="parameter.Key" type="text" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
-                      </div>
-                    </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="relative pb-8">
+              <div class="w-full relative flex space-x-3">
+                <div>
+                  <span :class="[props.plan.next_step_index >= props.plan.steps.length ? 'bg-green-500' : 'bg-indigo-500', 'h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white']">
+                    <font-awesome-icon :icon="props.plan.next_step_index >= props.plan.steps.length ? 'fa-check' : 'fa-flag-checkered'" class="h-5 w-5 text-white" aria-hidden="true" />
+                  </span>
+                </div>
+                <div class="w-full flex flex-col pt-1.5">
+                  <div v-if="props.plan.next_step_index >= props.plan.steps.length">
+                    <p class="text-sm text-gray-500">
+                      <span class="font-medium text-gray-900">Result:</span> {{ props.message }}
+                    </p>
+                  </div>
+                  <div v-else>
+                    <p class="text-sm text-gray-500">
+                      <span class="font-medium text-gray-900">Run Plan to get result</span>
+                    </p>
                   </div>
                 </div>
               </div>
@@ -127,20 +78,26 @@ const tabs = [
       </div>
     </div>
     <div>
-      <p class="text-xs text-right text-indigo-600">{{ plan.name }} - {{ ts.toLocaleString() }}</p>
+      <p class="text-xs text-right text-indigo-600">{{ props.plan.name }} - {{ props.ts }}</p>
     </div>
     <div class="absolute -top-6 -left-6">
       <div class="h-10 w-10 bg-white rounded-md border-2 border-regal-green text-center" >
-        <font-awesome-icon icon="fa-robot" class="h-6 w-6 pt-1 text-lime-500 " />
+        <font-awesome-icon icon="fa-robot" class="h-6 w-6 pt-1 text-amber-500" />
       </div>
     </div>
     <div class="absolute -top-6 -right-6">
       <div class=" bg-white rounded-md border-2 border-regal-green">
-        <button title="Run Plan">
-          <font-awesome-icon class="p-1 text-gray-500" icon="fa-play" />
+        <button @click="onPlay" title="Run Plan">
+          <font-awesome-icon class="p-1 text-gray-500" icon="play-circle" />
         </button>
-        <button title="Remove Plan">
-          <font-awesome-icon class="p-1 text-gray-500" icon="fa-square-xmark" />
+        <button title="Save Plan">
+          <font-awesome-icon class="p-1 text-gray-500" icon="save" />
+        </button>
+        <button title="Edit Plan">
+          <font-awesome-icon class="p-1 text-gray-500" icon="pen-to-square" />
+        </button>
+        <button title="Remove from thread">
+          <font-awesome-icon class="p-1 text-gray-500" icon="trash" />
         </button>
       </div>
     </div>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { MdEditor  } from "md-editor-v3";
-import { ref } from "vue";
-import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
+import { ref, watch } from "vue";
+import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
 
 type ToolbarNames = number | '=' | '-' | 'bold' | 'underline'| 'italic' | 'title' | 'strikeThrough' |'sub'  |   'sup'  | 'quote' |  'unorderedList' | 'orderedList' | 'task' | 'codeRow' | 'code' | 'link' | 'image' | 'table' | 'mermaid' | 'pageFullscreen'  | 'preview'
 
@@ -32,6 +32,20 @@ const toolbars = ref<ToolbarNames[]>([
 ])
 const message = ref('')
 const displayEditor = ref(false)
+const enableChatAi = ref(true)
+const enableSearchAi = ref(true)
+const enablePlanAi = ref(true)
+const enableSubmit = ref(true)
+
+watch(() => enableChatAi.value, (_) => {
+  enableSubmit.value = enableChatAi.value || enableSearchAi.value || enablePlanAi.value
+})
+watch(() => enablePlanAi.value, (_) => {
+  enableSubmit.value = enableChatAi.value || enableSearchAi.value || enablePlanAi.value
+})
+watch(() => enablePlanAi.value, (_) => {
+  enableSubmit.value = enableChatAi.value || enableSearchAi.value || enablePlanAi.value
+})
 
 const props = defineProps<{
   placeholder: string
@@ -40,7 +54,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div class="container mx-auto fixed -top-4 z-10">
+  <div class="container mx-auto fixed transition-all duration-500 ease-in-out -top-4 z-10">
     <div class="h-full rounded-lg bg-white shadow">
       <div class="px-4 py-5 sm:p-6">
         <div class="flex items-start space-x-4">
@@ -63,21 +77,20 @@ const props = defineProps<{
                     </button>
                   </div>
                   <div class="flow-root">
-                    <button type="button" title="Limit Memory"
-                      class="-m-2 inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-400 hover:text-gray-500">
-                      <font-awesome-icon class="" icon="fa-brain" />
+                    <button @click="enableChatAi = !enableChatAi" :title="(enableChatAi ? 'Disable' : 'Enable' ) + ' Chat Ai'" type="button" :class="[enableChatAi ? 'text-sky-500 hover:text-sky-400' : '', '-m-2 inline-flex h-10 w-10 items-center justify-center rounded-full']">
+                      <font-awesome-icon icon="robot" />
                     </button>
-                  </div>
-                  <div class="flow-root">
-                    <button type="button" title="Limit Skills"
-                      class="-m-2 inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-400 hover:text-gray-500">
-                      <font-awesome-icon class="" icon="fa-wand-magic-sparkles" />
+                    <button @click="enableSearchAi = !enableSearchAi" :title="(enableSearchAi ? 'Disable' : 'Enable' ) + ' Seach Ai'" type="button" :class="[enableSearchAi ? 'text-lime-500 hover:text-lime-400' : '','-m-2 inline-flex h-10 w-10 items-center justify-center rounded-full']">
+                      <font-awesome-icon icon="robot" />
+                    </button>
+                    <button @click="enablePlanAi = !enablePlanAi" :title="(enablePlanAi ? 'Disable' : 'Enable') + ' Plan Ai'" type="button" :class="[enablePlanAi ? 'text-amber-500 hover:text-amber-400' : '', '-m-2 inline-flex h-10 w-10 items-center justify-center rounded-full']">
+                      <font-awesome-icon icon="robot" />
                     </button>
                   </div>
                 </div>
                 <div class="flex-shrink-0">
-                  <button type="submit"
-                    class="inline-flex items-center rounded-md bg-lime-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-lime-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-600">
+                  <button :disabled="!enableSubmit"  type="submit"
+                    :class="[enableSubmit ? ' bg-lime-500  hover:bg-lime-600' : 'bg-gray-600', 'inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2']">
                     <font-awesome-icon class="h-5 w-5" icon="fa-paper-plane" />
                   </button>
                 </div>

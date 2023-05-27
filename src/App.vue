@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gradient-to-t from-slate-800 to-regal-green">
+  <div  class="bg-gradient-to-t from-slate-800 to-regal-green">
     <div class="container mx-auto transition-all duration-500 ease-in-out">
       <RouterView />
     </div>
