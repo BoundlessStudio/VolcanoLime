@@ -7,7 +7,7 @@ export interface Thread {
 }
 
 export type ChatRole = "assistant" | "user"
-export type ChatType = "chat" | "answer" | "plan"
+export type ChatType = "chat" | "answer" | "plan" | "drawing"
 
 export interface BaseMessage {
   message: string,
@@ -19,13 +19,8 @@ export interface ChatMessage extends BaseMessage {
 }
 
 export interface AnswerMessage extends ChatMessage {
-  citations: Citation[],
+  citations: string[],
   followup: string[],
-}
-
-export interface Citation {
-  id: string,
-  text: string
 }
 
 export interface PlanMessage extends ChatMessage {
@@ -53,4 +48,9 @@ export interface Plan {
   next_step_index: number;
   name: string;
   description: string;
+}
+
+
+export interface DrawingMessage extends ChatMessage {
+  drawing: string,
 }

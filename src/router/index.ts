@@ -25,6 +25,12 @@ export function createRouter(app: App): Router {
         component: LogoffView
       },
       {
+        path: "/login",
+        name: "login",
+        component: () => import('../views/ProfileView.vue'),
+        beforeEnter: createAuthGuard(app)
+      },
+      {
         path: '/about',
         name: 'about',
         component: () => import('../views/AboutView.vue'),

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import WelcomePortrait from '@/components/WelcomePortrait.vue';
+import WelcomeLandscape from '@/components/WelcomeLandscape.vue';
 import Login from '@/components/Login.vue';
 import { useAuth0 } from '@auth0/auth0-vue';
 const { isAuthenticated } = useAuth0();
@@ -7,7 +8,7 @@ const { isAuthenticated } = useAuth0();
 
 <template>
   <div v-if="isAuthenticated">
-    <WelcomePortrait />
+    <WelcomeLandscape />
   </div>
   <div v-else>
     <Login />

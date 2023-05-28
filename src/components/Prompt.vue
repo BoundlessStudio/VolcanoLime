@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useToggle } from '@vueuse/core'
 import { MdEditor  } from "md-editor-v3";
 import { ref, watch } from "vue";
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
@@ -35,16 +36,20 @@ const displayEditor = ref(false)
 const enableChatAi = ref(true)
 const enableSearchAi = ref(true)
 const enablePlanAi = ref(true)
+const enableDrawingAi = ref(true)
 const enableSubmit = ref(true)
 
 watch(() => enableChatAi.value, (_) => {
-  enableSubmit.value = enableChatAi.value || enableSearchAi.value || enablePlanAi.value
+  enableSubmit.value = enableChatAi.value || enableSearchAi.value || enablePlanAi.value || enableDrawingAi.value
 })
 watch(() => enablePlanAi.value, (_) => {
-  enableSubmit.value = enableChatAi.value || enableSearchAi.value || enablePlanAi.value
+  enableSubmit.value = enableChatAi.value || enableSearchAi.value || enablePlanAi.value || enableDrawingAi.value
 })
 watch(() => enablePlanAi.value, (_) => {
-  enableSubmit.value = enableChatAi.value || enableSearchAi.value || enablePlanAi.value
+  enableSubmit.value = enableChatAi.value || enableSearchAi.value || enablePlanAi.value || enableDrawingAi.value
+})
+watch(() => enableDrawingAi.value, (_) => {
+  enableSubmit.value = enableChatAi.value || enableSearchAi.value || enablePlanAi.value || enableDrawingAi.value
 })
 
 const props = defineProps<{
@@ -86,6 +91,17 @@ const props = defineProps<{
                     <button @click="enablePlanAi = !enablePlanAi" :title="(enablePlanAi ? 'Disable' : 'Enable') + ' Plan Ai'" type="button" :class="[enablePlanAi ? 'text-amber-500 hover:text-amber-400' : '', '-m-2 inline-flex h-10 w-10 items-center justify-center rounded-full']">
                       <font-awesome-icon icon="robot" />
                     </button>
+                    <button @click="enableDrawingAi = !enableDrawingAi" :title="(enableDrawingAi ? 'Disable' : 'Enable') + ' Drawing Ai'" type="button" :class="[enableDrawingAi ? 'text-purple-500 hover:text-purple-400' : '', '-m-2 inline-flex h-10 w-10 items-center justify-center rounded-full']">
+                      <font-awesome-icon icon="robot" />
+                    </button>
+                  </div>
+                  <div class="flow-root">
+                    <button title="Markdown Editor" type="button" class="-m-2 inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-400 hover:text-gray-500">
+                      <font-awesome-icon icon="brain" />
+                    </button>
+                    <button title="Markdown Editor" type="button" class="-m-2 inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-400 hover:text-gray-500">
+                      <font-awesome-icon icon="screwdriver-wrench" />
+                    </button>
                   </div>
                 </div>
                 <div class="flex-shrink-0">
@@ -118,19 +134,6 @@ const props = defineProps<{
                     <div class="border-b border-gray-200 focus-within:border-indigo-600">
                       <MdEditor ref="editorRef" v-model="message" :toolbars="toolbars" :no-upload-img="true" :placeholder="props.placeholder" language="en-US" codeTheme="github" previewTheme="github" >
                       </MdEditor>
-                    </div>
-                    <div class="flex justify-between pt-2">
-                      <div class="flex items-center space-x-5">
-                        <div class="flow-root">
-                          <!-- Footer Left -->
-                        </div>
-                      </div>
-                      <div class="flex-shrink-0">
-                        <button type="submit"
-                          class="inline-flex items-center rounded-md bg-lime-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-lime-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                          <font-awesome-icon class="h-5 w-5" icon="fa-paper-plane" />
-                        </button>
-                      </div>
                     </div>
                   </form>
                 </div>

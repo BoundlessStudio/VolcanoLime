@@ -14,12 +14,21 @@ const props = defineProps<ChatMessage>()
       <p class="text-xs text-right text-indigo-600">{{ ts }}</p>
     </div>
     <div class="absolute -top-6 -left-6">
-      <div class="h-10 w-10 bg-white rounded-md border-2 border-regal-green text-center" >
+      <div v-if="props.role === 'assistant'" class="h-10 w-10 bg-white rounded-md border-2 border-regal-green text-center" >
+        <font-awesome-icon icon="fa-robot" class="h-6 w-6 pt-1 text-purple-500 " />
+      </div>
+      <div v-if="props.role === 'user'"  class="h-10 w-10 bg-white rounded-md border-2 border-regal-green text-center" >
         <font-awesome-icon icon="fa-user" class="h-6 w-6 pt-1 text-gray-600" />
       </div>
     </div>
     <div class="absolute -top-6 -right-6">
       <div class=" bg-white rounded-md border-2 border-regal-green">
+        <button title="Share Image">
+          <font-awesome-icon class="p-1 text-gray-500" icon="share" />
+        </button>
+        <button title="Upscale Image">
+          <font-awesome-icon class="p-1 text-gray-500" icon="fa-up-right-and-down-left-from-center" />
+        </button>
         <button title="Edit Comment">
           <font-awesome-icon class="p-1 text-gray-500" icon="pen" />
         </button>

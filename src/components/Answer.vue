@@ -14,7 +14,8 @@ const tabs = [
 
 <template>
   <div class="relative">
-    <div v-if="props.role === 'assistant'">
+    <!--
+    <div>
       <div class="pl-10 border-b border-gray-200">
         <nav class="-mb-px flex space-x-8" aria-label="Tabs">
           <a v-for="tab in tabs" :key="tab.name" :href="tab.href" :class="[tab.current ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700', 'group inline-flex items-center border-b-2 py-4 px-1 text-sm font-medium']" :aria-current="tab.current ? 'page' : undefined">
@@ -24,17 +25,17 @@ const tabs = [
         </nav>
       </div>
     </div>
+    -->
     <div>
       <MdPreview v-model="props.message" :autoDetectCode="true" language="en-US" codeTheme="github" previewTheme="github"  />
     </div>
-    <!--
     <div class="px-5">
       <span class="font-medium text-gray-900">Citations</span>
       <div>
         <template v-for="(item) in props.citations">
           <div class="py-2">
             <span class="p-2 bg-sky-200 rounded-md">
-              {{ item.text }}
+              {{ item }}
             </span>
           </div>
         </template>
@@ -52,7 +53,6 @@ const tabs = [
         </template>
       </div>
     </div>
-    -->
     <div>
       <p class="text-xs text-right text-indigo-600">{{ ts }}</p>
     </div>

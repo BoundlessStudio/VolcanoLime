@@ -25,9 +25,10 @@ const recentPosts = [
   { id: 3, title: 'Chat 3 - Testing', href: '/chat/3',  date: 'Feb 25, 2023', datetime: '2023-02-25' },
 ]
 const tabs = [
-  { name: 'Chat', description: 'Talk with your Ai assistant', icon: 'fa-comment', color: 'text-sky-500'  },
-  { name: 'Ask', description: 'Search memories to recall the past',  icon: 'fa-magnifying-glass', color: 'text-green-500'  },
-  { name: 'Plan', description: 'Use skills to complete a goal', icon: 'fa-list-check', color: 'text-amber-500'  },
+  { name: 'Chat', description: 'Talk with your Ai assistant', icon: 'comment', color: 'text-sky-500'  },
+  { name: 'Ask', description: 'Search memories to recall the past',  icon: 'magnifying-glass', color: 'text-green-500'  },
+  { name: 'Plan', description: 'Use skills to complete a goal', icon: 'list-check', color: 'text-amber-500'  },
+  { name: 'Draw', description: 'Dream up new images', icon: 'paintbrush', color: 'text-purple-500'  },
 ]
 </script>
 

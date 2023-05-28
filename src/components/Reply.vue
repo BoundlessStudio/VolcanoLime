@@ -14,7 +14,10 @@ const props = defineProps<ChatMessage>()
       <p class="text-xs text-right text-indigo-600">{{ ts }}</p>
     </div>
     <div class="absolute -top-6 -left-6">
-      <div class="h-10 w-10 bg-white rounded-md border-2 border-regal-green text-center" >
+      <div v-if="props.role === 'assistant'" class="h-10 w-10 bg-white rounded-md border-2 border-regal-green text-center" >
+        <font-awesome-icon icon="fa-robot" class="h-6 w-6 pt-1 text-sky-500 " />
+      </div>
+      <div v-if="props.role === 'user'"  class="h-10 w-10 bg-white rounded-md border-2 border-regal-green text-center" >
         <font-awesome-icon icon="fa-user" class="h-6 w-6 pt-1 text-gray-600" />
       </div>
     </div>

@@ -19,7 +19,7 @@ const tabs = [
 
 <template>
   <div class="relative">
-    <div>
+    <!-- <div>
       <div class="pl-10 border-b border-gray-200">
         <nav class="-mb-px flex space-x-8" aria-label="Tabs">
           <a v-for="tab in tabs" :key="tab.name" :href="tab.href" :class="[tab.current ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700', 'group inline-flex items-center border-b-2 py-4 px-1 text-sm font-medium']" :aria-current="tab.current ? 'page' : undefined">
@@ -28,7 +28,7 @@ const tabs = [
           </a>
         </nav>
       </div>
-    </div>
+    </div> -->
     <div class="p-5">
       <div class="flow-root">
         <ul role="list" class="-mb-8">
@@ -94,7 +94,7 @@ const tabs = [
           <font-awesome-icon class="p-1 text-gray-500" icon="save" />
         </button>
         <button title="Edit Plan">
-          <font-awesome-icon class="p-1 text-gray-500" icon="pen-to-square" />
+          <font-awesome-icon class="p-1 text-gray-500" icon="pen" />
         </button>
         <button title="Remove from thread">
           <font-awesome-icon class="p-1 text-gray-500" icon="trash" />
