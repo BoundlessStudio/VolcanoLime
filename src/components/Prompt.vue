@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
-import { useDark, useToggle } from '@vueuse/core'
+import { ref } from "vue";
+import { useDark, useToggle, useMediaQuery } from '@vueuse/core'
 import { MdEditor } from "md-editor-v3";
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot, Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
 import { v4 as uuidv4 } from 'uuid';
@@ -23,6 +23,7 @@ const toolbars = ref<ToolbarNames[]>([
 ])
 
 const isDark = useDark()
+const greaterThenSmall = useMediaQuery('(min-width: 640px)')
 
 const placeholder = ref("") 
 const message = ref('')
@@ -32,7 +33,7 @@ const toggleMakrdown = useToggle(markdownEnabled)
 </script>
 
 <template>
-  <div class="container mx-auto fixed transition-all duration-500 ease-in-out -top-4 z-10">
+  <div class="container mx-auto fixed transition-all duration-500 ease-in-out -top-4 z-10 ">
     <div class="h-full rounded-lg bg-white dark:bg-slate-600 dark:text-gray-200 shadow">
       <div class="px-4 py-5 sm:p-6">
         <div class="flex items-start space-x-4">
@@ -40,12 +41,17 @@ const toggleMakrdown = useToggle(markdownEnabled)
             <form action="#">
               <div class="border-b border-gray-200 focus-within:border-lime-600">
                 <label for="comment" class="sr-only">How can I assist you today?</label>
-                <textarea v-model="message" :placeholder="placeholder" rows="4" name="comment" id="comment"
+                <textarea v-model="message" :placeholder="placeholder" :rows="greaterThenSmall ? 4 : 1" name="comment" id="comment"
                   class="block w-full resize-none border-0 border-b border-transparent p-0 pb-2 text-gray-900 placeholder:text-gray-400 dark:bg-slate-600 dark:text-gray-200 focus:border-lime-600 focus:ring-0 sm:text-sm sm:leading-6">
                 </textarea>
               </div>
               <div class="flex justify-between pt-2">
                 <div class="flex items-center space-x-5">
+                  <div class="flow-root sm:hidden">
+                    <RouterLink to="/" class="-m-2 inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-400 hover:text-gray-500">
+                      <font-awesome-icon icon="home" />
+                    </RouterLink>
+                  </div>
                   <div class="flow-root">
                     <button type="button" title="Whisper Voice"
                       class="-m-2 inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-400 hover:text-gray-500">

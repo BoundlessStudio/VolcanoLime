@@ -29,6 +29,7 @@ export interface Citation {
   document: string,
   author: string,
   timestamp: string,
+  origin: string,
   source: string,
   provider: string,
   confidence: number,

@@ -22,8 +22,11 @@ const isDark = useDark()
 }
 sup {
   margin-left: 5px;
-  padding-left: 2px;
-  padding-right: 2px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  padding-left: 3px;
+  padding-right: 3px;
+  font-weight: 600;;
   /* padding: 1px; */
   --tw-text-opacity: 1;
   color: rgb(79 70 229 / var(--tw-text-opacity));

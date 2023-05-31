@@ -48,38 +48,39 @@ const recentPlans = [
     <div class="flex justify-center pb-3">
       <img class="w-96" src="https://i.imgur.com/hoGx2Ce.png" />
     </div>
-    <div class="flex-auto overflow-hidden rounded-3xl text-sm leading-6 shadow-lg ring-1 ring-gray-900/5 bg-white dark:bg-slate-600 dark:text-gray-200">
+    <div class="flex-auto overflow-hidden rounded-3xl text-sm leading-6 shadow-lg ring-1 ring-gray-900/5 bg-gradient-to-b from-neutral-100 to-neutral-200 dark:bg-gradient-to-b dark:from-slate-500 dark:to-slate-600 dark:text-gray-200">
       <div class="p-4">
         <div class="grid grid-cols-1 gap-x-4 gap-y-10 px-6 py-10 lg:grid-cols-2 lg:px-8">
           <div class="grid grid-cols-2 gap-x-6 sm:gap-x-8">
             <div>
               <div class="flow-root">
                 <div class="-my-2">
-                  <div>
-                    <a href="/chat" class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
-                      <font-awesome-icon icon="comment" class="text-sky-500 h-6 w-6 flex-none" aria-hidden="true" />
-                      <span>Chat</span>
-                    </a>
-                    <span>Talk with your Ai assistant</span>
-                  </div>
-                  <!-- Only for Alignmenet -->
-                  <div class="pt-3 pb-5 invisible">
-                    <a href="/chat" class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
-                      <font-awesome-icon icon="comment" class="text-sky-500 h-6 w-6 flex-none" aria-hidden="true" />
-                      <span>Chat</span>
-                    </a>
-                    <span>Talk with your Ai assistant</span>
+                  <div class="h-64">
+                    <div>
+                      <a href="/chat" class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
+                        <font-awesome-icon icon="comment" class="text-sky-500 h-6 w-6 flex-none" aria-hidden="true" />
+                        <span class="underline">Chat</span>
+                      </a>
+                      <span class="text-gray-400">Talk with your Ai assistant</span>
+                    </div>
+                    <div class="pt-3 pb-5">
+                      <div class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
+                        <font-awesome-icon icon="fa-brands fa-markdown" class="text-gray-400 h-6 w-6 flex-none" aria-hidden="true" />
+                        <span>Markdown</span>
+                      </div>
+                      <span class="text-gray-400">Enhanced with markdown to visualize charts, tables, diagrams, lists, and formating</span>
+                    </div>
                   </div>
                   <div class="">
                     <div class="">
-                      <span class="text-sm font-semibold leading-6 text-lime-600 dark:text-lime-200">Recent Chats</span>
+                      <span class="text-sm font-bold leading-6">Recent Chats</span>
                     </div>
                     <article v-for="post in recentChats" :key="post.id" class="relative isolate flex max-w-2xl flex-col items-stretch py-1">
                       <a :href="post.href" class="truncate font-bold">{{ post.title }}</a>
-                      <time :datetime="post.ts" class="text-sm">{{ post.ts }}</time>
+                      <time :datetime="post.ts" class="text-sm text-gray-400">{{ post.ts }}</time>
                     </article>
                     <div class="py-1">
-                        <RouterLink to="/history" class="text-sm font-semibold leading-6 text-indigo-600 dark:text-indigo-200">
+                        <RouterLink to="/chats" class="text-sm font-semibold leading-6 text-indigo-600 dark:text-indigo-200">
                           See all <span aria-hidden="true">&rarr;</span>
                         </RouterLink>
                       </div>
@@ -90,30 +91,32 @@ const recentPlans = [
             <div>
               <div class="flow-root">
                 <div class="-my-2">
-                  <div>
-                    <a href="/ask" class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
-                      <font-awesome-icon icon="magnifying-glass" class="text-green-500 h-6 w-6 flex-none" aria-hidden="true" />
-                      <span>Ask</span>
-                    </a>
-                    <span>Search memories to recall the past</span>
-                  </div>
-                  <div class="pt-3 pb-5">
-                    <a href="/memory" class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
-                      <font-awesome-icon icon="fa-brain" class="text-red-500 h-6 w-6 flex-none" aria-hidden="true" />
-                      <span>Memory</span>
-                    </a>
-                    <span>Store memories for congitive search</span>
+                  <div class="h-64">
+                    <div>
+                      <a href="/ask" class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
+                        <font-awesome-icon icon="magnifying-glass" class="text-green-500 h-6 w-6 flex-none" aria-hidden="true" />
+                        <span class="underline">Ask</span>
+                      </a>
+                      <span class="text-gray-400">Search memories to recall the past</span>
+                    </div>
+                    <div class="pt-3 pb-5">
+                      <a href="/memory" class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
+                        <font-awesome-icon icon="fa-brain" class="text-pink-400 h-6 w-6 flex-none" aria-hidden="true" />
+                        <span class="underline">Memory</span>
+                      </a>
+                      <span class="text-gray-400">Manage private memories and share collective memory used in congitive search</span>
+                    </div>
                   </div>
                   <div class="">
                     <div class="">
-                      <span class="text-sm font-semibold leading-6 text-lime-600 dark:text-lime-200">Recent Q/A</span>
+                      <span class="text-sm font-bold leading-6">Recent Q/A</span>
                     </div>
                     <article v-for="post in recentAsks" :key="post.id" class="relative isolate flex max-w-2xl flex-col items-stretch py-1">
                       <a :href="post.href" class="truncate font-bold">{{ post.title }}</a>
-                      <time :datetime="post.ts" class="text-sm">{{ post.ts }}</time>
+                      <time :datetime="post.ts" class="text-sm text-gray-400">{{ post.ts }}</time>
                     </article>
                     <div class="py-1">
-                        <RouterLink to="/history" class="text-sm font-semibold leading-6 text-indigo-600 dark:text-indigo-200">
+                        <RouterLink to="/questions" class="text-sm font-semibold leading-6 text-indigo-600 dark:text-indigo-200">
                           See all <span aria-hidden="true">&rarr;</span>
                         </RouterLink>
                       </div>
@@ -125,30 +128,39 @@ const recentPlans = [
           <div class="grid grid-cols-1 gap-10 sm:gap-8 lg:grid-cols-2">
             <div class="flow-root">
               <div class="-my-2">
-                <div>
-                  <a href="/plan" class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
-                    <font-awesome-icon icon="list-check" class="text-amber-500 h-6 w-6 flex-none" aria-hidden="true" />
-                    <span>Plan</span>
-                  </a>
-                  <span>Use skills to complete a goal</span>
-                </div>
-                <div class="pt-3 pb-5">
-                  <a href="/skills" class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
-                    <font-awesome-icon icon="screwdriver-wrench" class="text-purple-500 h-6 w-6 flex-none" aria-hidden="true" />
-                    <span>Skills</span>
-                  </a>
-                  <span>User created semantic skills</span>
+                <div class="h-64">
+                  <div>
+                    <a href="/plan" class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
+                      <font-awesome-icon icon="list-check" class="text-amber-500 h-6 w-6 flex-none" aria-hidden="true" />
+                      <span class="underline">Plan</span>
+                    </a>
+                    <span class="text-gray-400">Use skills to complete a goal</span>
+                  </div>
+                  <div class="pt-3">
+                    <a href="/skills" class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
+                      <font-awesome-icon icon="screwdriver-wrench" class="text-teal-400 h-6 w-6 flex-none" aria-hidden="true" />
+                      <span class="underline">Skills</span>
+                    </a>
+                    <span class="text-gray-400">Craft custom semantic skills</span>
+                  </div>
+                  <div class="pt-3 pb-5">
+                    <a href="/tasks" class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
+                      <font-awesome-icon icon="wand-magic-sparkles" class="text-purple-400 h-6 w-6 flex-none" aria-hidden="true" />
+                      <span class="underline">Tasks</span>
+                    </a>
+                    <span class="text-gray-400">Combine plans with data to create automated tasks</span>
+                  </div>
                 </div>
                 <div class="">
                   <div class="">
-                    <span class="text-sm font-semibold leading-6 text-lime-600 dark:text-lime-200">Recent Goals</span>
+                    <span class="text-sm font-bold leading-6">Recent Goals</span>
                   </div>
                   <article v-for="post in recentPlans" :key="post.id" class="relative isolate flex max-w-2xl flex-col items-stretch py-1">
                     <a :href="post.href" class="truncate font-bold">{{ post.title }}</a>
-                    <time :datetime="post.ts" class="text-sm">{{ post.ts }}</time>
+                    <time :datetime="post.ts" class="text-sm text-gray-400">{{ post.ts }}</time>
                   </article>
                   <div class="py-1">
-                      <RouterLink to="/history" class="text-sm font-semibold leading-6 text-indigo-600 dark:text-indigo-200">
+                      <RouterLink to="/plans" class="text-sm font-semibold leading-6 text-indigo-600 dark:text-indigo-200">
                         See all <span aria-hidden="true">&rarr;</span>
                       </RouterLink>
                     </div>
@@ -156,10 +168,7 @@ const recentPlans = [
               </div>
             </div>
             <div class="relative flex flex-col w-full">
-              <div class="">
-                <span class="text-sm font-semibold leading-6">Account</span>
-              </div>
-              <div class="pt-2 pb-6">
+              <div class="pt-2 pb-2">
                 <div class="flex items-center">
                   <div>
                     <img class="inline-block h-9 w-9 rounded-full" :src="user.picture" alt="" />
@@ -170,19 +179,42 @@ const recentPlans = [
                   </div>
                 </div>
               </div>
-              <div class="py-1">
+              <div class="pt-5 pb-2">
                 <font-awesome-icon icon="user" class="h-5 w-5" />
-                <RouterLink to="/profile" class="pl-2 text-sm font-semibold leading-6 text-indigo-600 dark:text-indigo-200">Profile</RouterLink>
-                <div>change your account details.</div>
+                <RouterLink to="/profile" class="underline pl-2 text-sm font-semibold leading-6 text-gray-600 dark:text-gray-200">Profile</RouterLink>
+                <div>Change your account details</div>
               </div>
-              <div class="py-1">
+              <div class="py-2">
                 <font-awesome-icon icon="fa-circle-nodes" class="h-5 w-5" />
-                <RouterLink to="/integrations" class="pl-2 text-sm font-semibold leading-6 text-indigo-600 dark:text-indigo-200">Integrations</RouterLink>
-                <div>Connect external providers.</div>
+                <RouterLink to="/integrations" class="pl-2  underline text-sm font-semibold leading-6 text-gray-600 dark:text-gray-200">Integrations</RouterLink>
+                <div>Connect providers of skills and memories</div>
+                <div class="flex text-gray-500 dark:text-gray-400">
+                  <div class="p-1">
+                    <font-awesome-icon title="active" icon="fa-brands fa-windows" class="h-5 w-5 p-1 border-b-4 border-lime-400" />
+                  </div>
+                  <div class="p-1">
+                    <font-awesome-icon title="disabled" icon="fa-brands fa-github" class="h-5 w-5 p-1 border-b-4" />
+                  </div>
+                  <div class="p-1">
+                    <font-awesome-icon title="disabled" icon="fa-brands fa-slack" class="h-5 w-5 p-1 border-b-4" />
+                  </div>
+                  <div class="p-1">
+                    <font-awesome-icon title="coming soon" icon="fa-brands fa-google" class="h-5 w-5 p-1" />
+                  </div>
+                  <div class="p-1">
+                    <font-awesome-icon title="coming soon" icon="fa-brands fa-discord" class="h-5 w-5 p-1" />
+                  </div>
+                  <div class="p-1">
+                    <font-awesome-icon title="coming soon" icon="fa-brands fa-twitter" class="h-5 w-5 p-1" />
+                  </div>
+                  <div class="p-1">
+                    <font-awesome-icon title="coming soon" icon="fa-brands fa-linkedin" class="h-5 w-5 p-1" />
+                  </div>
+                </div>
               </div>
-              <div class="py-1">
+              <div class="pt-2 pb-5">
                 <font-awesome-icon icon="right-from-bracket" class="h-5 w-5" />
-                <RouterLink to="/logoff" class="pl-2 text-sm font-semibold leading-6 text-indigo-600 dark:text-indigo-200">Log out</RouterLink>
+                <RouterLink to="/logoff" class="underline pl-2 text-sm font-semibold leading-6 text-gray-600 dark:text-gray-200">Log out</RouterLink>
               </div>
               <div class="absolute bottom-0 right-0">
                 <a href="#" v-if="isDark" @click="toggleDark()" class="py-1">

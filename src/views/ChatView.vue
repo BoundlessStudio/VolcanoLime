@@ -14,7 +14,7 @@ import type { AnswerMessage, ChatMessage, DrawingMessage, PlanMessage, Thread } 
 
 const config: Config = {
   separator: "-",
-  dictionaries: [adjectives, colors, animals]
+  dictionaries: [colors, animals]
 }
 
 const data = [
@@ -46,7 +46,7 @@ const thread = reactive<Thread>({
   <div class="h-screen">
     <Menu></Menu>
     <Prompt></Prompt>
-    <div class="pt-48 px-5">
+    <div class="pt-32 md:pt-48 px-5">
       <CommandBar v-bind="thread"></CommandBar>
       <template v-for="(item) in thread.chats">
         <div class="py-3 transition-all duration-500 ease-in-out">

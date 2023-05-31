@@ -4,52 +4,19 @@ import { useDark } from '@vueuse/core'
 import { MdPreview  } from "md-editor-v3"
 
 const isDark = useDark()
-
 const props = defineProps<AnswerMessage>()
-
-const tabs = [
-  { name: 'Answer', href: '#', icon: 'fa-star', current: true },
-  { name: 'Citations', href: '#', icon: 'book-bookmark', current: false },
-  { name: 'Sources', href: '#', icon: 'fa-circle-nodes', current: false },
-  { name: 'Probes', href: '#', icon: 'fa-question', current: false },
-]
 </script>
 
 <template>
   <div class="relative">
-    <!--
-    <div>
-      <div class="pl-10 border-b border-gray-200">
-        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-          <a v-for="tab in tabs" :key="tab.name" :href="tab.href" :class="[tab.current ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700', 'group inline-flex items-center border-b-2 py-4 px-1 text-sm font-medium']" :aria-current="tab.current ? 'page' : undefined">
-            <font-awesome-icon :icon="tab.icon" :class="[tab.current ? 'text-indigo-500' : 'text-gray-400 group-hover:text-gray-500', '-ml-0.5 mr-2 h-5 w-5']" aria-hidden="true" />
-            <span>{{ tab.name }}</span>
-          </a>
-        </nav>
-      </div>
-    </div>
-    -->
     <div>
       <MdPreview v-model="props.message" :autoDetectCode="true"  :theme="isDark ? 'dark' : 'light'" language="en-US" codeTheme="github" previewTheme="github"  />
     </div>
+    <hr class="mx-4  dark:border-slate-400" />
     <div class="px-5 py-1">
       <div class="flex flex-col md:flex-row">
         <div class="">
-          <font-awesome-icon title="Learn More" icon="info-circle" class="text-gray-400" />
-        </div>
-        <template v-for="(item) in props.citations">
-          <div class="px-1">
-            <button type="button" class="rounded bg-indigo-100 b px-2 py-1 text-xs font-semibold text-indigo-600 shadow-sm hover:bg-indigo-200">
-              {{ item.number }}. {{ item.document }}
-            </button>
-          </div>
-        </template>
-      </div>
-    </div>
-    <div class="px-5 py-1">
-      <div class="flex flex-col md:flex-row">
-        <div class="">
-          <font-awesome-icon title="Follow-up Questions" icon="circle-question" class="text-gray-400" />
+          <span class="text-xs font-bold pr-2">Follow-up</span>
         </div>
         <template v-for="(item) in props.followup">
          <div class="px-1">
@@ -60,6 +27,44 @@ const tabs = [
         </template>
       </div>
     </div>
+    <div class="px-5 py-1">
+      <div class="flex flex-col">
+        <div class="">
+          <span class="text-xs font-bold pr-2">Citations</span>
+        </div>
+        <template v-for="(item) in props.citations">
+          <div class="flex">
+            <div class="flex-none">
+              <font-awesome-icon :icon="['fa-brands', item.provider]" class="w-12 h-12 pt-2 pr-3 text-gray-500 dark:text-gray-400" />
+            </div>
+            <div class="flex-grow flex flex-col text-xs text-gray-50 py-1">
+              <div class="-ml-1">
+                <sup>{{item.number}}</sup>
+                <span class="pl-1 text-sm font-semibold leading-6 text-indigo-500 dark:text-indigo-200">{{item.document}}</span>
+              </div>
+              <div class="flex">
+                <div class="text-gray-500 dark:text-gray-100 ">
+                  <font-awesome-icon :icon="item.origin" class="w-3 h-3 pr-1" />
+                </div>
+                <div class="px-1 text-gray-500 dark:text-gray-100 ">
+                  <span>{{item.source}}</span>
+                </div>
+                <div class="text-gray-400">
+                  <span>{{item.author}} - {{item.timestamp}}</span>
+                </div>
+              </div>
+              <div>
+                <span class="text-sm text-lime-600 dark:text-lime-100">{{item.text}}</span>
+              </div>
+            </div>
+            <div class="flex-none pt-2 pl-2">
+              <span class="inline-flex items-center rounded-md bg-lime-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">{{(item.confidence * 100).toFixed(2)}}%</span>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+    
     <div>
       <p class="text-xs text-right text-indigo-600 dark:text-indigo-400">{{ ts }}</p>
     </div>

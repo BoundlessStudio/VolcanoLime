@@ -14,18 +14,13 @@ import type { AnswerMessage, ChatMessage, DrawingMessage, PlanMessage, Thread } 
 
 const config: Config = {
   separator: "-",
-  dictionaries: [adjectives, colors, animals]
+  dictionaries: [colors, animals]
 }
 
 const data = [
     {
       plan: {
-        "state": [
-          {
-            "Key": "INPUT",
-            "Value": ""
-          }
-        ],
+        "state": [],
         "steps": [
           {
             "parameters": [
@@ -82,17 +77,17 @@ const data = [
         "name": uniqueNamesGenerator(config),
         "description": "Create a slogan for the BBQ Pit in London that specializes in Mustard Sauce then email it to amjohnson86@gmail.com with the subject \u0027New Marketing Slogan\u0027",
       },
-      message: "Experience the magic of London's BBQ Pit - where our Mustard Sauce rules the roost, and quality is never compromised!",
+      message: "Experience the magic of London\u0027s BBQ Pit - where our Mustard Sauce rules the roost, and quality is never compromised!",
       role: "assistant",
       type: "plan",
       ts: new Date().toLocaleString(),
     } as ChatMessage,
-    {
-      role: "user",
-      message: "Create a slogan for the BBQ Pit in London that specializes in Mustard Sauce then email it to amjohnson86@gmail.com with the subject 'New Marketing Slogan'",
-      ts: new Date().toLocaleString(),
-      type: "chat",
-    } as ChatMessage
+    // {
+    //   role: "user",
+    //   message: "Create a slogan for the BBQ Pit in London that specializes in Mustard Sauce then email it to amjohnson86@gmail.com with the subject 'New Marketing Slogan'",
+    //   ts: new Date().toLocaleString(),
+    //   type: "chat",
+    // } as ChatMessage
   ];
 
 const thread = reactive<Thread>({

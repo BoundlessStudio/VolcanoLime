@@ -5,47 +5,84 @@ const props = defineProps<PlanMessage>()
 
 const onPlay = () => {
   if(props.plan.next_step_index === props.plan.steps.length)  {
-    props.plan.next_step_index = 0;
+    props.plan.next_step_index = 0
+    props.plan.state= [{
+      "Key": "INPUT",
+      "Value": ""
+    }]
   } else {
-    props.plan.next_step_index = props.plan.steps.length;
+    props.plan.next_step_index = props.plan.steps.length
+    props.plan.state = [{
+      "Key": "SLOGAN",
+      "Value": "Experience the magic of London\u0027s BBQ Pit - where our Mustard Sauce rules the roost, and quality is never compromised!"
+    },
+    {
+      "Key": "INPUT",
+      "Value": "Experience the magic of London\u0027s BBQ Pit - where our Mustard Sauce rules the roost, and quality is never compromised!"
+    }]
   }
 }
 
-const tabs = [
-  { name: 'Steps', href: '#', icon: 'shoe-prints', current: true }, 
-  { name: 'Data', href: '#', icon: 'database', current: false },
-]
 </script>
 
 <template>
   <div class="relative">
-    <!-- <div>
-      <div class="pl-10 border-b border-gray-200">
-        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-          <a v-for="tab in tabs" :key="tab.name" :href="tab.href" :class="[tab.current ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700', 'group inline-flex items-center border-b-2 py-4 px-1 text-sm font-medium']" :aria-current="tab.current ? 'page' : undefined">
-            <font-awesome-icon :icon="tab.icon" :class="[tab.current ? 'text-indigo-500' : 'text-gray-400 group-hover:text-gray-500', '-ml-0.5 mr-2 h-5 w-5']" aria-hidden="true" />
-            <span>{{ tab.name }}</span>
-          </a>
-        </nav>
-      </div>
-    </div> -->
     <div class="p-5">
       <div class="flow-root">
         <ul role="list" class="-mb-8">
-          <li v-for="(event, eventIdx) in props.plan.steps" :key="eventIdx">
+          <li>
             <div class="relative pb-8">
               <span class="absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true" />
               <div class="w-full relative flex space-x-3">
                 <div>
-                  <span :class="[eventIdx >= plan.next_step_index ? 'bg-indigo-500' : 'bg-green-500', 'h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white dark:ring-slate-400']">
-                    <font-awesome-icon :icon="eventIdx >= plan.next_step_index ? 'fa-flag' : 'fa-check'" class="h-5 w-5 text-white" aria-hidden="true" />
+                  <span :class="[props.plan.next_step_index >= props.plan.steps.length ? 'bg-green-500' : 'bg-indigo-500', 'h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white dark:ring-slate-400']">
+                    <font-awesome-icon :icon="'bullseye'" class="h-5 w-5 text-white" aria-hidden="true" />
+                  </span>
+                </div>
+                <div class="w-full flex flex-col pt-1.5">
+                  <span class="text-sm">{{ props.plan.description }}</span>
+                </div>
+              </div>
+            </div>
+          </li>
+          <!-- TODO: Add steps' Pramaters -->
+          <li v-for="(step, stepIdx) in props.plan.steps" :key="stepIdx">
+            <div class="relative pb-8">
+              <span class="absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true" />
+              <div class="w-full relative flex space-x-3">
+                <div>
+                  <span :class="[stepIdx >= plan.next_step_index ? 'bg-indigo-500' : 'bg-green-500', 'h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white dark:ring-slate-400']">
+                    <font-awesome-icon :icon="stepIdx >= plan.next_step_index ? 'shoe-prints' : 'fa-check'" class="h-5 w-5 text-white" aria-hidden="true" />
                   </span>
                 </div>
                 <div class="w-full flex flex-col pt-1.5">
                   <div>
                     <p class="text-sm text-gray-500 dark:text-gray-200">
-                      <a :href="'/skill/'+event.skill_name+'/fn/'+event.name" class="font-medium">{{ event.name }}</a> {{ event.description }} 
+                      <a :href="'/skill/'+step.skill_name+'/fn/'+step.name" class="underline font-medium">{{ step.name }}</a> {{ step.description }} 
                     </p>
+                  </div>
+                  <div>
+                    <table>
+                      <tr v-for="(parameter, parameterIdx) in step.parameters" :key="parameterIdx">
+                        <td>
+                          <span title="Input" class="w-full inline-flex items-center rounded-md bg-amber-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">{{parameter.Key}}</span>
+                        </td>
+                        <td v-if="parameter.Value.startsWith('$')">
+                          <span class="inline-flex items-center rounded-md bg-sky-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">{{parameter.Value}}</span>
+                        </td>
+                        <td v-else>
+                          <span>{{parameter.Value}}</span>
+                        </td>
+                      </tr>
+                      <tr v-for="(output, outputIdx) in step.outputs" :key="outputIdx">
+                        <td>
+                          <span title="Output" class="w-full inline-flex items-center rounded-md bg-sky-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">{{output}}</span>
+                        </td>
+                        <td>
+                          <span>{{ plan.state.find(s => s.Key == output)?.Value }}</span>
+                        </td>
+                      </tr>
+                    </table>
                   </div>
                 </div>
               </div>
@@ -56,18 +93,13 @@ const tabs = [
               <div class="w-full relative flex space-x-3">
                 <div>
                   <span :class="[props.plan.next_step_index >= props.plan.steps.length ? 'bg-green-500' : 'bg-indigo-500', 'h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white dark:ring-slate-400']">
-                    <font-awesome-icon :icon="props.plan.next_step_index >= props.plan.steps.length ? 'fa-check' : 'fa-flag-checkered'" class="h-5 w-5 text-white" aria-hidden="true" />
+                    <font-awesome-icon :icon="'fa-flag-checkered'" class="h-5 w-5 text-white" aria-hidden="true" />
                   </span>
                 </div>
                 <div class="w-full flex flex-col pt-1.5">
                   <div v-if="props.plan.next_step_index >= props.plan.steps.length">
                     <p class="text-sm text-gray-500 dark:text-gray-200">
-                      <span class="font-medium">Result:</span> {{ props.message }}
-                    </p>
-                  </div>
-                  <div v-else>
-                    <p class="text-sm text-gray-500 dark:text-gray-200">
-                      <span class="font-medium">Run Plan to get result</span>
+                      {{ props.message }}
                     </p>
                   </div>
                 </div>
@@ -75,6 +107,23 @@ const tabs = [
             </div>
           </li>
         </ul>
+      </div>
+    </div>
+    <hr class="mx-4  dark:border-slate-400" />
+    <div class="px-5 pt-3 pb-1">
+      <div class="flex flex-row">
+        <div class="">
+          <button @click="onPlay" type="button" class="rounded bg-green-100 dark:bg-green-500 px-2 py-1 text-xs font-semibold dark:text-gray-100 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-500 hover:bg-green-200 dark:hover:bg-green-400">
+            <font-awesome-icon title="Invoke Plan" icon="play" class="text-green-500 dark:text-gray-100" />
+            <span class="pl-1">Run</span>
+          </button>
+        </div>
+        <div class="pl-2">
+          <button type="button" class="rounded bg-purple-100 dark:bg-purple-500 px-2 py-1 text-xs font-semibold dark:text-gray-100 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-500 hover:bg-purple-200 dark:hover:bg-purple-400">
+            <font-awesome-icon title="Automate" icon="wand-magic-sparkles" class="text-purple-500 dark:text-gray-100" />
+            <span class="pl-1">Automate</span>
+          </button>
+        </div>
       </div>
     </div>
     <div>
@@ -87,9 +136,6 @@ const tabs = [
     </div>
     <div class="absolute -top-6 -right-6">
       <div class=" bg-white dark:bg-slate-600 text-gray-500 dark:text-gray-200  rounded-md border-2 border-regal-green">
-        <button @click="onPlay" title="Run Plan">
-          <font-awesome-icon class="p-1" icon="play-circle" />
-        </button>
         <button title="Edit Plan">
           <font-awesome-icon class="p-1" icon="pen" />
         </button>

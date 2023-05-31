@@ -10,11 +10,11 @@ import Drawing from '@/components/Drawing.vue'
 import { reactive } from 'vue'
 import { v4 as uuidv4 } from 'uuid';
 import { uniqueNamesGenerator, adjectives, colors, animals, type Config } from 'unique-names-generator';
-import type { AnswerMessage, ChatMessage, DrawingMessage, PlanMessage, Thread } from '@/types/thread'
+import type { AnswerMessage, ChatMessage, Citation, DrawingMessage, PlanMessage, Thread } from '@/types/thread'
 
 const config: Config = {
   separator: "-",
-  dictionaries: [adjectives, colors, animals]
+  dictionaries: [colors, animals]
 }
 
 const data = [
@@ -22,11 +22,18 @@ const data = [
       role: "assistant",
       message: "Yes, you can use out-of-network providers. However, you will have to pay a higher deductible and coinsurance<sup>1</sup>.",
       citations: [
-      {
-        number: 1,
-        document: "Northwind_Health_Plus_Benfits_Details-70.pdf",
-        text: ""
-      }],
+        {
+          number: 1,
+          provider: "windows",
+          origin: "folder",
+          source: "Benfits",
+          document: "Northwind_Health_Plus_Benfits_Details-70.pdf",
+          author: "James Webstar",
+          timestamp: new Date().toLocaleDateString(),
+          text: "out-of-network providers are covered, but you will have to pay a higher deductible and coinsurance.",
+          confidence: 0.9476,
+        } as Citation
+      ],
       followup: [
         "What is cost of out-of-network provider?",
         "What is included for out-of-network providers?",
@@ -47,13 +54,25 @@ const data = [
       citations: [
         {
           number: 1,
+          provider: "windows",
+          origin: "folder",
+          source: "Benfits",
           document: "Benefits_Options-2.pdf",
-          text: ""
+          author: "James Webstar",
+          timestamp: new Date().toLocaleString(),
+          text: "Northwind Health Plus offers coverage for hosibitalization, doctors visits, lab tests and x-rays.",
+          confidence: 0.9857,
         },
         {
           number: 2,
+          provider: "windows",
+          origin: "folder",
+          source: "Benfits",
           document: "Northwind_Health_Plus_Benfits_Details-70.pdf",
-          text: ""
+          author: "James Webstar",
+          timestamp: new Date().toLocaleString(),
+          text: "Compared to Standard only offers coverage for doctors visits and lab tests.",
+          confidence: 0.8765,
         }
       ],
       followup: [
@@ -86,7 +105,7 @@ const thread = reactive<Thread>({
   <div class="h-screen">
     <Menu></Menu>
     <Prompt></Prompt>
-    <div class="pt-48 px-5">
+    <div class="pt-32 md:pt-48 px-5">
       <CommandBar v-bind="thread"></CommandBar>
       <template v-for="(item) in thread.chats">
         <div class="py-3 transition-all duration-500 ease-in-out">

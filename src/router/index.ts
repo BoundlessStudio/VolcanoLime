@@ -56,12 +56,6 @@ export function createRouter(app: App): Router {
         beforeEnter: createAuthGuard(app)
       },
       {
-        path: '/history',
-        name: 'history',
-        component: () => import('../views/HistoryView.vue'),
-        beforeEnter: createAuthGuard(app)
-      },
-      {
         path: '/skills',
         name: 'skills',
         component: () => import('../views/SkillsView.vue'),
@@ -72,7 +66,25 @@ export function createRouter(app: App): Router {
         name: 'memory',
         component: () => import('../views/MemoryView.vue'),
         beforeEnter: createAuthGuard(app)
-      }
+      },
+      {
+        path: '/chats',
+        name: 'chats',
+        component: () => import('../views/HistoryView.vue'),
+        beforeEnter: createAuthGuard(app)
+      },
+      {
+        path: '/questions',
+        name: 'questions',
+        component: () => import('../views/HistoryView.vue'),
+        beforeEnter: createAuthGuard(app)
+      },
+      {
+        path: '/plans',
+        name: 'plans',
+        component: () => import('../views/HistoryView.vue'),
+        beforeEnter: createAuthGuard(app)
+      },
     ]
   })
 }

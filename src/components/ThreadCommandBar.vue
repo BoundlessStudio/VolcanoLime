@@ -10,7 +10,7 @@ const props = defineProps<Thread>()
     </div>
     <div class="relative flex justify-center">
       <div class="bg-regal-green px-3 text-base font-semibold leading-6 text-white">
-        <span class="pr-2 text-2xl">{{ props.name }}</span>
+        <span class="pr-2 text-2xl ">{{ props.name }}</span>
         <button title="Edit Thread" type="button"
           class="relative inline-flex items-center rounded-l-md bg-white px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10">
           <span class="sr-only">Edit Thread</span>
