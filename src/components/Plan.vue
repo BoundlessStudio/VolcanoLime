@@ -78,7 +78,7 @@ const tabs = [
       </div>
     </div>
     <div>
-      <p class="text-xs text-right text-indigo-600 dark:text-indigo-400">{{ props.plan.name }} - {{ props.ts }}</p>
+      <p class="text-xs text-right text-indigo-600 dark:text-indigo-400">{{ props.ts }}</p>
     </div>
     <div class="absolute -top-6 -left-6">
       <div class="h-10 w-10 bg-white dark:bg-slate-600 dark:text-gray-200 rounded-md border-2 border-regal-green text-center" >
@@ -89,9 +89,6 @@ const tabs = [
       <div class=" bg-white dark:bg-slate-600 text-gray-500 dark:text-gray-200  rounded-md border-2 border-regal-green">
         <button @click="onPlay" title="Run Plan">
           <font-awesome-icon class="p-1" icon="play-circle" />
-        </button>
-        <button title="Save Plan">
-          <font-awesome-icon class="p-1" icon="save" />
         </button>
         <button title="Edit Plan">
           <font-awesome-icon class="p-1" icon="pen" />

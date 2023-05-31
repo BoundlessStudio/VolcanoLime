@@ -19,18 +19,6 @@ const config: Config = {
 
 const data = [
     {
-      role: "assistant",
-      message: "Once upon a time, in a small village nestled in the valley of rolling green hills, there lived a young boy named Finn with his faithful dog, Bear. They were inseparable, the boy with the wild sun-streaked hair, and the shaggy, lovable mutt. One day, while exploring the woods, Finn discovered an ancient map hidden in a hollow tree trunk. The map was tattered and worn, but a mysterious symbol marked a location deep in the heart of the forest. Excited by the prospect of adventure, Finn and Bear set off to uncover the treasure that lay hidden within their beloved woods. Their journey was not an easy one. The forest was dense and tangled, with sharp thorns and brambles that scratched their skin and caught in their hair. They crossed a fierce river, its rapids threatening to sweep them away, and scaled a steep slope that seemed intent on keeping the treasure hidden. But Finn and Bear were determined, and they pressed on, guided by the need to uncover the secrets the map held.",
-      type: "chat",
-      ts: new Date().toLocaleString(),
-    } as ChatMessage,
-    {
-      role: "user",
-      type: "chat",
-      message: "Write me a story about a dog and his boy.",
-      ts: new Date().toLocaleString(),
-    } as ChatMessage,
-    {
       plan: {
         "state": [
           {
@@ -104,58 +92,6 @@ const data = [
       message: "Create a slogan for the BBQ Pit in London that specializes in Mustard Sauce then email it to amjohnson86@gmail.com with the subject 'New Marketing Slogan'",
       ts: new Date().toLocaleString(),
       type: "chat",
-    } as ChatMessage,
-    {
-      role: "assistant",
-      message: "Yes, you can use out-of-network providers. However, you will have to pay a higher deductible and coinsurance<sup>1</sup>.",
-      citations: [
-      {
-        number: 1,
-        document: "Northwind_Health_Plus_Benfits_Details-70.pdf",
-        text: ""
-      }],
-      followup: [
-        "What is cost of out-of-network provider?",
-        "What is included for out-of-network providers?",
-        "What is included in my Northwind Health Plus plan that is not in the standard plan?"
-      ],
-      type: "answer",
-      ts: new Date().toLocaleString(),
-    } as ChatMessage,
-    {
-      role: "user",
-      message: "Can i use out-of-network provider?",
-      ts: new Date().toLocaleString(),
-      type: "chat",
-    } as ChatMessage,
-    {
-      role: "assistant",
-      message: "Northwind Health Plus offers coverage for hosibitalization, doctors visits, lab tests and x-rays<sup>1</sup>. Standard only offers coverage for doctors visits and lab tests.<sup>2</sup>",
-      citations: [
-        {
-          number: 1,
-          document: "Benefits_Options-2.pdf",
-          text: ""
-        },
-        {
-          number: 2,
-          document: "Northwind_Health_Plus_Benfits_Details-70.pdf",
-          text: ""
-        }
-      ],
-      followup: [
-        "Can i use out-of-network provider?",
-        "What is cost of out-of-network provider?",
-        "What is included for out-of-network providers?"
-      ],
-      type: "answer",
-      ts: new Date().toLocaleString(),
-    } as ChatMessage,
-    {
-      role: "user",
-      message: "What is included in my Northwind Health Plus plan that is not in the standard plan?",
-      type: "chat",
-      ts: new Date().toLocaleString(),
     } as ChatMessage
   ];
 

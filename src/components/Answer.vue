@@ -32,7 +32,6 @@ const tabs = [
     <div>
       <MdPreview v-model="props.message" :autoDetectCode="true"  :theme="isDark ? 'dark' : 'light'" language="en-US" codeTheme="github" previewTheme="github"  />
     </div>
-    <hr />
     <div class="px-5 py-1">
       <div class="flex flex-col md:flex-row">
         <div class="">

@@ -19,23 +19,23 @@ const { user } = useAuth0()
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
 
-const engagement = [
-  { name: 'Chat', description: 'Talk with your Ai assistant', icon: 'comment', color: 'text-sky-500' },
-  { name: 'Ask', description: 'Search memories to recall the past', icon: 'magnifying-glass', color: 'text-green-500' },
-  { name: 'Plan', description: 'Use skills to complete a goal', icon: 'list-check', color: 'text-amber-500' },
-  { name: 'Draw', description: 'Dream up new images', icon: 'paintbrush', color: 'text-purple-500' },
+const recentChats = [
+  { id: 1, title: 'minimum-gray-cattle', href: '/chat/1', ts: new Date().toLocaleString() },
+  { id: 2, title: 'Custom title that is really long and will need to get truncated', href: '/chat/2',  ts: new Date().toLocaleString() },
+  { id: 3, title: 'ashamed-emerald-barracuda', href: '/chat/3',  ts: new Date().toLocaleString() },
+  { id: 4, title: 'critical-chocolate-mongoose', href: '/chat/4',  ts: new Date().toLocaleString() },
+  { id: 5, title: 'supporting-plum-bird', href: '/chat/5',  ts: new Date().toLocaleString() },
 ]
-const resources = [
-  { name: 'Skills', description: 'User created semantic skills', href: '/skills', icon: 'screwdriver-wrench', color: 'text-indigo-500' },
-  { name: 'Memory', description: 'Store memories for congitive search', href: '/memory', icon: 'fa-brain', color: 'text-red-500' },
-  { name: 'Integrations', description: 'Connect external providers', href: '/integrations', icon: 'fa-circle-nodes', color: 'text-teal-500' },
+const recentAsks = [
+  { id: 1, title: 'absent-blue-swallow', href: '/ask/1', ts: new Date().toLocaleString() },
+  { id: 2, title: 'previous-ivory-gal', href: '/ask/2',  ts: new Date().toLocaleString() },
+  { id: 3, title: 'polite-turquoise-horse', href: '/ask/3',  ts: new Date().toLocaleString() },
 ]
-const recentPosts = [
-  { id: 1, title: 'Chat 1 - Test', href: '/thread/1', ts: new Date().toLocaleString() },
-  { id: 2, title: 'Chat 2 - with a really long title that needs to get truncated', href: '/thread/2',  ts: new Date().toLocaleString() },
-  { id: 3, title: 'Chat 3 - Testing', href: '/thread/3',  ts: new Date().toLocaleString() },
-  { id: 4, title: 'Chat 4 - Testing', href: '/thread/4',  ts: new Date().toLocaleString() },
-  { id: 5, title: 'Chat 5 - Testing', href: '/thread/5',  ts: new Date().toLocaleString() },
+const recentPlans = [
+  { id: 1, title: 'variable-violet-koala', href: '/plan/1', ts: new Date().toLocaleString() },
+  { id: 2, title: 'tender-green-albatross', href: '/plan/2',  ts: new Date().toLocaleString() },
+  { id: 3, title: 'thoughtful-scarlet-hippopotamus', href: '/plan/3',  ts: new Date().toLocaleString() },
+  { id: 4, title: 'shared-silver-guineafowl', href: '/plan/4',  ts: new Date().toLocaleString() },
 ]
 </script>
 <template>
@@ -53,55 +53,113 @@ const recentPosts = [
         <div class="grid grid-cols-1 gap-x-4 gap-y-10 px-6 py-10 lg:grid-cols-2 lg:px-8">
           <div class="grid grid-cols-2 gap-x-6 sm:gap-x-8">
             <div>
-              <h3 class="text-sm font-medium leading-6">Engagement</h3>
-              <div class="mt-6 flow-root">
+              <div class="flow-root">
                 <div class="-my-2">
-                  <template v-for="item in engagement" :key="item.name">
-                    <a href="/thread" class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
-                      <font-awesome-icon :icon="item.icon" :class="item.color" class="h-6 w-6 flex-none" aria-hidden="true" />
-                      <span>{{ item.name }}</span>
+                  <div>
+                    <a href="/chat" class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
+                      <font-awesome-icon icon="comment" class="text-sky-500 h-6 w-6 flex-none" aria-hidden="true" />
+                      <span>Chat</span>
                     </a>
-                    <span >{{ item.description }}</span>
-                  </template>
+                    <span>Talk with your Ai assistant</span>
+                  </div>
+                  <!-- Only for Alignmenet -->
+                  <div class="pt-3 pb-5 invisible">
+                    <a href="/chat" class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
+                      <font-awesome-icon icon="comment" class="text-sky-500 h-6 w-6 flex-none" aria-hidden="true" />
+                      <span>Chat</span>
+                    </a>
+                    <span>Talk with your Ai assistant</span>
+                  </div>
+                  <div class="">
+                    <div class="">
+                      <span class="text-sm font-semibold leading-6 text-lime-600 dark:text-lime-200">Recent Chats</span>
+                    </div>
+                    <article v-for="post in recentChats" :key="post.id" class="relative isolate flex max-w-2xl flex-col items-stretch py-1">
+                      <a :href="post.href" class="truncate font-bold">{{ post.title }}</a>
+                      <time :datetime="post.ts" class="text-sm">{{ post.ts }}</time>
+                    </article>
+                    <div class="py-1">
+                        <RouterLink to="/history" class="text-sm font-semibold leading-6 text-indigo-600 dark:text-indigo-200">
+                          See all <span aria-hidden="true">&rarr;</span>
+                        </RouterLink>
+                      </div>
+                  </div>
                 </div>
               </div>
             </div>
             <div>
-              <h3 class="text-sm font-medium leading-6">Resources</h3>
-              <div class="mt-6 flow-root">
+              <div class="flow-root">
                 <div class="-my-2">
-                  <template v-for="item in resources" :key="item.name">
-                    <a :href="item.href"
-                      class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
-                      <font-awesome-icon :icon="item.icon" :class="item.color" class="h-6 w-6 flex-none" aria-hidden="true" />
-                      <span>{{ item.name }}</span>
+                  <div>
+                    <a href="/ask" class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
+                      <font-awesome-icon icon="magnifying-glass" class="text-green-500 h-6 w-6 flex-none" aria-hidden="true" />
+                      <span>Ask</span>
                     </a>
-                    <span class="">{{ item.description }}</span>
-                  </template>
+                    <span>Search memories to recall the past</span>
+                  </div>
+                  <div class="pt-3 pb-5">
+                    <a href="/memory" class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
+                      <font-awesome-icon icon="fa-brain" class="text-red-500 h-6 w-6 flex-none" aria-hidden="true" />
+                      <span>Memory</span>
+                    </a>
+                    <span>Store memories for congitive search</span>
+                  </div>
+                  <div class="">
+                    <div class="">
+                      <span class="text-sm font-semibold leading-6 text-lime-600 dark:text-lime-200">Recent Q/A</span>
+                    </div>
+                    <article v-for="post in recentAsks" :key="post.id" class="relative isolate flex max-w-2xl flex-col items-stretch py-1">
+                      <a :href="post.href" class="truncate font-bold">{{ post.title }}</a>
+                      <time :datetime="post.ts" class="text-sm">{{ post.ts }}</time>
+                    </article>
+                    <div class="py-1">
+                        <RouterLink to="/history" class="text-sm font-semibold leading-6 text-indigo-600 dark:text-indigo-200">
+                          See all <span aria-hidden="true">&rarr;</span>
+                        </RouterLink>
+                      </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
           <div class="grid grid-cols-1 gap-10 sm:gap-8 lg:grid-cols-2">
-            <div>
-              <div class="pb-4">
-                <span class="text-sm font-semibold leading-6 ">Recent History</span>
+            <div class="flow-root">
+              <div class="-my-2">
+                <div>
+                  <a href="/plan" class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
+                    <font-awesome-icon icon="list-check" class="text-amber-500 h-6 w-6 flex-none" aria-hidden="true" />
+                    <span>Plan</span>
+                  </a>
+                  <span>Use skills to complete a goal</span>
+                </div>
+                <div class="pt-3 pb-5">
+                  <a href="/skills" class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
+                    <font-awesome-icon icon="screwdriver-wrench" class="text-purple-500 h-6 w-6 flex-none" aria-hidden="true" />
+                    <span>Skills</span>
+                  </a>
+                  <span>User created semantic skills</span>
+                </div>
+                <div class="">
+                  <div class="">
+                    <span class="text-sm font-semibold leading-6 text-lime-600 dark:text-lime-200">Recent Goals</span>
+                  </div>
+                  <article v-for="post in recentPlans" :key="post.id" class="relative isolate flex max-w-2xl flex-col items-stretch py-1">
+                    <a :href="post.href" class="truncate font-bold">{{ post.title }}</a>
+                    <time :datetime="post.ts" class="text-sm">{{ post.ts }}</time>
+                  </article>
+                  <div class="py-1">
+                      <RouterLink to="/history" class="text-sm font-semibold leading-6 text-indigo-600 dark:text-indigo-200">
+                        See all <span aria-hidden="true">&rarr;</span>
+                      </RouterLink>
+                    </div>
+                </div>
               </div>
-              <div class="py-1">
-                <RouterLink to="/history" class="text-sm font-semibold leading-6 text-indigo-600 dark:text-indigo-200">
-                  See all <span aria-hidden="true">&rarr;</span>
-                </RouterLink>
-              </div>
-              <article v-for="post in recentPosts" :key="post.id" class="relative isolate flex max-w-2xl flex-col items-stretch py-1">
-                <a :href="post.href" class="truncate font-bold">{{ post.title }}</a>
-                <time :datetime="post.ts" class="text-sm">{{ post.ts }}</time>
-              </article>
             </div>
             <div class="relative flex flex-col w-full">
-              <div class="pb-4">
-                <span class="text-sm font-semibold leading-6 ">Account</span>
+              <div class="">
+                <span class="text-sm font-semibold leading-6">Account</span>
               </div>
-              <div class="py-3">
+              <div class="pt-2 pb-6">
                 <div class="flex items-center">
                   <div>
                     <img class="inline-block h-9 w-9 rounded-full" :src="user.picture" alt="" />
@@ -114,7 +172,13 @@ const recentPosts = [
               </div>
               <div class="py-1">
                 <font-awesome-icon icon="user" class="h-5 w-5" />
-                <RouterLink to="/profile" class="pl-2 text-sm font-semibold leading-6 text-indigo-600 dark:text-indigo-200">Your profile</RouterLink>
+                <RouterLink to="/profile" class="pl-2 text-sm font-semibold leading-6 text-indigo-600 dark:text-indigo-200">Profile</RouterLink>
+                <div>change your account details.</div>
+              </div>
+              <div class="py-1">
+                <font-awesome-icon icon="fa-circle-nodes" class="h-5 w-5" />
+                <RouterLink to="/integrations" class="pl-2 text-sm font-semibold leading-6 text-indigo-600 dark:text-indigo-200">Integrations</RouterLink>
+                <div>Connect external providers.</div>
               </div>
               <div class="py-1">
                 <font-awesome-icon icon="right-from-bracket" class="h-5 w-5" />

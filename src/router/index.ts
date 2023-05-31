@@ -32,15 +32,21 @@ export function createRouter(app: App): Router {
         beforeEnter: createAuthGuard(app)
       },
       {
-        path: '/thread',
-        name: 'thrtead',
-        component: () => import('../views/ThreadView.vue'),
+        path: '/chat',
+        name: 'chat',
+        component: () => import('../views/ChatView.vue'),
         beforeEnter: createAuthGuard(app)
       },
       {
-        path: '/thread/:id',
-        name: 'thread',
-        component: () => import('../views/ThreadView.vue'),
+        path: '/ask',
+        name: 'ask',
+        component: () => import('../views/AskView.vue'),
+        beforeEnter: createAuthGuard(app)
+      },
+      {
+        path: '/plan',
+        name: 'plan',
+        component: () => import('../views/PlanView.vue'),
         beforeEnter: createAuthGuard(app)
       },
       {
