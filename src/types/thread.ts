@@ -19,8 +19,19 @@ export interface ChatMessage extends BaseMessage {
 }
 
 export interface AnswerMessage extends ChatMessage {
-  citations: string[],
+  citations: Citation[],
   followup: string[],
+}
+
+export interface Citation {
+  number: number,
+  text: string,
+  document: string,
+  author: string,
+  timestamp: string,
+  source: string,
+  provider: string,
+  confidence: number,
 }
 
 export interface PlanMessage extends ChatMessage {

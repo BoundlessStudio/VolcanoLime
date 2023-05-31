@@ -120,7 +120,12 @@ const data = [
     {
       role: "assistant",
       message: "Yes, you can use out-of-network providers. However, you will have to pay a higher deductible and coinsurance<sup>1</sup>.",
-      citations: ["1 - Northwind_Health_Plus_Benfits_Details-70.pdf"],
+      citations: [
+      {
+        number: 1,
+        document: "Northwind_Health_Plus_Benfits_Details-70.pdf",
+        text: ""
+      }],
       followup: [
         "What is cost of out-of-network provider?",
         "What is included for out-of-network providers?",
@@ -137,8 +142,19 @@ const data = [
     } as ChatMessage,
     {
       role: "assistant",
-      message: "Northwind Health Plus offers coverage for hosibitalization, doctors visits, lab tests and x-rays<sup>1</sup>. Standard only offers coverage for doctors visits and lab tests.",
-      citations: ["1 - Benefits_Options-2.pdf"],
+      message: "Northwind Health Plus offers coverage for hosibitalization, doctors visits, lab tests and x-rays<sup>1</sup>. Standard only offers coverage for doctors visits and lab tests.<sup>2</sup>",
+      citations: [
+        {
+          number: 1,
+          document: "Benefits_Options-2.pdf",
+          text: ""
+        },
+        {
+          number: 2,
+          document: "Northwind_Health_Plus_Benfits_Details-70.pdf",
+          text: ""
+        }
+      ],
       followup: [
         "Can i use out-of-network provider?",
         "What is cost of out-of-network provider?",
@@ -168,12 +184,12 @@ const thread = reactive<Thread>({
 <template>
   <div class="h-screen">
     <Menu></Menu>
-    <Prompt placeholder="Lets Chat."></Prompt>
+    <Prompt></Prompt>
     <div class="pt-48 px-5">
       <CommandBar v-bind="thread"></CommandBar>
       <template v-for="(item) in thread.chats">
         <div class="py-3 transition-all duration-500 ease-in-out">
-          <div class="h-full rounded-lg bg-white shadow">
+          <div class="h-full rounded-lg bg-white  dark:bg-slate-600 dark:text-gray-200 shadow">
             <div class="px-2 py-2">
               <Chat v-if="item.type === 'chat' && item.role == 'user'" v-bind="item"></Chat>
               <Reply v-if="item.type === 'chat' && item.role == 'assistant'" v-bind="item"></Reply>

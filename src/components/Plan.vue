@@ -37,14 +37,14 @@ const tabs = [
               <span class="absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true" />
               <div class="w-full relative flex space-x-3">
                 <div>
-                  <span :class="[eventIdx >= plan.next_step_index ? 'bg-indigo-500' : 'bg-green-500', 'h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white']">
+                  <span :class="[eventIdx >= plan.next_step_index ? 'bg-indigo-500' : 'bg-green-500', 'h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white dark:ring-slate-400']">
                     <font-awesome-icon :icon="eventIdx >= plan.next_step_index ? 'fa-flag' : 'fa-check'" class="h-5 w-5 text-white" aria-hidden="true" />
                   </span>
                 </div>
                 <div class="w-full flex flex-col pt-1.5">
                   <div>
-                    <p class="text-sm text-gray-500">
-                      <a :href="'/skill/'+event.skill_name+'/fn/'+event.name" class="font-medium text-gray-900">{{ event.name }}</a> {{ event.description }} 
+                    <p class="text-sm text-gray-500 dark:text-gray-200">
+                      <a :href="'/skill/'+event.skill_name+'/fn/'+event.name" class="font-medium">{{ event.name }}</a> {{ event.description }} 
                     </p>
                   </div>
                 </div>
@@ -55,19 +55,19 @@ const tabs = [
             <div class="relative pb-8">
               <div class="w-full relative flex space-x-3">
                 <div>
-                  <span :class="[props.plan.next_step_index >= props.plan.steps.length ? 'bg-green-500' : 'bg-indigo-500', 'h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white']">
+                  <span :class="[props.plan.next_step_index >= props.plan.steps.length ? 'bg-green-500' : 'bg-indigo-500', 'h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white dark:ring-slate-400']">
                     <font-awesome-icon :icon="props.plan.next_step_index >= props.plan.steps.length ? 'fa-check' : 'fa-flag-checkered'" class="h-5 w-5 text-white" aria-hidden="true" />
                   </span>
                 </div>
                 <div class="w-full flex flex-col pt-1.5">
                   <div v-if="props.plan.next_step_index >= props.plan.steps.length">
-                    <p class="text-sm text-gray-500">
-                      <span class="font-medium text-gray-900">Result:</span> {{ props.message }}
+                    <p class="text-sm text-gray-500 dark:text-gray-200">
+                      <span class="font-medium">Result:</span> {{ props.message }}
                     </p>
                   </div>
                   <div v-else>
-                    <p class="text-sm text-gray-500">
-                      <span class="font-medium text-gray-900">Run Plan to get result</span>
+                    <p class="text-sm text-gray-500 dark:text-gray-200">
+                      <span class="font-medium">Run Plan to get result</span>
                     </p>
                   </div>
                 </div>
@@ -78,26 +78,26 @@ const tabs = [
       </div>
     </div>
     <div>
-      <p class="text-xs text-right text-indigo-600">{{ props.plan.name }} - {{ props.ts }}</p>
+      <p class="text-xs text-right text-indigo-600 dark:text-indigo-400">{{ props.plan.name }} - {{ props.ts }}</p>
     </div>
     <div class="absolute -top-6 -left-6">
-      <div class="h-10 w-10 bg-white rounded-md border-2 border-regal-green text-center" >
+      <div class="h-10 w-10 bg-white dark:bg-slate-600 dark:text-gray-200 rounded-md border-2 border-regal-green text-center" >
         <font-awesome-icon icon="fa-robot" class="h-6 w-6 pt-1 text-amber-500" />
       </div>
     </div>
     <div class="absolute -top-6 -right-6">
-      <div class=" bg-white rounded-md border-2 border-regal-green">
+      <div class=" bg-white dark:bg-slate-600 text-gray-500 dark:text-gray-200  rounded-md border-2 border-regal-green">
         <button @click="onPlay" title="Run Plan">
-          <font-awesome-icon class="p-1 text-gray-500" icon="play-circle" />
+          <font-awesome-icon class="p-1" icon="play-circle" />
         </button>
         <button title="Save Plan">
-          <font-awesome-icon class="p-1 text-gray-500" icon="save" />
+          <font-awesome-icon class="p-1" icon="save" />
         </button>
         <button title="Edit Plan">
-          <font-awesome-icon class="p-1 text-gray-500" icon="pen" />
+          <font-awesome-icon class="p-1" icon="pen" />
         </button>
         <button title="Remove from thread">
-          <font-awesome-icon class="p-1 text-gray-500" icon="trash" />
+          <font-awesome-icon class="p-1" icon="trash" />
         </button>
       </div>
     </div>

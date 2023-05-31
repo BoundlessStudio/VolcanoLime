@@ -10,11 +10,6 @@ export function createRouter(app: App): Router {
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
       {
-        path: "/",
-        name: "home",
-        component: HomeView
-      },
-      {
         path: "/login",
         name: "login",
         component: LoginView
@@ -25,15 +20,15 @@ export function createRouter(app: App): Router {
         component: LogoffView
       },
       {
-        path: "/login",
-        name: "login",
-        component: () => import('../views/ProfileView.vue'),
+        path: "/",
+        name: "home",
+        component: HomeView,
         beforeEnter: createAuthGuard(app)
       },
       {
-        path: '/about',
-        name: 'about',
-        component: () => import('../views/AboutView.vue'),
+        path: "/profile",
+        name: "profile",
+        component: () => import('../views/ProfileView.vue'),
         beforeEnter: createAuthGuard(app)
       },
       {

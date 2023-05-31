@@ -1,9 +1,23 @@
 <script setup lang="ts">
 import { useDark, useToggle } from '@vueuse/core'
-import { useAuth0 } from "@auth0/auth0-vue";
 import { RouterLink } from 'vue-router';
+import { useAuth0 } from '@auth0/auth0-vue';
+const { getAccessTokenSilently } = useAuth0();
+
+const getData = async () => {
+  const token = await getAccessTokenSilently()
+  const response = await fetch('https://electric-raspberry.ngrok.app/WeatherForecast', {
+    headers: {
+      Authorization: 'Bearer ' + token
+    }
+  });
+  const data = await response.json();
+  console.log("API", data)
+}
 
 const { user } = useAuth0()
+const isDark = useDark()
+const toggleDark = useToggle(isDark)
 
 const engagement = [
   { name: 'Chat', description: 'Talk with your Ai assistant', icon: 'comment', color: 'text-sky-500' },
@@ -23,11 +37,7 @@ const recentPosts = [
   { id: 4, title: 'Chat 4 - Testing', href: '/thread/4',  ts: new Date().toLocaleString() },
   { id: 5, title: 'Chat 5 - Testing', href: '/thread/5',  ts: new Date().toLocaleString() },
 ]
-
-const isDark = useDark()
-const toggleDark = useToggle(isDark)
 </script>
-
 <template>
   <div class="h-screen px-2">
     <div class="flex justify-center items-center">
@@ -35,39 +45,38 @@ const toggleDark = useToggle(isDark)
         <img class="h-32 w-32" src="https://i.imgur.com/39VOU8x.png" alt="Volcano Lime" />
       </RouterLink>
     </div>
-    <div class="flex justify-center">
+    <div class="flex justify-center pb-3">
       <img class="w-96" src="https://i.imgur.com/hoGx2Ce.png" />
     </div>
-    <div class="flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
+    <div class="flex-auto overflow-hidden rounded-3xl text-sm leading-6 shadow-lg ring-1 ring-gray-900/5 bg-white dark:bg-slate-600 dark:text-gray-200">
       <div class="p-4">
         <div class="grid grid-cols-1 gap-x-4 gap-y-10 px-6 py-10 lg:grid-cols-2 lg:px-8">
           <div class="grid grid-cols-2 gap-x-6 sm:gap-x-8">
             <div>
-              <h3 class="text-sm font-medium leading-6 text-gray-500">Engagement</h3>
+              <h3 class="text-sm font-medium leading-6">Engagement</h3>
               <div class="mt-6 flow-root">
                 <div class="-my-2">
                   <template v-for="item in engagement" :key="item.name">
-                    <a href="/thread"
-                      class="flex gap-x-4 py-2 text-sm font-semibold leading-6 text-gray-900">
+                    <a href="/thread" class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
                       <font-awesome-icon :icon="item.icon" :class="item.color" class="h-6 w-6 flex-none" aria-hidden="true" />
                       <span>{{ item.name }}</span>
                     </a>
-                    <span class="text-gray-500">{{ item.description }}</span>
+                    <span >{{ item.description }}</span>
                   </template>
                 </div>
               </div>
             </div>
             <div>
-              <h3 class="text-sm font-medium leading-6 text-gray-500">Resources</h3>
+              <h3 class="text-sm font-medium leading-6">Resources</h3>
               <div class="mt-6 flow-root">
                 <div class="-my-2">
                   <template v-for="item in resources" :key="item.name">
                     <a :href="item.href"
-                      class="flex gap-x-4 py-2 text-sm font-semibold leading-6 text-gray-900">
+                      class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
                       <font-awesome-icon :icon="item.icon" :class="item.color" class="h-6 w-6 flex-none" aria-hidden="true" />
                       <span>{{ item.name }}</span>
                     </a>
-                    <span class="text-gray-500">{{ item.description }}</span>
+                    <span class="">{{ item.description }}</span>
                   </template>
                 </div>
               </div>
@@ -76,19 +85,21 @@ const toggleDark = useToggle(isDark)
           <div class="grid grid-cols-1 gap-10 sm:gap-8 lg:grid-cols-2">
             <div>
               <div class="pb-4">
-                <span class="text-sm font-semibold leading-6 text-gray-500">Recent History</span>
+                <span class="text-sm font-semibold leading-6 ">Recent History</span>
               </div>
               <div class="py-1">
-                <RouterLink to="/history" class="text-sm font-semibold leading-6 text-indigo-600">See all <span aria-hidden="true">&rarr;</span></RouterLink>
+                <RouterLink to="/history" class="text-sm font-semibold leading-6 text-indigo-600 dark:text-indigo-200">
+                  See all <span aria-hidden="true">&rarr;</span>
+                </RouterLink>
               </div>
               <article v-for="post in recentPosts" :key="post.id" class="relative isolate flex max-w-2xl flex-col items-stretch py-1">
                 <a :href="post.href" class="truncate font-bold">{{ post.title }}</a>
-                <time :datetime="post.ts" class="text-sm  text-gray-600">{{ post.ts }}</time>
+                <time :datetime="post.ts" class="text-sm">{{ post.ts }}</time>
               </article>
             </div>
-            <div class="flex flex-col w-full">
+            <div class="relative flex flex-col w-full">
               <div class="pb-4">
-                <span class="text-sm font-semibold leading-6 text-gray-500">Account</span>
+                <span class="text-sm font-semibold leading-6 ">Account</span>
               </div>
               <div class="py-3">
                 <div class="flex items-center">
@@ -96,30 +107,29 @@ const toggleDark = useToggle(isDark)
                     <img class="inline-block h-9 w-9 rounded-full" :src="user.picture" alt="" />
                   </div>
                   <div class="ml-3">
-                    <p class="text-sm font-medium text-gray-700 group-hover:text-gray-900">{{ user.nickname }}</p>
-                    <p class="text-xs font-medium text-gray-500 group-hover:text-gray-700">{{ user.email }}</p>
+                    <p class="text-sm font-medium">{{ user.name }}</p>
+                    <p class="text-xs font-medium">{{ user.email }}</p>
                   </div>
                 </div>
               </div>
               <div class="py-1">
                 <font-awesome-icon icon="user" class="h-5 w-5" />
-                <RouterLink to="/profile" class="pl-2 text-sm font-semibold leading-6 text-indigo-600">Your profile</RouterLink>
+                <RouterLink to="/profile" class="pl-2 text-sm font-semibold leading-6 text-indigo-600 dark:text-indigo-200">Your profile</RouterLink>
               </div>
-              <!--
-              <div v-if="isDark" @click="toggleDark()" class="py-1">
-                <font-awesome-icon icon="sun" class="h-5 w-5" /> 
-                <a href="#" class="pl-2 text-sm font-semibold leading-6 text-indigo-600">Lumos!</a>
-              </div>
-              <div v-else @click="toggleDark()" class="py-1">
-                <font-awesome-icon icon="moon" class="h-5 w-5" />
-                <a href="#" class="pl-2 text-sm font-semibold leading-6 text-indigo-600">Nox!</a>
-              </div>
-              -->
               <div class="py-1">
                 <font-awesome-icon icon="right-from-bracket" class="h-5 w-5" />
-                <RouterLink to="/logoff" class="pl-2 text-sm font-semibold leading-6 text-indigo-600">Log out</RouterLink>
+                <RouterLink to="/logoff" class="pl-2 text-sm font-semibold leading-6 text-indigo-600 dark:text-indigo-200">Log out</RouterLink>
               </div>
-              
+              <div class="absolute bottom-0 right-0">
+                <a href="#" v-if="isDark" @click="toggleDark()" class="py-1">
+                  <font-awesome-icon icon="sun" class="h-4 w-4 text-amber-300" /> 
+                  <span class="pl-2 text-sm font-semibold leading-6">Lumos!</span>
+                </a>
+                <a href="#" v-else @click="toggleDark()" class="py-1">
+                  <font-awesome-icon icon="moon" class="h-4 w-4 text-sky-300" />
+                  <span class="pl-2 text-sm font-semibold leading-6 text-gray-600">Nox!</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
