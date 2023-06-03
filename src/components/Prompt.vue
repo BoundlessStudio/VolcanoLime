@@ -2,8 +2,8 @@
 import { ref } from "vue";
 import { useDark, useToggle, useMediaQuery } from '@vueuse/core'
 import { MdEditor } from "md-editor-v3";
-import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot, Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
-import { v4 as uuidv4 } from 'uuid';
+import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
+
 
 type ToolbarNames = number | '=' | '-' | 'bold' | 'underline' | 'italic' | 'title' | 'strikeThrough' | 'sub' | 'sup' | 'quote' | 'unorderedList' | 'orderedList' | 'task' | 'codeRow' | 'code' | 'link' | 'image' | 'table' | 'mermaid' | 'pageFullscreen' | 'preview'
 

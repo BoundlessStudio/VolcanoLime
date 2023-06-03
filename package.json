@@ -23,6 +23,7 @@
     "@vueuse/core": "^10.1.2",
     "md-editor-v3": "^4.0.1",
     "pinia": "^2.0.36",
+    "primevue": "^3.29.2",
     "unique-names-generator": "^4.7.1",
     "uuid": "^9.0.0",
     "vue": "^3.3.2",

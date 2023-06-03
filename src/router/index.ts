@@ -62,6 +62,12 @@ export function createRouter(app: App): Router {
         beforeEnter: createAuthGuard(app)
       },
       {
+        path: '/skills/:id',
+        name: 'skill',
+        component: () => import('../views/SkillView.vue'),
+        beforeEnter: createAuthGuard(app)
+      },
+      {
         path: '/memory',
         name: 'memory',
         component: () => import('../views/MemoryView.vue'),

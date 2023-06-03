@@ -2,11 +2,8 @@
 import Prompt from '@/components/Prompt.vue'
 import CommandBar from '@/components/ThreadCommandBar.vue'
 import Chat from '@/components/Chat.vue'
-import Reply from '@/components/Reply.vue'
 import Answer from '@/components/Answer.vue'
-import Plan from '@/components/Plan.vue'
-import Menu from '@/components/Menu.vue'
-import Drawing from '@/components/Drawing.vue'
+import Logo from '@/components/Logo.vue'
 import { reactive } from 'vue'
 import { v4 as uuidv4 } from 'uuid';
 import { uniqueNamesGenerator, adjectives, colors, animals, type Config } from 'unique-names-generator';
@@ -56,7 +53,7 @@ const data = [
           number: 1,
           provider: "windows",
           origin: "folder",
-          source: "Benfits",
+          source: "Benefits",
           document: "Benefits_Options-2.pdf",
           author: "James Webstar",
           timestamp: new Date().toLocaleString(),
@@ -67,7 +64,7 @@ const data = [
           number: 2,
           provider: "windows",
           origin: "folder",
-          source: "Benfits",
+          source: "Benefits",
           document: "Northwind_Health_Plus_Benfits_Details-70.pdf",
           author: "James Webstar",
           timestamp: new Date().toLocaleString(),
@@ -103,7 +100,7 @@ const thread = reactive<Thread>({
 
 <template>
   <div class="h-screen">
-    <Menu></Menu>
+    <Logo></Logo>
     <Prompt></Prompt>
     <div class="pt-32 md:pt-48 px-5">
       <CommandBar v-bind="thread"></CommandBar>
@@ -111,11 +108,8 @@ const thread = reactive<Thread>({
         <div class="py-3 transition-all duration-500 ease-in-out">
           <div class="h-full rounded-lg bg-white  dark:bg-slate-600 dark:text-gray-200 shadow">
             <div class="px-2 py-2">
-              <Chat v-if="item.type === 'chat' && item.role == 'user'" v-bind="item"></Chat>
-              <Reply v-if="item.type === 'chat' && item.role == 'assistant'" v-bind="item"></Reply>
+              <Chat v-if="item.type === 'chat'" v-bind="item"></Chat>
               <Answer v-if="item.type === 'answer'" v-bind="(item as AnswerMessage)"></Answer>
-              <Plan v-if="item.type === 'plan'" v-bind="(item as PlanMessage)"></Plan>
-              <Drawing v-if="item.type === 'drawing'" v-bind="(item as DrawingMessage)"></Drawing>
             </div>
           </div>
         </div>

@@ -23,9 +23,9 @@ const props = defineProps<ChatMessage>()
     </div>
     <div class="absolute -top-6 -right-6">
       <div class=" bg-white dark:bg-slate-600 text-gray-500 dark:text-gray-200 rounded-md border-2 border-regal-green">
-        <button title="Edit Comment">
+        <!-- <button title="Edit Comment">
           <font-awesome-icon class="p-1" icon="pen" />
-        </button>
+        </button> -->
         <button title="Remove from thread">
           <font-awesome-icon class="p-1" icon="trash" />
         </button>

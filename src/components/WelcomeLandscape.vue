@@ -20,23 +20,35 @@ const isDark = useDark()
 const toggleDark = useToggle(isDark)
 
 const recentChats = [
-  { id: 1, title: 'minimum-gray-cattle', href: '/chat/1', ts: new Date().toLocaleString() },
+  { id: 1, title: 'gray-cattle', href: '/chat/1', ts: new Date().toLocaleString() },
   { id: 2, title: 'Custom title that is really long and will need to get truncated', href: '/chat/2',  ts: new Date().toLocaleString() },
-  { id: 3, title: 'ashamed-emerald-barracuda', href: '/chat/3',  ts: new Date().toLocaleString() },
-  { id: 4, title: 'critical-chocolate-mongoose', href: '/chat/4',  ts: new Date().toLocaleString() },
-  { id: 5, title: 'supporting-plum-bird', href: '/chat/5',  ts: new Date().toLocaleString() },
+  { id: 3, title: 'emerald-barracuda', href: '/chat/3',  ts: new Date().toLocaleString() },
+  { id: 4, title: 'chocolate-mongoose', href: '/chat/4',  ts: new Date().toLocaleString() },
+  { id: 5, title: 'plum-bird', href: '/chat/5',  ts: new Date().toLocaleString() },
 ]
 const recentAsks = [
-  { id: 1, title: 'absent-blue-swallow', href: '/ask/1', ts: new Date().toLocaleString() },
-  { id: 2, title: 'previous-ivory-gal', href: '/ask/2',  ts: new Date().toLocaleString() },
-  { id: 3, title: 'polite-turquoise-horse', href: '/ask/3',  ts: new Date().toLocaleString() },
+  { id: 1, title: 'blue-swallow', href: '/ask/1', ts: new Date().toLocaleString() },
+  { id: 2, title: 'ivory-gal', href: '/ask/2',  ts: new Date().toLocaleString() },
+  { id: 3, title: 'turquoise-horse', href: '/ask/3',  ts: new Date().toLocaleString() },
 ]
 const recentPlans = [
-  { id: 1, title: 'variable-violet-koala', href: '/plan/1', ts: new Date().toLocaleString() },
-  { id: 2, title: 'tender-green-albatross', href: '/plan/2',  ts: new Date().toLocaleString() },
-  { id: 3, title: 'thoughtful-scarlet-hippopotamus', href: '/plan/3',  ts: new Date().toLocaleString() },
-  { id: 4, title: 'shared-silver-guineafowl', href: '/plan/4',  ts: new Date().toLocaleString() },
+  { id: 1, title: 'violet-koala', href: '/plan/1', ts: new Date().toLocaleString() },
+  { id: 2, title: 'green-albatross', href: '/plan/2',  ts: new Date().toLocaleString() },
+  { id: 3, title: 'scarlet-hippopotamus', href: '/plan/3',  ts: new Date().toLocaleString() },
+  { id: 4, title: 'silver-guineafowl', href: '/plan/4',  ts: new Date().toLocaleString() },
 ]
+const integrations = [
+  { name: 'Micrsoft', icon: 'fa-brands fa-windows', enabled: true, activated: true },
+  { name: 'Google', icon: 'fa-brands fa-google', enabled: true, activated: false  },
+  { name: 'Github', icon: 'fa-brands fa-github', enabled: false, activated: false },
+  { name: 'Notion', icon: 'fa-brands fa-notion', enabled: false, activated: false  },
+  { name: 'Trello', icon: 'fa-brands fa-trello', enabled: false, activated: false  },
+  { name: 'Slack', icon: 'fa-brands fa-slack', enabled: false, activated: false },
+  { name: 'Discord', icon: 'fa-brands fa-discord', enabled: false, activated: false  },
+  // { name: 'Twitter', icon: 'fa-brands fa-twitter', enabled: false, activated: false  },
+  // { name: 'Facebook', icon: 'fa-brands fa-facebook', enabled: false, activated: false  },
+]
+
 </script>
 <template>
   <div class="h-screen px-2">
@@ -59,13 +71,13 @@ const recentPlans = [
                     <div>
                       <a href="/chat" class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
                         <font-awesome-icon icon="comment" class="text-sky-500 h-6 w-6 flex-none" aria-hidden="true" />
-                        <span class="underline">Chat</span>
+                        <span class=" hover:underline">Chat</span>
                       </a>
                       <span class="text-gray-400">Talk with your Ai assistant</span>
                     </div>
                     <div class="pt-3 pb-5">
                       <div class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
-                        <font-awesome-icon icon="fa-brands fa-markdown" class="text-gray-400 h-6 w-6 flex-none" aria-hidden="true" />
+                        <font-awesome-icon icon="fa-brands fa-markdown" class="text-gray-600 dark:text-gray-100 h-6 w-6 flex-none" aria-hidden="true" />
                         <span>Markdown</span>
                       </div>
                       <span class="text-gray-400">Enhanced with markdown to visualize charts, tables, diagrams, lists, and formating</span>
@@ -95,14 +107,14 @@ const recentPlans = [
                     <div>
                       <a href="/ask" class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
                         <font-awesome-icon icon="magnifying-glass" class="text-green-500 h-6 w-6 flex-none" aria-hidden="true" />
-                        <span class="underline">Ask</span>
+                        <span class=" hover:underline">Ask</span>
                       </a>
                       <span class="text-gray-400">Search memories to recall the past</span>
                     </div>
                     <div class="pt-3 pb-5">
                       <a href="/memory" class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
                         <font-awesome-icon icon="fa-brain" class="text-pink-400 h-6 w-6 flex-none" aria-hidden="true" />
-                        <span class="underline">Memory</span>
+                        <span class=" hover:underline">Memory</span>
                       </a>
                       <span class="text-gray-400">Manage private memories and share collective memory used in congitive search</span>
                     </div>
@@ -132,21 +144,21 @@ const recentPlans = [
                   <div>
                     <a href="/plan" class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
                       <font-awesome-icon icon="list-check" class="text-amber-500 h-6 w-6 flex-none" aria-hidden="true" />
-                      <span class="underline">Plan</span>
+                      <span class=" hover:underline">Plan</span>
                     </a>
                     <span class="text-gray-400">Use skills to complete a goal</span>
                   </div>
                   <div class="pt-3">
                     <a href="/skills" class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
                       <font-awesome-icon icon="screwdriver-wrench" class="text-teal-400 h-6 w-6 flex-none" aria-hidden="true" />
-                      <span class="underline">Skills</span>
+                      <span class=" hover:underline">Skills</span>
                     </a>
                     <span class="text-gray-400">Craft custom semantic skills</span>
                   </div>
                   <div class="pt-3 pb-5">
                     <a href="/tasks" class="flex gap-x-4 py-2 text-sm font-semibold leading-6">
                       <font-awesome-icon icon="wand-magic-sparkles" class="text-purple-400 h-6 w-6 flex-none" aria-hidden="true" />
-                      <span class="underline">Tasks</span>
+                      <span class=" hover:underline">Tasks</span>
                     </a>
                     <span class="text-gray-400">Combine plans with data to create automated tasks</span>
                   </div>
@@ -181,40 +193,22 @@ const recentPlans = [
               </div>
               <div class="pt-5 pb-2">
                 <font-awesome-icon icon="user" class="h-5 w-5" />
-                <RouterLink to="/profile" class="underline pl-2 text-sm font-semibold leading-6 text-gray-600 dark:text-gray-200">Profile</RouterLink>
+                <RouterLink to="/profile" class=" hover:underline pl-2 text-sm font-semibold leading-6 text-gray-600 dark:text-gray-200">Profile</RouterLink>
                 <div>Change your account details</div>
               </div>
               <div class="py-2">
                 <font-awesome-icon icon="fa-circle-nodes" class="h-5 w-5" />
-                <RouterLink to="/integrations" class="pl-2  underline text-sm font-semibold leading-6 text-gray-600 dark:text-gray-200">Integrations</RouterLink>
+                <RouterLink to="/integrations" class="pl-2   hover:underline text-sm font-semibold leading-6 text-gray-600 dark:text-gray-200">Integrations</RouterLink>
                 <div>Connect providers of skills and memories</div>
                 <div class="flex text-gray-500 dark:text-gray-400">
-                  <div class="p-1">
-                    <font-awesome-icon title="active" icon="fa-brands fa-windows" class="h-5 w-5 p-1 border-b-4 border-lime-400" />
-                  </div>
-                  <div class="p-1">
-                    <font-awesome-icon title="disabled" icon="fa-brands fa-github" class="h-5 w-5 p-1 border-b-4" />
-                  </div>
-                  <div class="p-1">
-                    <font-awesome-icon title="disabled" icon="fa-brands fa-slack" class="h-5 w-5 p-1 border-b-4" />
-                  </div>
-                  <div class="p-1">
-                    <font-awesome-icon title="coming soon" icon="fa-brands fa-google" class="h-5 w-5 p-1" />
-                  </div>
-                  <div class="p-1">
-                    <font-awesome-icon title="coming soon" icon="fa-brands fa-discord" class="h-5 w-5 p-1" />
-                  </div>
-                  <div class="p-1">
-                    <font-awesome-icon title="coming soon" icon="fa-brands fa-twitter" class="h-5 w-5 p-1" />
-                  </div>
-                  <div class="p-1">
-                    <font-awesome-icon title="coming soon" icon="fa-brands fa-linkedin" class="h-5 w-5 p-1" />
+                  <div v-for="(item) in integrations" v-bind:key="item.name" class="p-1">
+                    <font-awesome-icon title="active" :icon="item.icon" :class="['h-5 w-5 p-1', item.enabled ? 'border-b-4 ' : '', item.activated ? 'border-lime-400' : '']" />
                   </div>
                 </div>
               </div>
               <div class="pt-2 pb-5">
                 <font-awesome-icon icon="right-from-bracket" class="h-5 w-5" />
-                <RouterLink to="/logoff" class="underline pl-2 text-sm font-semibold leading-6 text-gray-600 dark:text-gray-200">Log out</RouterLink>
+                <RouterLink to="/logoff" class=" hover: hover:underline pl-2 text-sm font-semibold leading-6 text-gray-600 dark:text-gray-200">Log out</RouterLink>
               </div>
               <div class="absolute bottom-0 right-0">
                 <a href="#" v-if="isDark" @click="toggleDark()" class="py-1">
