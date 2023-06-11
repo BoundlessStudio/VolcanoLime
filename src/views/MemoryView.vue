@@ -348,6 +348,9 @@ const stats = ref<Memory[]>([
 const selectedKey = ref<TreeSelectionKeys>([])
 </script>
 
+<!-- Search Box -->
+<!-- Provider Catiegories -->
+
 <template>
   <div class="h-screen">
     <Logo></Logo>
@@ -368,7 +371,7 @@ const selectedKey = ref<TreeSelectionKeys>([])
               </div>
               <div class="flex justify-between">
                 <div class="ml-16 text-sm font-medium">
-                  <span class="pr-1">{{ item.provider }}</span>
+                  <span>{{ item.source }}</span>
                 </div>
               </div>
             </dt>
@@ -380,13 +383,6 @@ const selectedKey = ref<TreeSelectionKeys>([])
                 </div>
                 <p class="text-xs pl-1 font-semibold ">{{ item.progress }}</p>
               </div>
-              <div class="py-2 text-xs truncate">
-                <span>{{ item.source }}</span>
-              </div>
-              <!-- <div class="py-2">
-                <Tree v-model:selectionKeys="selectedKey" :value="item.nodes" :filter="item.filter" filterMode="lenient"
-                  selectionMode="checkbox"></Tree>
-              </div> -->
               <div class="absolute inset-x-0 bottom-0 bg-gray-50 dark:bg-slate-500 px-4 py-4 sm:px-6 flex justify-between">
                 <div class="text-sm">
                   <a v-if="item.nodes.length > 0" href="#" class="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-200 dark:hover:text-indigo-300">

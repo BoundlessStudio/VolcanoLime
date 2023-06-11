@@ -62,7 +62,7 @@ const templates = reactive([
             <div
               class="flex flex-1 items-center justify-between truncate rounded-r-md border-b border-r border-t text-gray-500 dark:text-gray-200 border-gray-200 bg-white dark:bg-slate-600 dark:border-slate-700">
               <div class="flex-1 truncate px-4 py-2 text-sm">
-                <a href="#" class="font-medium">{{ skill.name }}</a>
+                <RouterLink :to="'/skills/' + skill.id" class="font-medium">{{ skill.name }}</RouterLink>
                 <p class="dark:text-gray-400">{{ skill.functions }} Functions</p>
               </div>
               <div class="flex-shrink-0 pr-2">

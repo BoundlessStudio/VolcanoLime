@@ -2,20 +2,15 @@
 import { useDark, useToggle } from '@vueuse/core'
 import { RouterLink } from 'vue-router';
 import { useAuth0 } from '@auth0/auth0-vue';
-const { getAccessTokenSilently } = useAuth0();
+const { user, getAccessTokenSilently } = useAuth0();
 
 const getData = async () => {
   const token = await getAccessTokenSilently()
-  const response = await fetch('https://electric-raspberry.ngrok.app/WeatherForecast', {
-    headers: {
-      Authorization: 'Bearer ' + token
-    }
-  });
-  const data = await response.json();
-  console.log("API", data)
+  console.log(token);
+  // const response = await fetch('https://electric-raspberry.ngrok.app/me', { headers: { Authorization: 'Bearer ' + token } });
+  // const data = await response.json();
 }
 
-const { user } = useAuth0()
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
 
@@ -186,7 +181,7 @@ const integrations = [
                     <img class="inline-block h-9 w-9 rounded-full" :src="user.picture" alt="" />
                   </div>
                   <div class="ml-3">
-                    <p class="text-sm font-medium">{{ user.name }}</p>
+                    <p @click="getData" class="text-sm font-medium">{{ user.name }}</p>
                     <p class="text-xs font-medium">{{ user.email }}</p>
                   </div>
                 </div>
