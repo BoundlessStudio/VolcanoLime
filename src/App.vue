@@ -1,15 +1,9 @@
 <script setup lang="ts">
-import { useDark } from '@vueuse/core'
-import { RouterView } from 'vue-router'
-const isDark = useDark()
+// import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <div :class="[isDark ? 'dark' : '', 'bg-gradient-to-t from-slate-800 to-regal-green']">
-    <div class="container mx-auto transition-all duration-500 ease-in-out">
-      <RouterView />
-    </div>
-  </div>
+  <RouterView />
 </template>
 
 <style>

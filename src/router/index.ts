@@ -1,9 +1,11 @@
 import { createRouter as createVueRouter, createWebHistory, type Router } from 'vue-router'
 import { createAuthGuard } from "@auth0/auth0-vue";
 import HomeView from '../views/HomeView.vue'
+import WelcomeView from '@/views/WelcomeView.vue';
 import LoginView from '../views/LoginView.vue'
 import LogoffView from '../views/LogoffView.vue'
 import type { App } from 'vue';
+
 
 export function createRouter(app: App): Router {
   return createVueRouter({
@@ -23,7 +25,12 @@ export function createRouter(app: App): Router {
         path: "/",
         name: "home",
         component: HomeView,
-        beforeEnter: createAuthGuard(app)
+        // beforeEnter: createAuthGuard(app)
+      },
+      {
+        path: "/about",
+        name: "about",
+        component: () => import('../views/AboutView.vue'),
       },
       {
         path: "/profile",
@@ -32,65 +39,18 @@ export function createRouter(app: App): Router {
         beforeEnter: createAuthGuard(app)
       },
       {
-        path: '/chat',
-        name: 'chat',
-        component: () => import('../views/ChatView.vue'),
+        path: "/welcome",
+        name: "welcome",
+        component: () => import('../views/WelcomeView.vue'),
         beforeEnter: createAuthGuard(app)
       },
       {
-        path: '/ask',
-        name: 'ask',
-        component: () => import('../views/AskView.vue'),
+        path: '/feed/:id',
+        name: 'feed',
+        component: () => import('../views/FeedView.vue'),
         beforeEnter: createAuthGuard(app)
       },
-      {
-        path: '/plan',
-        name: 'plan',
-        component: () => import('../views/PlanView.vue'),
-        beforeEnter: createAuthGuard(app)
-      },
-      {
-        path: '/integrations',
-        name: 'integrations',
-        component: () => import('../views/IntegrationsView.vue'),
-        beforeEnter: createAuthGuard(app)
-      },
-      {
-        path: '/skills',
-        name: 'skills',
-        component: () => import('../views/SkillsView.vue'),
-        beforeEnter: createAuthGuard(app)
-      },
-      {
-        path: '/skills/:id',
-        name: 'skill',
-        component: () => import('../views/SkillView.vue'),
-        beforeEnter: createAuthGuard(app)
-      },
-      {
-        path: '/memory',
-        name: 'memory',
-        component: () => import('../views/MemoryView.vue'),
-        beforeEnter: createAuthGuard(app)
-      },
-      {
-        path: '/chats',
-        name: 'chats',
-        component: () => import('../views/HistoryView.vue'),
-        beforeEnter: createAuthGuard(app)
-      },
-      {
-        path: '/questions',
-        name: 'questions',
-        component: () => import('../views/HistoryView.vue'),
-        beforeEnter: createAuthGuard(app)
-      },
-      {
-        path: '/plans',
-        name: 'plans',
-        component: () => import('../views/HistoryView.vue'),
-        beforeEnter: createAuthGuard(app)
-      },
+      
     ]
   })
 }

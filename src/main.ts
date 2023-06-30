@@ -1,7 +1,5 @@
 import './assets/main.css'
 import 'md-editor-v3/lib/style.css'
-import 'primevue/resources/primevue.min.css'
-import 'primevue/resources/themes/tailwind-light/theme.css'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -12,7 +10,6 @@ import { createAuth0 } from '@auth0/auth0-vue';
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { createRouter } from './router'
-import PrimeVue from 'primevue/config';
 import App from './App.vue'
 
 //@ts-ignore
@@ -20,9 +17,7 @@ export const cni = { prefix: 'fab', iconName: 'notion', icon: [30, 30, [], null,
 library.add(fas, fab, cni)
 
 const app = createApp(App)
-app.use(PrimeVue)
-app.use(createPinia())
-app.use(createRouter(app))
+
 app.use(
   createAuth0({
     domain: "dev-qupdjha4.us.auth0.com",
@@ -32,7 +27,9 @@ app.use(
       audience: "electric-raspberry.ngrok.app",
     }
   })
-);
+)
+app.use(createPinia())
+app.use(createRouter(app))
 app.component('font-awesome-icon', FontAwesomeIcon)
 
 app.mount('#app')
