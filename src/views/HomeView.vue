@@ -41,22 +41,28 @@ TODO: Personalities
 
 const configBot: Config = {
   separator: ".",
-  dictionaries: [names, names],
+  dictionaries: [names],
   style: "lowerCase",
 }
 
 const veterans = [
   {
     name: '@george',
-    role: 'Conversationalist',
+    role: 'Guide',
     bio: 'is your charming conversationalist, excels at engaging with others through meaningful dialogues. He makes sure that even the most complex ideas are articulated and understood in an approachable way, bringing our team closer together.',
-    imageUrl: 'https://i.imgur.com/h1sVmBR.png',
+    imageUrl: 'https://i.imgur.com/1d5btuI.png',
   },
   {
     name: '@jeeves',
     role: 'Mentats',
     bio: 'is your chief knowledge curator. He helps you store, and retrieve memories, making sure we never lose a single valuable insight.',
-    imageUrl: 'https://i.imgur.com/D19JghL.png',
+    imageUrl: 'https://i.imgur.com/EKrj5bE.png',
+  },
+  {
+    name: '@charles',
+    role: 'Writer',
+    bio: 'is your gifted storyteller, expertly weaving narratives that captivate and inspire our audience. Through his imaginative storytelling, he engages and transports us to new realms of possibilities.',
+    imageUrl: 'https://i.imgur.com/JCyTEXa.png',
   },
   {
     name: '@dalle',
@@ -65,54 +71,66 @@ const veterans = [
     imageUrl: 'https://i.imgur.com/8PhftEq.png',
   },
   {
-    name: '@mary',
-    role: 'Librarian',
-    bio: 'is your guide through the vast web of interconencted services. She is the go-to for managing memory sources through our catalogue of providers.',
-    imageUrl: 'https://i.imgur.com/L0nlbw2.png',
+    name: '@alex',
+    role: 'Diagrams & Charts',
+    bio: 'is your illustration master. they specializes in creating stunning visuals that bring data to life, transforming complex information into digestible, engaging, and striking diagrams and charts. Their skills are invaluable for conveying ideas and insights in a compelling and accessible way.',
+    imageUrl: 'https://i.imgur.com/bYMhUJE.png',
   },
   {
-    name: '@tessla',
-    role: 'Architect',
+    name: '@tesla',
+    role: 'Planer',
     bio: 'is your exceptional strategist and problem solver. Gifted with exceptional analytical abilities, they bring organization and clarity to even the most complex goals.',
     imageUrl: 'https://i.imgur.com/lW4OkVJ.png',
   },
   {
     name: '@shuri',
-    role: 'Engineer',
+    role: 'Prompt Engineer',
     bio: 'is your brilliant engineer, responsible for designing, building, and maintaining the skills used by others. Her technical expertise and innovative solutions drive our team towards success and new heights of excellence.',
     imageUrl: 'https://i.imgur.com/C9xQbAy.png',
   },
+  // {
+  //   name: '@mary',
+  //   role: 'Microsoft',
+  //   bio: 'is your integration specialist for Microsoft. She offers technical guidance to seamlessly link your account to Live Services. With her expertise, she brings the power of Calendar, Drive, Email, and Task skills to helps enhance that range of our goals.',
+  //   imageUrl: 'https://i.imgur.com/lAjAtEo.png',
+  // },
 ]
 const rookies = [
+  // {
+  //   name: '@skyler',
+  //   role: 'Google',
+  //   bio: 'is your integration specialist for Google. Her technical guidance will help you link your account allowing access to range of Google Services. Because of her specialist, she brings the power of A, B, C, and D skills to helps enhance that range of our goals.',
+  //   imageUrl: 'https://i.imgur.com/J9TBPqP.png',
+  // },
+  // {
+  //   name: '@simon',
+  //   role: 'Slack',
+  //   bio: 'is your dedicated Slack specialist. His expert knowledge and understanding of Slack enables them to convert channels to memories allowing Jeeves to recall related slack messages. Simon exemplifies the power of seamless virtual teamwork, fostering interaction, and increasing productivity within our team.',
+  //   imageUrl: 'https://i.imgur.com/GwFa0UY.png',
+  // },
+  // {
+  //   name: '@nora',
+  //   role: 'Notion',
+  //   bio: 'is your proficient Notion wizard. She is a master at curating and organizing the wealth of information on Notion into memories. Her work empowers the team to to query a existing knowledge base for information.',
+  //   imageUrl: 'https://i.imgur.com/vd0svVO.png',
+  // },
   {
-    name: '@jiminy',
-    role: 'Writer',
-    bio: 'is your gifted storyteller, expertly weaving narratives that captivate and inspire our audience. Through his imaginative storytelling, he engages and transports us to new realms of possibilities.',
-    imageUrl: 'https://i.imgur.com/uVjynIy.png',
+    name: '@ricky',
+    role: 'Convert',
+    bio: ' is your efficient document converter. His skill lies in his ability to transform and reformat a variety of document types with ease and precision. Whether it\'s converting PDFs to Word documents, or transforming converting images, Ricky makes sure that your files remain accessible and easy to work with.',
+    imageUrl: 'https://i.imgur.com/yJqnqCy.png',
   },
+  // {
+  //   name: '@carl',
+  //   role: 'Compute',
+  //   bio: ' is your dedicated REPL expert. He specializes creating code and instantly running said code in an isolated, secure environment, providing immediate feedback that helps guide his next move. His expertise lies in bring computability to the team.',
+  //   imageUrl: 'https://i.imgur.com/V7WaU6B.png',
+  // },
   {
-    name: '@gale',
-    role: 'Meteorologist',
-    bio: 'is your weather expert, uses advanced scientific knowledge to predict and analyze weather patterns or just tell you if it is going to rain today.',
-    imageUrl: 'https://i.imgur.com/H9vTZaQ.png',
-  },
-  {
-    name: '@melanie',
-    role: 'Musician',
-    bio: 'is your personal music guide, helping you discover new songs and artists, and creating playlists tailored to your preferences. With her extensive knowledge of music, she always knows the perfect tune for any occasion.',
-    imageUrl: 'https://i.imgur.com/5T1PfDc.png',
-  },
-  {
-    name: '@skyler',
-    role: 'Travel',
-    bio: 'is your consultant for planning the perfect getaway. From finding hidden gems to organizing custom itineraries, their expertise ensures that every trip is memorable and stress-free.',
-    imageUrl: 'https://i.imgur.com/JCyTEXa.png',
-  },
-  {
-    name: '@theo',
-    role: 'Cheif',
-    bio: 'is your personal chef, sharing mouth-watering recipes, cooking tips, and meal planning ideas. With her culinary prowess, she makes every dining experience unforgettable.',
-    imageUrl: 'https://i.imgur.com/UnSjzye.png',
+    name: '@travis',
+    role: 'Cartographer',
+    bio: 'is your go-to expert for all things related to maps, routing, and distance calculations. He can skillfully interpret and utilize geospatial data, providing invaluable insights on optimal routes and real-time distances. With his expertise, you will never be lost. Travis is instrumental in connecting spaces and people, making geographical challenges a thing of the past for our team.',
+    imageUrl: 'https://i.imgur.com/YNCtu4z.png',
   },
 ]
 const assistant_name = ref(uniqueNamesGenerator(configBot))
@@ -123,9 +141,9 @@ const navigation = {
     { name: 'George', href: '/team/#george' },
     { name: 'Dalle', href: '/team/#dalle' },
     { name: 'Jeeves', href: '/team/#jeeves' },
-    { name: 'Tessla', href: '/team/#tessla' },
-    { name: 'Mary', href: '/team/#mary' },
     { name: 'Shuri', href: '/team/#shuri' },
+    { name: 'Tesla', href: '/team/#tesla' },
+    { name: 'Charles', href: '/team/#charles' },
   ],
   system: [
     { name: 'Feeds', href: '#' },
@@ -140,7 +158,7 @@ const navigation = {
   ],
   account: [
     { name: 'Profile', href: '#' },
-    { name: 'Intergreations', href: '#' },
+    { name: 'Integrations', href: '#' },
     { name: 'Login', href: '/login' },
   ],
   social: [
@@ -216,10 +234,10 @@ const navigation = {
             We are proud of our diverse, talented and fictional team, which is dedicated to providing you the best possible services with their respective AI skills.
           </p>
           <p class="mt-6 text-lg leading-8 text-gray-600">
-            Our actors are designed to be your personal assistants each speicalized with unique skills, pinch of their own personality and are here to help.
+            Our actors are designed to be your personal assistants each specialized with unique skills, pinch of their own personality and are here to help.
           </p>
           <p class="mt-6 text-lg leading-8 text-gray-600">
-            We are always looking for more talented adgents to join our team. See our github project for open positions.
+            We are always looking for more talented agents to join our team. See our github project for open positions.
           </p>
         </div>
         <ul role="list" class="grid gap-x-8 gap-y-12 sm:grid-cols-2 sm:gap-y-6 xl:col-span-2">
@@ -229,7 +247,7 @@ const navigation = {
                 <div class="w-full border-t border-gray-300" />
               </div>
               <div class="relative flex justify-center">
-                <span class="bg-white px-2 text-sm text-gray-500">AI Veterans</span>
+                <span class="bg-white px-2 text-sm text-gray-500">Ai Veterans</span>
               </div>
             </div>
           </li>
@@ -243,17 +261,18 @@ const navigation = {
               </div>
             </div>
           </li>
+          
           <li class="col-span-2">
             <div class="relative">
               <div class="absolute inset-0 flex items-center" aria-hidden="true">
                 <div class="w-full border-t border-gray-300" />
               </div>
               <div class="relative flex justify-center">
-                <span class="bg-white px-2 text-sm text-gray-500">AI Rookies Spotlight</span>
+                <span class="bg-white px-2 text-sm text-gray-500">Ai in Training</span>
               </div>
             </div>
           </li>
-          <li v-for="person in spotlight(rookies, 2)" :key="person.name">
+          <li v-for="person in rookies" :key="person.name">
             <div class="flex items-center gap-x-6">
               <img class="h-16 w-16 rounded-full" :src="person.imageUrl" alt="" />
               <div>
@@ -263,6 +282,7 @@ const navigation = {
               </div>
             </div>
           </li>
+          
           <li class="col-span-2">
             <div class="relative">
               <div class="absolute inset-0 flex items-center" aria-hidden="true">
@@ -273,20 +293,11 @@ const navigation = {
               </div>
             </div>
           </li>
-          <li>
-            <div class="flex items-center gap-x-6">
-              <img class="h-16 w-16 rounded-full" :src="assistant_img" alt="" />
-              <div>
-                <h3 class="text-base font-semibold leading-7 tracking-tight text-gray-900">@{{ assistant_name }}</h3>
-                <p class="text-sm font-semibold leading-6 text-indigo-600">Assistant</p>
-                <p class="text-xs text-gray-400">Your custom agent created from our functions and/or your semantic skills.</p>
-              </div>
-            </div>
-          </li>
-          <li>
+
+          <li class="col-span-2">
             <span class="text-sm italic leading-6 text-gray-400">
-              No complex menus, no endlesss lists of commands, no custom builders and no code needed! 
-              Just chat with <span class="text-lime-500">@shuri</span> and they will help you craft new semantic skills, use functions from our providers, and craft a personality for your adgent.
+              No complex menus, no endless lists of commands, no custom builders and no code needed! 
+              Just chat with <span class="text-lime-500">@shuri</span> and they will help you craft new semantic skills or import functions from OpenAPI documents.
             </span>
           </li>
           <li class="col-span-2">
@@ -300,11 +311,6 @@ const navigation = {
             </div>
           </li>
           <li>
-            <span class="text-sm italic leading-6 text-gray-400">
-              Right now everything you create is private. We are working hard to unlock the ability to share feeds with other users and collaborator together with your team and ours.
-            </span>
-          </li>
-          <li >
             <div class="flex items-center gap-x-6">
               <img class="h-16 w-16 rounded-full" src="https://placehold.co/100X100?text=me" alt="" />
               <div>
@@ -314,7 +320,11 @@ const navigation = {
               </div>
             </div>
           </li>
-          
+          <li>
+            <span class="text-sm italic leading-6 text-gray-400">
+              By default, everything you create is private. You can switch a a feed to public and share its link with other users and collaborator together with your team and ours.
+            </span>
+          </li>
         </ul>
       </div>
     </div>

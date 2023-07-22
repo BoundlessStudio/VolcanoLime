@@ -34,10 +34,11 @@ export interface CommentDocument {
   type: string
   /** @minLength 1 */
   body: string
+  inContext: boolean
   /** @format int32 */
   tokens: number
-  /** @format int32 */
-  characters: number
+  /** @format double */
+  relevance: number
   /** @minLength 1 */
   feedId: string
   author: AuthorDocument
@@ -66,6 +67,7 @@ export interface FeedDocument {
   /** @minLength 1 */
   description: string
   access: FeedAccess
+  selectedSkills: string[]
 }
 
 export interface FeedEditDocument {
@@ -76,6 +78,40 @@ export interface FeedEditDocument {
   /** @minLength 1 */
   description: string
   access: FeedAccess
+  selectedSkills: string[]
+}
+
+export interface FileDocument {
+  /** @minLength 1 */
+  name: string
+  /** @minLength 1 */
+  url: string
+  /** @minLength 1 */
+  type: string
+  /** @format int64 */
+  size: number
+}
+
+export interface SkillDocument {
+  /** @minLength 1 */
+  skillId: string
+  /** @minLength 1 */
+  name: string
+  /** @minLength 1 */
+  owner: string
+  type: SkillType
+  typeOf?: string | null
+  prompt?: string | null
+  description?: string | null
+  url?: string | null
+}
+
+/** @format int32 */
+export enum SkillType {
+  Unknown = 0,
+  Coded = 1,
+  Semantic = 2,
+  OpenApi = 3
 }
 
 import axios, {
@@ -294,11 +330,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags FeedController
-     * @name ListFeed
+     * @name ListFeeds
      * @request GET:/api/feeds
      * @secure
      */
-    listFeed: (params: RequestParams = {}) =>
+    listFeeds: (params: RequestParams = {}) =>
       this.request<FeedDocument[], void>({
         path: `/api/feeds`,
         method: 'GET',
@@ -374,6 +410,73 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/feed/${feedId}`,
         method: 'DELETE',
         secure: true,
+        ...params
+      }),
+
+    /**
+     * No description
+     *
+     * @tags FileController
+     * @name Whisper
+     * @request POST:/api/whisper
+     * @secure
+     */
+    whisper: (
+      data: {
+        /** @format binary */
+        file: File
+      },
+      params: RequestParams = {}
+    ) =>
+      this.request<string, void>({
+        path: `/api/whisper`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.FormData,
+        format: 'json',
+        ...params
+      }),
+
+    /**
+     * No description
+     *
+     * @tags FileController
+     * @name Upload
+     * @request POST:/api/upload/{feed_id}
+     * @secure
+     */
+    upload: (
+      feedId: string,
+      data: {
+        files: File[]
+      },
+      params: RequestParams = {}
+    ) =>
+      this.request<FileDocument[], void>({
+        path: `/api/upload/${feedId}`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.FormData,
+        format: 'json',
+        ...params
+      }),
+
+    /**
+     * No description
+     *
+     * @tags SkillController
+     * @name ListSkills
+     * @request GET:/api/skills
+     * @secure
+     */
+    listSkills: (params: RequestParams = {}) =>
+      this.request<SkillDocument[], void>({
+        path: `/api/skills`,
+        method: 'GET',
+        secure: true,
+        format: 'json',
         ...params
       })
   }

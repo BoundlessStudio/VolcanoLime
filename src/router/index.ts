@@ -50,7 +50,12 @@ export function createRouter(app: App): Router {
         component: () => import('../views/FeedView.vue'),
         beforeEnter: createAuthGuard(app)
       },
-      
+      {
+        path: '/history',
+        name: 'history',
+        component: () => import('../views/HistoryView.vue'),
+        beforeEnter: createAuthGuard(app)
+      },
     ]
   })
 }

@@ -4,7 +4,7 @@ import { defineStore } from 'pinia'
 import { useAuth0 } from "@auth0/auth0-vue"
 import { uniqueNamesGenerator, colors, animals,  type Config } from 'unique-names-generator'
 import * as signalR from "@microsoft/signalr"
-import { Api, type FeedDocument, type FeedCreateDocument, type FeedEditDocument, type CommentCreateDocument, type CommentDocument } from '@/api/electric-raspberry'
+import { Api, type FeedDocument, type FeedCreateDocument, type FeedEditDocument, type CommentCreateDocument, type CommentDocument, type FileDocument, type SkillDocument } from '@/api/electric-raspberry'
 
 export interface ThreadState {
   connected: Boolean
@@ -15,7 +15,6 @@ export interface FeedArgs {
 }
 export interface CommentArgs {
   feedId: string,
-  commentId: string
 }
 
 const config: Config = {
@@ -52,8 +51,8 @@ export const useThreadStore = defineStore('thread', () => {
   //   feedChanged.trigger({ feedId })
   // })
   const commentsChanged = createEventHook<CommentArgs>()
-  connection.on("onCommentsChanged", async (feedId, commentId) => {
-    commentsChanged.trigger({ feedId, commentId })
+  connection.on("onCommentsChanged", async (feedId) => {
+    commentsChanged.trigger({ feedId })
   })
 
   async function start() {
@@ -74,7 +73,11 @@ export const useThreadStore = defineStore('thread', () => {
     })
     return client
   }
-
+  async function listSkills() : Promise<SkillDocument[]> {
+    const controller = await getController()
+    var response = await controller.api.listSkills()
+    return response.data || []
+  }
   async function createFeed(template: string) : Promise<FeedDocument> {
     const controller = await getController()
     var dto = {
@@ -86,8 +89,8 @@ export const useThreadStore = defineStore('thread', () => {
   }
   async function listFeeds() : Promise<FeedDocument[]> {
     const controller = await getController()
-    var reponse = await controller.api.listFeed()
-    return reponse.data || []
+    var response = await controller.api.listFeeds()
+    return response.data || []
   }
   async function getFeed(id: string) : Promise<FeedDocument> {
     const controller = await getController()
@@ -104,8 +107,8 @@ export const useThreadStore = defineStore('thread', () => {
   }
   async function listComments(id: string) {
     const controller = await getController()
-    const reponse = await controller.api.listComments(id)
-    return reponse.data || []
+    const response = await controller.api.listComments(id)
+    return response.data || []
   }
   async function createComment(body: CommentCreateDocument): Promise<CommentDocument>  {
     const controller = await getController()
@@ -116,10 +119,17 @@ export const useThreadStore = defineStore('thread', () => {
     const controller = await getController()
     await controller.api.deleteComment(id)
   }
+  async function uploadFiles(id: string, files: File[]): Promise<FileDocument[]>  {
+    const controller = await getController()
+    var response = await controller.api.upload(id, {
+      files: files
+    })
+    return response.data
+  }
   
   return { 
     state, 
-    start, createFeed, listFeeds, getFeed, editFeed, deleteFeed, joinFeed, listComments, createComment, deleteComment,
+    start, listSkills, createFeed, listFeeds, getFeed, editFeed, deleteFeed, joinFeed, listComments, createComment, deleteComment, uploadFiles,
     onCommentsChanged: commentsChanged.on
   }
 })
