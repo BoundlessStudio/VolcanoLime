@@ -115,11 +115,11 @@ export enum SkillType {
 }
 
 import axios, {
-  AxiosInstance,
-  AxiosRequestConfig,
-  AxiosResponse,
-  HeadersDefaults,
-  ResponseType
+  type AxiosInstance,
+  type AxiosRequestConfig,
+  type AxiosResponse,
+  type HeadersDefaults,
+  type ResponseType
 } from 'axios'
 
 export type QueryParamsType = Record<string | number, any>

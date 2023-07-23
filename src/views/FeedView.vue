@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { FeedAccess, type CommentDocument, type FeedDocument } from '@/api/electric-raspberry'
-import { nextTick, ref, watch } from 'vue';
+import { nextTick, ref, watch } from 'vue'
 import { formatTimeAgo } from '@vueuse/core'
 import { useRoute } from 'vue-router'
 import { useThreadStore } from '@/stores//thread'
-import { MdPreview, config, } from 'md-editor-v3'
+import { MdPreview, config } from 'md-editor-v3'
 import MarkdownIt from 'markdown-it'
 import FeedEditPanel from '@/components/FeedEditPanel.vue'
 import FeedPrompt from '@/components/FeedPrompt.vue'
@@ -15,17 +15,20 @@ config({
     var fence = md.renderer.rules.fence
     md.renderer.rules.fence = (tokens, idx, options, env, self) => {
       const token = tokens[idx]
-      if(token.info == 'chart') {
-        return `<img src="https://quickchart.io/chart?c=${encodeURIComponent(token.content)}" title="" alt="Chart" zoom="" class="medium-zoom-image">`
+      if (token.info == 'chart') {
+        return `<img src="https://quickchart.io/chart?c=${encodeURIComponent(
+          token.content
+        )}" title="" alt="Chart" zoom="" class="medium-zoom-image">`
       } else {
-        return fence ? fence(tokens, idx, options, env, self) : ""
+        return fence ? fence(tokens, idx, options, env, self) : ''
       }
     }
   }
 })
 
 const route = useRoute()
-const { getFeed, listComments, createComment, deleteComment, start, joinFeed, onCommentsChanged } = useThreadStore()
+const { getFeed, listComments, createComment, deleteComment, start, joinFeed, onCommentsChanged } =
+  useThreadStore()
 
 const loading = ref(true)
 
@@ -36,7 +39,7 @@ const feed = ref<FeedDocument>()
 const comments = ref<CommentDocument[]>([])
 
 onCommentsChanged(async (args) => {
-  if(id.value == args.feedId) {
+  if (id.value == args.feedId) {
     await loadComments()
   }
 })
@@ -55,47 +58,50 @@ const addComment = async (prompt: string) => {
   const dto = {
     body: prompt,
     feedId: id.value,
-    type: 'comment',
+    type: 'comment'
   }
   const comment = await createComment(dto)
   comments.value.push(comment)
   await nextTick()
   window.scrollTo(0, document.body.scrollHeight)
-  counter.value = 0;
+  counter.value = 0
 }
 
-const removeComment = async (id: string|undefined|null) => {
-  if(id) {
+const removeComment = async (id: string | undefined | null) => {
+  if (id) {
     await deleteComment(id)
-    comments.value = comments.value.filter(c => c.commentId !== id)
+    comments.value = comments.value.filter((c) => c.commentId !== id)
   }
 }
 
 const fromNow = (date?: string) => {
-  if(date) {
+  if (date) {
     return formatTimeAgo(new Date(date))
   } else {
     return ''
   }
 }
 
-watch(() => route.params.id, async (newId ) => {
-  loading.value = true
-  id.value = newId as string
-  await start()
-  await loadFeed()
-  await loadComments()
-  await joinFeed(id.value)
-  loading.value = false
-  await nextTick()
-  window.scrollTo(0, document.body.scrollHeight)
-}, { immediate: true })
+watch(
+  () => route.params.id,
+  async (newId) => {
+    loading.value = true
+    id.value = newId as string
+    await start()
+    await loadFeed()
+    await loadComments()
+    await joinFeed(id.value)
+    loading.value = false
+    await nextTick()
+    window.scrollTo(0, document.body.scrollHeight)
+  },
+  { immediate: true }
+)
 
 const counter = ref(0)
 setInterval(() => {
-  counter.value++;
+  counter.value++
 }, 1000)
-
 </script>
 
 <!-- 
@@ -109,7 +115,7 @@ TOOD: Add Mock Comments to Test UI
 -->
 
 <template>
-  <FeedEditPanel :id="id" :show="open" @canceled="open=false" @saved="loadFeed"></FeedEditPanel>
+  <FeedEditPanel :id="id" :show="open" @canceled="open = false" @saved="loadFeed"></FeedEditPanel>
 
   <div v-if="loading">
     <div class="flex h-screen">
@@ -130,7 +136,7 @@ TOOD: Add Mock Comments to Test UI
           <div class="bg-white px-1 text-lg text-gray-500">
             <span>{{ feed?.name }}</span>
           </div>
-          <div @click="open=true" class="bg-white px-1 text-lg text-gray-500">
+          <div @click="open = true" class="bg-white px-1 text-lg text-gray-500">
             <font-awesome-icon icon="pen-to-square" class="" title="Public" />
           </div>
         </div>
@@ -158,10 +164,32 @@ TOOD: Add Mock Comments to Test UI
             <div class="flex parent">
               <div class="w-1/12">
                 <div class="h-full relative">
-                  <div :class="[item.inContext == true && item.type == 'comment'  ? 'border-green-600' : item.inContext == false && item.type == 'comment' ? 'border-red-600' : 'border-neutral-400 border-dashed',  'absolute top-0 left-[50%] h-full border-l-2']"></div>
-                  <div :class="[item.inContext == true && item.type == 'comment'  ? 'border-green-600' : item.inContext == false && item.type == 'comment' ? 'border-red-600' : 'border-neutral-400 border-dashed',  'absolute -bottom-6 left-[50%] h-6 border-l-2']"></div>
-                  <div class="w-full flex justify-center ">
-                    <img :src="item.author.picture" alt="" class="relative h-7 w-7 md:h-9 md:w-9 flex-none rounded-full bg-gray-50 transition-all" />
+                  <div
+                    :class="[
+                      item.inContext == true && item.type == 'comment'
+                        ? 'border-green-600'
+                        : item.inContext == false && item.type == 'comment'
+                        ? 'border-red-600'
+                        : 'border-neutral-400 border-dashed',
+                      'absolute top-0 left-[50%] h-full border-l-2'
+                    ]"
+                  ></div>
+                  <div
+                    :class="[
+                      item.inContext == true && item.type == 'comment'
+                        ? 'border-green-600'
+                        : item.inContext == false && item.type == 'comment'
+                        ? 'border-red-600'
+                        : 'border-neutral-400 border-dashed',
+                      'absolute -bottom-6 left-[50%] h-6 border-l-2'
+                    ]"
+                  ></div>
+                  <div class="w-full flex justify-center">
+                    <img
+                      :src="item.author.picture"
+                      alt=""
+                      class="relative h-7 w-7 md:h-9 md:w-9 flex-none rounded-full bg-gray-50 transition-all"
+                    />
                   </div>
                 </div>
               </div>
@@ -169,10 +197,14 @@ TOOD: Add Mock Comments to Test UI
                 <div class="flex justify-between pb-1">
                   <div>
                     <div>
-                      <time :datetime="item.timestamp"  class="flex-none text-xs leading-5 text-gray-500">{{ fromNow(item.timestamp) }}</time>
+                      <time
+                        :datetime="item.timestamp"
+                        class="flex-none text-xs leading-5 text-gray-500"
+                        >{{ fromNow(item.timestamp) }}</time
+                      >
                     </div>
                     <div class="flex">
-                      <span class="text-xs">{{ item.author.name }} {{item.type}}</span>
+                      <span class="text-xs">{{ item.author.name }} {{ item.type }}</span>
                     </div>
                   </div>
                   <div class="child transition-all">
@@ -181,14 +213,28 @@ TOOD: Add Mock Comments to Test UI
                     </div>
                   </div>
                 </div>
-                <div v-if="item.type == 'comment'" class="rounded-md p-1 pt-4 ring-1 ring-inset ring-gray-200 text-sm text-gray-500">
-                  <MdPreview :editor-id="`editor-${item.commentId}`"  v-model="item.body" previewTheme="github"></MdPreview>
+                <div
+                  v-if="item.type == 'comment'"
+                  class="rounded-md p-1 pt-4 ring-1 ring-inset ring-gray-200 text-sm text-gray-500"
+                >
+                  <MdPreview
+                    :editor-id="`editor-${item.commentId}`"
+                    v-model="item.body"
+                    previewTheme="github"
+                  ></MdPreview>
                 </div>
-                <div v-if="item.type == 'planing'" class="rounded-md p-1 pt-4 ring-1 ring-inset ring-gray-200 text-sm text-gray-500">
-                  <MdPreview :editor-id="`editor-${item.commentId}`"  v-model="item.body" previewTheme="github"></MdPreview>
+                <div
+                  v-if="item.type == 'planing'"
+                  class="rounded-md p-1 pt-4 ring-1 ring-inset ring-gray-200 text-sm text-gray-500"
+                >
+                  <MdPreview
+                    :editor-id="`editor-${item.commentId}`"
+                    v-model="item.body"
+                    previewTheme="github"
+                  ></MdPreview>
                 </div>
                 <div v-if="item.type == 'memory'">
-                  <span class="text-xs">{{item.body}}</span>
+                  <span class="text-xs">{{ item.body }}</span>
                 </div>
               </div>
             </div>

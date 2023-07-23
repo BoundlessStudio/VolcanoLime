@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { useThreadStore } from '@/stores/thread';
+import { useThreadStore } from '@/stores/thread'
 
-const router = useRouter();
+const router = useRouter()
 const { createFeed } = useThreadStore()
 
 const create = async (template: string) => {
@@ -13,24 +13,20 @@ const create = async (template: string) => {
 const faqs = [
   {
     question: 'How do you make holy water?',
-    answer:
-      'You boil the hell out of it.',
+    answer: 'You boil the hell out of it.'
   },
   {
     question: 'What is the best thing about Switzerland?',
-    answer:
-      'I do not know, but the flag is a big plus.',
+    answer: 'I do not know, but the flag is a big plus.'
   },
   {
     question: 'What do you call someone with no body and no nose?',
-    answer:
-      'Nobody knows!',
+    answer: 'Nobody knows!'
   },
   {
     question: 'Why do you never see elephants hiding in trees?',
-    answer:
-      'Because they are so good at it.',
-  },
+    answer: 'Because they are so good at it.'
+  }
 ]
 
 const items = [
@@ -65,7 +61,7 @@ const items = [
     iconColor: 'bg-yellow-500',
     icon: 'calendar',
     link: 'lock'
-  },
+  }
 ]
 </script>
 
@@ -74,10 +70,13 @@ const items = [
     <div class="py-6">
       <div class="lg:grid lg:grid-cols-12 lg:gap-8">
         <div class="lg:col-span-5">
-          <h2 class="text-lg font-bold leading-10 tracking-tight  text-gray-900">Frequently Asked Questions</h2>
+          <h2 class="text-lg font-bold leading-10 tracking-tight text-gray-900">
+            Frequently Asked Questions
+          </h2>
           <p class="mt-4 text-sm italic leading-6 text-gray-600">
-            Can't find the answer you're looking for? Just click the Empty Feed and <span class="text-lime-500">@george</span> as message. 
-            They love to chat although sometimes makes things up.
+            Can't find the answer you're looking for? Just click the Empty Feed and
+            <span class="text-lime-500">@george</span> as message. They love to chat although
+            sometimes makes things up.
           </p>
         </div>
         <div class="mt-10 lg:col-span-7 lg:mt-0">
@@ -95,13 +94,24 @@ const items = [
     </div>
     <div class="mx-auto py-6">
       <h2 class="text-base font-semibold leading-6 text-gray-900">Create a new feed</h2>
-      <p class="mt-1 text-sm text-gray-500">Get started by selecting a template or start from an empty feed.</p>
+      <p class="mt-1 text-sm text-gray-500">
+        Get started by selecting a template or start from an empty feed.
+      </p>
       <ul role="list" class="mt-6 divide-y divide-gray-200 border-b border-t border-gray-200">
         <li v-for="(item, itemIdx) in items" :key="itemIdx">
           <div class="group relative flex items-start space-x-3 px-2 py-4 hover:bg-gray-200">
             <div class="flex-shrink-0">
-              <span :class="[item.iconColor, 'inline-flex h-10 w-10 items-center justify-center rounded-lg']">
-                <font-awesome-icon :icon="item.icon" class="h-6 w-6 text-white" aria-hidden="true" />
+              <span
+                :class="[
+                  item.iconColor,
+                  'inline-flex h-10 w-10 items-center justify-center rounded-lg'
+                ]"
+              >
+                <font-awesome-icon
+                  :icon="item.icon"
+                  class="h-6 w-6 text-white"
+                  aria-hidden="true"
+                />
               </span>
             </div>
             <div class="min-w-0 flex-1">
@@ -114,12 +124,15 @@ const items = [
               <p class="text-sm text-gray-500">{{ item.description }}</p>
             </div>
             <div class="flex-shrink-0 self-center">
-              <font-awesome-icon :icon="item.link" class="h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
+              <font-awesome-icon
+                :icon="item.link"
+                class="h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                aria-hidden="true"
+              />
             </div>
           </div>
         </li>
       </ul>
-     
     </div>
   </div>
 </template>
