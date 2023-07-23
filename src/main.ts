@@ -31,9 +31,9 @@ const app = createApp(App)
 app.use(
   createAuth0({
     domain: 'dev-qupdjha4.us.auth0.com',
-    clientId: 'HRMJMSRxjgKXHgbqisfA7FHfQpl7DPIF',
+    clientId: 'c84WgeN4S4BUMfUHJWMlEtmdrr8BlLZ7',
     authorizationParams: {
-      redirect_uri: 'https://volcano-lime.ngrok.app',
+      redirect_uri: 'https://volcano-lime.com',
       audience: 'electric-raspberry.ngrok.app'
     }
   })
