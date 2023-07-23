@@ -40,7 +40,7 @@ export const useThreadStore = defineStore('thread', () => {
   })
 
   const connection = new signalR.HubConnectionBuilder()
-    .withUrl('https://electric-raspberry.ngrok.app/hub/feed', {
+    .withUrl('electric-raspberry.azurewebsites.net/hub/feed', {
       accessTokenFactory: getAccessTokenSilently
     })
     .build()
