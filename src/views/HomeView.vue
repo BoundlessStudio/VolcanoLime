@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { uniqueNamesGenerator, names, type Config } from 'unique-names-generator';
 import { useAuth0 } from '@auth0/auth0-vue';
-import { ref } from 'vue';
+import { useDark, useToggle } from '@vueuse/core'
+import { ref, watch } from 'vue';
 
 function spotlight<T>(a: Array<T>, n: number) {
     for (let i = a.length - 1; i > 0; i--) {
@@ -10,34 +11,9 @@ function spotlight<T>(a: Array<T>, n: number) {
     }
     return a.slice(0, n);
 }
-
-// TODO:
-// chat types:
-// - User (prompt)
-// - Job (thinking)
-// - Ai Reponse
-// - Reponse Enchantments
-// - 1. [X] Mermaid.js (Mermaid scripts) => diagrams
-// - 2. [ ] JsonForms.io (jsonschema and/or uischema scripts) => form submit creates comment with jsoen results into script tag
-// - 3. [?] Citations (citation scripts) => links to document with author, source, origin, provider, confidence, text and timestamp
-// - Reponse Sudgestions
-// - 1. [ ] Question => tell me more, sudgestions, etc
-// - 2. [ ] Memorize => memorize this  comment
-// - 3. [ ] Plan => create a plan for the this goal
-// - Ai followup
-// - 1. [ ] Answer => to Question Sudgestions
-// - 1. [ ] Plan's Step => the results of the each step of plan int response to the run plan command.
-// - 4. [?] Citations (citation scripts) => links to document with author, source, origin, provider, confidence, text and timestamp
-
-/*
-TODO: Personalities
-@dalle - Artist
-@jeeves - Question and Answer
-@tessla - planner
-@mary - Story Teller
-@thor - Mythologist
-+ Add your own using semtic skills
-*/
+const isDark = useDark()
+const toggleDark = useToggle(isDark)
+const { isAuthenticated, user } = useAuth0();
 
 const configBot: Config = {
   separator: ".",
@@ -129,47 +105,39 @@ const rookies = [
   {
     name: '@travis',
     role: 'Cartographer',
-    bio: 'is your go-to expert for all things related to maps, routing, and distance calculations. He can skillfully interpret and utilize geospatial data, providing invaluable insights on optimal routes and real-time distances. With his expertise, you will never be lost. Travis is instrumental in connecting spaces and people, making geographical challenges a thing of the past for our team.',
+    bio: 'is your go-to expert for all things related to maps, routing, and distance calculations. He can skillfully interpret and utilize geo-spatial data, providing invaluable insights on optimal routes and real-time distances. With his expertise, you will never be lost. Travis is instrumental in connecting spaces and people, making geographical challenges a thing of the past for our team.',
     imageUrl: 'https://i.imgur.com/YNCtu4z.png',
   },
 ]
-const assistant_name = ref(uniqueNamesGenerator(configBot))
-const assistant_img = ref('https://placehold.co/100X100?text=' + assistant_name.value[0].toUpperCase())
 
 const navigation = {
   solutions: [
-    { name: 'George', href: '/team/#george' },
-    { name: 'Dalle', href: '/team/#dalle' },
-    { name: 'Jeeves', href: '/team/#jeeves' },
-    { name: 'Shuri', href: '/team/#shuri' },
-    { name: 'Tesla', href: '/team/#tesla' },
-    { name: 'Charles', href: '/team/#charles' },
+    { name: 'George', href: '/status/#george' },
+    { name: 'Dalle', href: '/status/#dalle' },
+    { name: 'Jeeves', href: '/status/#jeeves' },
+    { name: 'Shuri', href: '/status/#shuri' },
+    { name: 'Tesla', href: '/status/#tesla' },
+    { name: 'Charles', href: '/status/#charles' },
   ],
   system: [
-    { name: 'Feeds', href: '#' },
-    { name: 'Settings', href: '#' },
-    { name: 'Theme 🔆', href: '#' },
+    { name: 'Welcome', href: '/welcome' },
+    { name: 'Feeds', href: '/history' },
+    // { name: 'Theme 🔆', href: '#' },
   ],
   support: [
     { name: 'About', href: '/about' },
-    { name: 'Guides', href: '#' },
-    { name: 'Documentation', href: '#' },
-    { name: 'Status', href: '#' },
-  ],
-  account: [
-    { name: 'Profile', href: '#' },
-    { name: 'Integrations', href: '#' },
-    { name: 'Login', href: '/login' },
+    { name: 'Discord', href: 'https://discord.gg/8RKKsyT4Dk' },
+    { name: 'Twitter', href: 'https://twitter.com/RGBKnights' },
   ],
   social: [
     {
-      name: 'Twitter',
-      href: 'https://twitter.com/RGBKnights',
-      icon: 'fa-brands fa-twitter',
+      name: 'volcano-lime: the boring stuff',
+      href: 'https://github.com/RGBKnights/volcano-lime',
+      icon: 'fa-brands fa-github',
     },
     {
-      name: 'GitHub',
-      href: 'https://github.com/RGBKnights',
+      name: 'electric-raspberry: the interesting stuff',
+      href: 'https://github.com/RGBKnights/electric-raspberry',
       icon: 'fa-brands fa-github',
     },
   ],
@@ -177,7 +145,13 @@ const navigation = {
 </script>
 
 <template>
-  <div class="relative isolate overflow-hidden bg-white">
+  <header class="flex justify-center bg-lime-600 text-neutral-100">
+    <div class="p-2">
+      <span>During the Alpha all data will be deleted when the server restarts.</span>
+    </div>
+  </header>
+
+  <div class="relative isolate overflow-hidden bg-whit">
     <svg class="absolute inset-0 -z-10 h-full w-full stroke-gray-200 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]" aria-hidden="true">
       <defs>
         <pattern id="0787a7c5-978c-4f66-83c7-11c213f99cb7" width="200" height="200" x="50%" y="-1" patternUnits="userSpaceOnUse">
@@ -189,7 +163,7 @@ const navigation = {
     <div class="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:px-8 lg:py-10">
       <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl lg:flex-shrink-0 lg:pt-8">
         <div class="flex">
-          <img src="https://i.imgur.com/MpXedd3.png" class="w-48 h-48" alt="Volcano Lime" />
+          <img src="https://i.imgur.com/MpXedd3.png" class="w-48 h-48 rounded-full" alt="Volcano Lime" />
           <span class="pt-4 md:pt-8 text-6xl text-lime-500 font-logo">Volcano Lime</span>
         </div>
         <div class="mt-24 sm:mt-32 lg:mt-16">
@@ -222,8 +196,8 @@ const navigation = {
     </div>
   </div>
 
-  <div>
-    <div class="bg-white py-12 sm:py-24">
+  <div class="bg-white">
+    <div class="py-12 sm:py-24">
       <div class="mx-auto grid max-w-7xl gap-x-8 gap-y-20 px-6 lg:px-8 xl:grid-cols-3">
         <div class="max-w-2xl">
           <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl ">Meet the Team!</h2>
@@ -298,6 +272,7 @@ const navigation = {
             <span class="text-sm italic leading-6 text-gray-400">
               No complex menus, no endless lists of commands, no custom builders and no code needed! 
               Just chat with <span class="text-lime-500">@shuri</span> and they will help you craft new semantic skills or import functions from OpenAPI documents.
+              <span class="text-lime-500">@tesla</span> can use these new skills automatically in the feed it was created in but you can enabled them in other feeds as well.
             </span>
           </li>
           <li class="col-span-2">
@@ -311,10 +286,18 @@ const navigation = {
             </div>
           </li>
           <li>
-            <div class="flex items-center gap-x-6">
-              <img class="h-16 w-16 rounded-full" src="https://placehold.co/100X100?text=me" alt="" />
+            <div v-if="isAuthenticated" class="flex items-center gap-x-6">
+              <img class="h-16 w-16 rounded-full" :src="user.picture" alt="" />
               <div>
-                <h3 class="text-base font-semibold leading-7 tracking-tight text-gray-900">@me</h3>
+                <h3 class="text-base font-semibold leading-7 tracking-tight text-gray-900">{{user.name}}</h3>
+                <p class="text-sm font-semibold leading-6 text-indigo-600">User</p>
+                <p class="text-xs text-gray-400">You, the user, are the most important part of the team. You are the reason we do what we do.</p>
+              </div>
+            </div>
+            <div v-else class="flex items-center gap-x-6">
+              <img class="h-16 w-16 rounded-full" src="https://placehold.co/100X100?text=ME" alt="" />
+              <div>
+                <h3 class="text-base font-semibold leading-7 tracking-tight text-gray-900">Me</h3>
                 <p class="text-sm font-semibold leading-6 text-indigo-600">User</p>
                 <p class="text-xs text-gray-400">You, the user, are the most important part of the team. You are the reason we do what we do.</p>
               </div>
@@ -342,10 +325,14 @@ const navigation = {
             <p class="text-xs italic text-gray-600">While we are still in the early stages of development, we are excited to share our progress with you and hope you enjoy our work.</p>
           </blockquote>
           <div class="flex space-x-6">
-            <a v-for="item in navigation.social" :key="item.name" :href="item.href" class="text-gray-400 hover:text-gray-500">
-              <span class="sr-only">{{ item.name }}</span>
-              <font-awesome-icon :icon="item.icon" class="h-6 w-6" aria-hidden="true" />
-            </a>
+            <ul>
+              <li v-for="item in navigation.social" :key="item.name">
+                <a :href="item.href" :title="item.name" target="_blank" class="text-gray-400 hover:text-gray-500">
+                  <font-awesome-icon :icon="item.icon" class="h-6 w-6" aria-hidden="true" />
+                  <span class="pl-2">{{ item.name }}</span>
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
         <div class="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
@@ -379,8 +366,17 @@ const navigation = {
             <div class="mt-10 md:mt-0">
               <h3 class="text-sm font-semibold leading-6 text-gray-900">Account</h3>
               <ul role="list" class="mt-6 space-y-4">
-                <li v-for="item in navigation.account" :key="item.name">
-                  <a :href="item.href" class="text-sm leading-6 text-gray-600 hover:text-gray-900">{{ item.name }}</a>
+                <li v-if="isDark">
+                  <a @click="toggleDark()" class="cursor-pointer text-sm leading-6 text-gray-600 hover:text-gray-900">Theme 🌙</a>
+                </li>
+                <li v-else>
+                  <a @click="toggleDark()" class="cursor-pointer text-sm leading-6 text-gray-600 hover:text-gray-900">Theme 🔆</a>
+                </li>
+                <li v-if="isAuthenticated">
+                  <a href="/logoff" class="text-sm leading-6 text-gray-600 hover:text-gray-900">Logoff</a>
+                </li>
+                <li v-else>
+                  <a href="/login" class="text-sm leading-6 text-gray-600 hover:text-gray-900">Login</a>
                 </li>
               </ul>
             </div>
