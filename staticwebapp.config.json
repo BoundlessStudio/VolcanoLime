@@ -1,6 +1,6 @@
 {
   "globalHeaders": {
-    "content-security-policy": "default-src https: 'unsafe-eval' 'unsafe-inline'; object-src 'none'; connect-src electric-raspberry.azurewebsites.net dev-qupdjha4.us.auth0.com"
+    "content-security-policy": "default-src https: 'unsafe-eval' 'unsafe-inline'; object-src 'none'; connect-src ws://electric-raspberry.azurewebsites.net https://electric-raspberry.azurewebsites.net https://dev-qupdjha4.us.auth0.com"
   },
   "navigationFallback": {
     "rewrite": "/index.html",
