@@ -15,7 +15,8 @@ export const useWhisperStore = defineStore('whisper', () => {
     const client = new Api({
       headers: {
         Authorization: `Bearer ${token}`
-      }
+      },
+      baseURL: import.meta.env.VITE_API
     })
     return client
   }

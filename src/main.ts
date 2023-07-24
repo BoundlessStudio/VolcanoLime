@@ -30,11 +30,11 @@ const app = createApp(App)
 
 app.use(
   createAuth0({
-    domain: 'dev-qupdjha4.us.auth0.com',
-    clientId: 'c84WgeN4S4BUMfUHJWMlEtmdrr8BlLZ7',
+    domain: import.meta.env.VITE_AUTH_DOMAIN,
+    clientId: import.meta.env.VITE_AUTH_CLIENT_ID,
     authorizationParams: {
-      redirect_uri: 'https://volcano-lime.com',
-      audience: 'electric-raspberry.ngrok.app'
+      redirect_uri: import.meta.env.VITE_AUTH_REDIRECT_URL,
+      audience: import.meta.env.VITE_AUTH_AUDIENCE
     }
   })
 )

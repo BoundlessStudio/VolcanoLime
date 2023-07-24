@@ -40,7 +40,7 @@ export const useThreadStore = defineStore('thread', () => {
   })
 
   const connection = new signalR.HubConnectionBuilder()
-    .withUrl('https://electric-raspberry.azurewebsites.net/hub/feed', {
+    .withUrl(import.meta.env.VITE_API + '/hub/feed', {
       accessTokenFactory: getAccessTokenSilently
     })
     .build()
@@ -79,7 +79,8 @@ export const useThreadStore = defineStore('thread', () => {
     const client = new Api({
       headers: {
         Authorization: `Bearer ${token}`
-      }
+      },
+      baseURL: import.meta.env.VITE_API
     })
     return client
   }
