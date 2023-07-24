@@ -102,6 +102,14 @@ const counter = ref(0)
 setInterval(() => {
   counter.value++
 }, 1000)
+
+const save = async () => {
+  open.value = false
+  await loadFeed()
+}
+const cancel = async () => {
+  open.value = false
+}
 </script>
 
 <!-- 
@@ -115,7 +123,7 @@ TOOD: Add Mock Comments to Test UI
 -->
 
 <template>
-  <FeedEditPanel :id="id" :show="open" @canceled="open = false" @saved="loadFeed"></FeedEditPanel>
+  <FeedEditPanel :id="id" :show="open" @canceled="cancel" @saved="save"></FeedEditPanel>
 
   <div v-if="loading">
     <div class="flex h-screen">
