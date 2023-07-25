@@ -127,7 +127,7 @@ const navigation = {
   support: [
     { name: 'About', href: '/about' },
     { name: 'Discord', href: 'https://discord.gg/8RKKsyT4Dk' },
-    { name: 'Twitter', href: 'https://twitter.com/RGBKnights' }
+    // { name: 'Twitter', href: 'https://twitter.com/RGBKnights' }
   ],
   social: [
     {

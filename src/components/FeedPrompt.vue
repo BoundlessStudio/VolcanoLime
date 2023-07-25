@@ -152,6 +152,7 @@ const { isOverDropZone } = useDropZone(dropZoneRef, onDrop)
       <div class="overflow-hidden rounded-lg shadow-sm ring-1 ring-inset ring-gray-300">
         <div class="h-48">
           <MdEditor
+            @keydown.enter.shift.exact.prevent="submitComment"
             ref="editorRef"
             v-model="prompt"
             :toolbars="toolbar"
@@ -181,7 +182,7 @@ const { isOverDropZone } = useDropZone(dropZoneRef, onDrop)
             </button>
           </div>
           <div class="pr-2 text-gray-500 text-sm">
-            <button @click="submitComment" class="p-1">
+            <button title="Shift+Enter" @click="submitComment" class="p-1">
               <font-awesome-icon icon="paper-plane" />
             </button>
           </div>
