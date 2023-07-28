@@ -41,7 +41,7 @@ const toolbar = ref([
 
 const completions = ref<Array<CompletionSource>>([
   (context) => {
-    const bots = ['@george', '@jeeves', '@charles', '@dalle', '@alex', '@tesla', '@shuri']
+    const bots = ['@george', '@jeeves', '@charles', '@leonardo', '@alex', '@tesla', '@shuri']
     const word = context.matchBefore(/@\w*/)
     if (word === null || (word.from == word.to && context.explicit)) return null
     return {

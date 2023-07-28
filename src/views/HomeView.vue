@@ -40,11 +40,17 @@ const veterans = [
     bio: 'is your gifted storyteller, expertly weaving narratives that captivate and inspire our audience. Through his imaginative storytelling, he engages and transports us to new realms of possibilities.',
     imageUrl: 'https://i.imgur.com/JCyTEXa.png'
   },
+  // {
+  //   name: '@dalle',
+  //   role: 'Artist',
+  //   bio: 'is your resident artist, bringing creativity and imagination to everything they touch. Creating stunning visuals and captivating designs that bring your ideas to life.',
+  //   imageUrl: 'https://i.imgur.com/8PhftEq.png'
+  // },
   {
-    name: '@dalle',
+    name: "@leonardo",
     role: 'Artist',
-    bio: 'is your resident artist, bringing creativity and imagination to everything they touch. Creating stunning visuals and captivating designs that bring your ideas to life.',
-    imageUrl: 'https://i.imgur.com/8PhftEq.png'
+    bio: 'is your master artist, bringing creativity and imagination to everything they touch. Creating stunning visuals and captivating designs that bring your ideas to life.',
+    imageUrl: 'https://i.imgur.com/wKbKtP1.png'
   },
   {
     name: '@alex',
