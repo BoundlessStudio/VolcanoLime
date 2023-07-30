@@ -2,12 +2,12 @@
 import { uniqueNamesGenerator, names, type Config } from 'unique-names-generator'
 import { useAuth0 } from '@auth0/auth0-vue'
 import { useDark, useToggle } from '@vueuse/core'
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 
 function spotlight<T>(a: Array<T>, n: number) {
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1))
-    ;[a[i], a[j]] = [a[j], a[i]]
+      ;[a[i], a[j]] = [a[j], a[i]]
   }
   return a.slice(0, n)
 }
@@ -116,6 +116,25 @@ const rookies = [
   }
 ]
 
+const images = [
+  "https://i.imgur.com/qF2xP8b.png",
+  "https://i.imgur.com/veD7t7B.png",
+  "https://i.imgur.com/cwWr3bA.png",
+  "https://i.imgur.com/BCAGkeb.png",
+];
+const active = ref(0)
+
+onMounted(() => {
+  let i = 0;
+  setInterval(() => {
+    if (i > images.length - 1) {
+      i = 0;
+    }
+    active.value = i;
+    i++;
+  }, 10000);
+})
+
 const navigation = {
   solutions: [
     { name: 'George', href: '/status/#george' },
@@ -160,46 +179,27 @@ const navigation = {
   <div class="relative isolate overflow-hidden bg-whit">
     <svg
       class="absolute inset-0 -z-10 h-full w-full stroke-gray-200 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
-      aria-hidden="true"
-    >
+      aria-hidden="true">
       <defs>
-        <pattern
-          id="0787a7c5-978c-4f66-83c7-11c213f99cb7"
-          width="200"
-          height="200"
-          x="50%"
-          y="-1"
-          patternUnits="userSpaceOnUse"
-        >
+        <pattern id="0787a7c5-978c-4f66-83c7-11c213f99cb7" width="200" height="200" x="50%" y="-1"
+          patternUnits="userSpaceOnUse">
           <path d="M.5 200V.5H200" fill="none" />
         </pattern>
       </defs>
-      <rect
-        width="100%"
-        height="100%"
-        stroke-width="0"
-        fill="url(#0787a7c5-978c-4f66-83c7-11c213f99cb7)"
-      />
+      <rect width="100%" height="100%" stroke-width="0" fill="url(#0787a7c5-978c-4f66-83c7-11c213f99cb7)" />
     </svg>
     <div class="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:px-8 lg:py-10">
       <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl lg:flex-shrink-0 lg:pt-8">
         <div class="flex">
-          <img
-            src="https://i.imgur.com/MpXedd3.png"
-            class="w-48 h-48 rounded-full"
-            alt="Volcano Lime"
-          />
+          <img src="https://i.imgur.com/MpXedd3.png" class="w-48 h-48 rounded-full" alt="Volcano Lime" />
           <span class="pt-4 md:pt-8 text-6xl text-lime-500 font-logo">Volcano Lime</span>
         </div>
         <div class="mt-24 sm:mt-32 lg:mt-16">
           <div class="inline-flex space-x-6">
             <span
-              class="rounded-full bg-indigo-600/10 px-3 py-1 text-sm font-semibold leading-6 text-indigo-600 ring-1 ring-inset ring-indigo-600/10"
-              >What's new</span
-            >
-            <span
-              class="inline-flex items-center space-x-2 text-sm font-medium leading-6 text-gray-600"
-            >
+              class="rounded-full bg-indigo-600/10 px-3 py-1 text-sm font-semibold leading-6 text-indigo-600 ring-1 ring-inset ring-indigo-600/10">What's
+              new</span>
+            <span class="inline-flex items-center space-x-2 text-sm font-medium leading-6 text-gray-600">
               <span>Alpha</span>
             </span>
           </div>
@@ -216,35 +216,28 @@ const navigation = {
           to our open source memory providers.
         </p>
         <div class="mt-10 flex items-center gap-x-6">
-          <a
-            href="/welcome"
-            class="rounded-md bg-lime-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-lime-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-600"
-            >Get started</a
-          >
-          <a
-            href="/history"
-            class="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >Feeds</a
-          >
-          <a href="/about" class="text-sm font-semibold leading-6 text-gray-900"
-            >About <span aria-hidden="true">→</span></a
-          >
+          <a href="/welcome"
+            class="rounded-md bg-lime-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-lime-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-600">Get
+            started</a>
+          <a href="/history"
+            class="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Feeds</a>
+          <a href="/about" class="text-sm font-semibold leading-6 text-gray-900">About <span
+              aria-hidden="true">→</span></a>
         </div>
       </div>
-      <div
-        class="mx-auto mt-16 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mr-0 lg:mt-32 lg:max-w-none lg:flex-none xl:ml-32"
-      >
+      <div class="mx-auto mt-16 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mr-0 lg:mt-32 lg:max-w-none lg:flex-none xl:ml-32">
         <div class="max-w-3xl flex-none sm:max-w-5xl lg:max-w-none">
-          <div
-            class="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4"
-          >
-            <img
-              src="https://i.imgur.com/QNWvVfG.png"
-              alt="App screenshot"
-              width="2432"
-              height="1442"
-              class="w-[76rem] rounded-md shadow-2xl ring-1 ring-gray-900/10"
-            />
+          <div class="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4">
+            <div class="relative slide">
+              <div class="carousel-inner relative overflow-hidden w-full">
+                <div v-for="(img, i) in images" :id="`slide-${i}`" :key="i"
+                  :class="`${active === i ? 'active' : 'left-full'}`"
+                  class="carousel-item inset-0 relative w-full transform transition-all duration-500 ease-in-out">
+                  <img width="2432" height="1442" class="w-[76rem] rounded-md shadow-2xl ring-1 ring-gray-900/10"
+                    :src="img" alt="First slide" />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -364,11 +357,7 @@ const navigation = {
               </div>
             </div>
             <div v-else class="flex items-center gap-x-6">
-              <img
-                class="h-16 w-16 rounded-full"
-                src="https://placehold.co/100X100?text=ME"
-                alt=""
-              />
+              <img class="h-16 w-16 rounded-full" src="https://placehold.co/100X100?text=ME" alt="" />
               <div>
                 <h3 class="text-base font-semibold leading-7 tracking-tight text-gray-900">Me</h3>
                 <p class="text-sm font-semibold leading-6 text-indigo-600">User</p>
@@ -396,10 +385,8 @@ const navigation = {
       <div class="xl:grid xl:grid-cols-3 xl:gap-8">
         <div class="space-y-4">
           <div>
-            <img src="https://i.imgur.com/lPkdSu2.png" class="w-6 h-6 inline" /><img
-              src="https://i.imgur.com/mYwoufP.png"
-              class="w-8 h-8 inline"
-            />
+            <img src="https://i.imgur.com/lPkdSu2.png" class="w-6 h-6 inline" /><img src="https://i.imgur.com/mYwoufP.png"
+              class="w-8 h-8 inline" />
           </div>
           <blockquote>
             <p class="text-xs italic text-gray-600">
@@ -410,12 +397,7 @@ const navigation = {
           <div class="flex space-x-6">
             <ul>
               <li v-for="item in navigation.social" :key="item.name">
-                <a
-                  :href="item.href"
-                  :title="item.name"
-                  target="_blank"
-                  class="text-gray-400 hover:text-gray-500"
-                >
+                <a :href="item.href" :title="item.name" target="_blank" class="text-gray-400 hover:text-gray-500">
                   <font-awesome-icon :icon="item.icon" class="h-6 w-6" aria-hidden="true" />
                   <span class="pl-2">{{ item.name }}</span>
                 </a>
@@ -427,19 +409,9 @@ const navigation = {
           <div class="md:grid md:grid-cols-2 md:gap-8">
             <div>
               <h3 class="text-sm font-semibold leading-6 text-gray-900">Agents</h3>
-              <ul
-                role="list"
-                :class="[
-                  'marker:text-lime-500',
-                  'mt-6 space-y-4 list-disc transition-all duration-200'
-                ]"
-              >
+              <ul role="list" :class="['marker:text-lime-500','mt-6 space-y-4 list-disc transition-all duration-200']">
                 <li v-for="item in navigation.solutions" :key="item.name">
-                  <a
-                    :href="item.href"
-                    class="text-sm leading-6 text-gray-600 hover:text-gray-900"
-                    >{{ item.name }}</a
-                  >
+                  <a :href="item.href" class="text-sm leading-6 text-gray-600 hover:text-gray-900">{{ item.name }}</a>
                 </li>
               </ul>
             </div>
@@ -447,11 +419,7 @@ const navigation = {
               <h3 class="text-sm font-semibold leading-6 text-gray-900">Support</h3>
               <ul role="list" class="mt-6 space-y-4">
                 <li v-for="item in navigation.support" :key="item.name">
-                  <a
-                    :href="item.href"
-                    class="text-sm leading-6 text-gray-600 hover:text-gray-900"
-                    >{{ item.name }}</a
-                  >
+                  <a :href="item.href" class="text-sm leading-6 text-gray-600 hover:text-gray-900">{{ item.name }}</a>
                 </li>
               </ul>
             </div>
@@ -461,11 +429,7 @@ const navigation = {
               <h3 class="text-sm font-semibold leading-6 text-gray-900">System</h3>
               <ul role="list" class="mt-6 space-y-4">
                 <li v-for="item in navigation.system" :key="item.name">
-                  <a
-                    :href="item.href"
-                    class="text-sm leading-6 text-gray-600 hover:text-gray-900"
-                    >{{ item.name }}</a
-                  >
+                  <a :href="item.href" class="text-sm leading-6 text-gray-600 hover:text-gray-900">{{ item.name }}</a>
                 </li>
               </ul>
             </div>
@@ -473,28 +437,18 @@ const navigation = {
               <h3 class="text-sm font-semibold leading-6 text-gray-900">Account</h3>
               <ul role="list" class="mt-6 space-y-4">
                 <li v-if="isDark">
-                  <a
-                    @click="toggleDark()"
-                    class="cursor-pointer text-sm leading-6 text-gray-600 hover:text-gray-900"
-                    >Theme 🌙</a
-                  >
+                  <a @click="toggleDark()"
+                    class="cursor-pointer text-sm leading-6 text-gray-600 hover:text-gray-900">Theme 🌙</a>
                 </li>
                 <li v-else>
-                  <a
-                    @click="toggleDark()"
-                    class="cursor-pointer text-sm leading-6 text-gray-600 hover:text-gray-900"
-                    >Theme 🔆</a
-                  >
+                  <a @click="toggleDark()"
+                    class="cursor-pointer text-sm leading-6 text-gray-600 hover:text-gray-900">Theme 🔆</a>
                 </li>
                 <li v-if="isAuthenticated">
-                  <a href="/logoff" class="text-sm leading-6 text-gray-600 hover:text-gray-900"
-                    >Logoff</a
-                  >
+                  <a href="/logoff" class="text-sm leading-6 text-gray-600 hover:text-gray-900">Logoff</a>
                 </li>
                 <li v-else>
-                  <a href="/login" class="text-sm leading-6 text-gray-600 hover:text-gray-900"
-                    >Login</a
-                  >
+                  <a href="/login" class="text-sm leading-6 text-gray-600 hover:text-gray-900">Login</a>
                 </li>
               </ul>
             </div>
@@ -510,4 +464,21 @@ const navigation = {
   </footer>
 </template>
 
-<style></style>
+<style>
+.left-full {
+  left: -100%;
+}
+
+.carousel-item {
+  float: left;
+  position: relative;
+  display: block;
+  width: 100%;
+  margin-right: -100%;
+  backface-visibility: hidden;
+}
+
+.carousel-item.active {
+  left: 0;
+}
+</style>
