@@ -117,10 +117,10 @@ const rookies = [
 ]
 
 const images = [
-  "https://i.imgur.com/qF2xP8b.png",
-  "https://i.imgur.com/veD7t7B.png",
-  "https://i.imgur.com/cwWr3bA.png",
-  "https://i.imgur.com/BCAGkeb.png",
+  "https://i.imgur.com/fCP7JjK.png",
+  "https://i.imgur.com/dJ7ARQq.png",
+  "https://i.imgur.com/27HhveU.png",
+  "https://i.imgur.com/qpZTPhm.png",
 ];
 const active = ref(0)
 
