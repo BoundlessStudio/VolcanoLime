@@ -90,6 +90,21 @@ Remember, the power of Volcano Lime lies in collaboration. Whether you're workin
 
 ## Installation
 
+### Recommended IDE Setup
+
+For an optimal development experience, we recommend the following IDE setup:
+
+1. **Visual Studio Code (VSCode)**:
+   - Download and install [VSCode](https://code.visualstudio.com/), if you haven't already.
+
+2. **Volar Extension**:
+   - Install the [Volar extension](https://marketplace.visualstudio.com/items?itemName=Vue.volar) from the VSCode marketplace.
+   - **Note**: If you have the Vetur extension installed, it's recommended to disable it to avoid conflicts with Volar.
+
+3. **TypeScript Vue Plugin (Volar)**:
+   - Enhance your Vue 3 type support with the [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) by installing it from the VSCode marketplace.
+
+
 ### Prerequisites
 Before you begin the installation process, ensure you have the following prerequisites installed:
 
@@ -134,21 +149,6 @@ Before you begin the installation process, ensure you have the following prerequ
    npm run dev
    ```
 
-### Recommended IDE Setup
-
-For an optimal development experience, we recommend the following IDE setup:
-
-1. **Visual Studio Code (VSCode)**:
-   - Download and install [VSCode](https://code.visualstudio.com/), if you haven't already.
-
-2. **Volar Extension**:
-   - Install the [Volar extension](https://marketplace.visualstudio.com/items?itemName=Vue.volar) from the VSCode marketplace.
-   - **Note**: If you have the Vetur extension installed, it's recommended to disable it to avoid conflicts with Volar.
-
-3. **TypeScript Vue Plugin (Volar)**:
-   - Enhance your Vue 3 type support with the [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) by installing it from the VSCode marketplace.
-
-
 ## API Documentation
 
 Our API is meticulously documented and interactive, thanks to Swagger. Below is a guide to help you get started with our API documentation.
@@ -169,17 +169,9 @@ For those interested in delving deeper into our API's workings or contributing, 
 
 ### Tips for Using Our API:
 
-1. **Authorization**: Some endpoints might require authorization. Ensure you provide the necessary headers or authentication tokens as specified in the endpoint details.
+1. **Authorization**: All endpoints might require authorization. Ensure you provide the necessary headers or authentication tokens as specified in the endpoint details.
    
 2. **Rate Limits**: Always check if there are any rate limits on the API calls to ensure continuous service and avoid being temporarily blocked.
-
-3. **Feedback**: If you encounter any discrepancies or have suggestions regarding our API documentation, please reach out. Your feedback helps us improve.
-
-
-## Support and Feedback
-This is completely unsupported. There are no promises that this will be developed any further. It is published only to help people explore what they could do with this sort of capability.
-
-You are free to report issues, but please manage your expectations. It's possible that you might not receive any response, much less a fix.
 
 
 ## Security Notes
@@ -197,6 +189,11 @@ Licensed under the MIT license.
 
 For full license details, please refer to the LICENSE file included in the repository.
 
+
+## Support and Feedback
+This is completely unsupported. There are no promises that this will be developed any further. It is published only to help people explore what they could do with this sort of capability.
+
+You are free to report issues, but please manage your expectations. It's possible that you might not receive any response, much less a fix.
 
 ## Acknowledgements
 
