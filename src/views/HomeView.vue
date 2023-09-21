@@ -5,6 +5,7 @@ import { useToggle, useDropZone, useFileDialog } from '@vueuse/core'
 import { useThreadStore } from '@/stores/thread'
 import { useWhisperStore } from '@/stores/whisper'
 import { onMounted, ref, watch } from 'vue'
+import { Switch, SwitchGroup, SwitchLabel } from '@headlessui/vue'
 
 // config({
 //   markdownItConfig: (md: MarkdownIt) => {
@@ -31,9 +32,13 @@ import { onMounted, ref, watch } from 'vue'
 // Make up a dataset of the birth rates of cats and dogs for the last 10 years then chart the dataset.
 // Create a table in the sandbox for the following data: https://gist.githubusercontent.com/RGBKnights/66efdad3bfebc54f0d4a7c14d133e64e/raw/2fd540b11ca6837e0a1f5c60572cc1296478ed4f/MockData.csv
 // What are the columns names for the following csv: https://gist.githubusercontent.com/RGBKnights/66efdad3bfebc54f0d4a7c14d133e64e/raw/2fd540b11ca6837e0a1f5c60572cc1296478ed4f/MockData.csv
-// Count the types of genders in 'gender' column from this csv then show the counts in a pie chart: https://gist.githubusercontent.com/RGBKnights/66efdad3bfebc54f0d4a7c14d133e64e/raw/2fd540b11ca6837e0a1f5c60572cc1296478ed4f/MockData.csv
-// Show the following data on a timeline. https://gist.githubusercontent.com/RGBKnights/e8f02ba308e7b116fe3dbd8eef02e04d/raw/c1a07534203572fb303e60e2216d96b357b9d237/MockTimeline.json
+// Show the following data on a timeline.  https://electricraspberry.blob.core.windows.net/windowslive-dec9c2bc7d3ff74d/timelines.json
+// Lets play a guess game. generate a random number between 1 and 10 and I have 3 guesses to get it right.
+// Find my location then show it on a map.
+
+// Has Issues...
 // https://tinyurl.com/5447hu36 What are the columns names in the file.
+// Count the types of genders in 'gender' column from this csv then create a pie chart of the counts: https://gist.githubusercontent.com/RGBKnights/66efdad3bfebc54f0d4a7c14d133e64e/raw/2fd540b11ca6837e0a1f5c60572cc1296478ed4f/MockData.csv
 
 // Needs new Convert Skills
 // Convert this csv to excel: https://gist.githubusercontent.com/RGBKnights/66efdad3bfebc54f0d4a7c14d133e64e/raw/2fd540b11ca6837e0a1f5c60572cc1296478ed4f/MockData.csv
@@ -46,10 +51,13 @@ const loading = ref(false)
 const busy = ref(false)
 const prompt = ref("")
 const result = ref("")
-const showLarge = ref(false)
-const toggleLarge = useToggle(showLarge)
+const showMarkdown = ref(false)
+const toggleMarkdown = useToggle(showMarkdown)
 const showFiles = ref(false)
-const toggleShowFiles = useToggle(showFiles)
+const toggleUploadControl = useToggle(showFiles)
+
+const showWork = ref(false)
+const toggleLog = useToggle(showWork)
 
 watch(() => whisper.transcription, (value) => {
   prompt.value += ' ' + value
@@ -125,7 +133,7 @@ const tools = [
         <span v-else class="font-logo font-bold text-7xl text-lime-500 dark:text-lime-700">Volcano Lime</span>
       </div>  
       <div v-if="isAuthenticated" class="flex flex-col gap-3">
-        <div v-if="showLarge">
+        <div v-if="showMarkdown">
           <div class="relative flex flex-grow items-stretch focus-within:z-10 h-64">
             <MdEditor v-model="prompt" class="rounded-lg pr-10 pl-2" previewTheme="github" theme="dark" language="en-US" :toolbars="tools" :preview="false"></MdEditor>
             <div @click="submit()" class="cursor-pointer absolute inset-y-0 right-0 flex items-center pr-2">
@@ -139,16 +147,16 @@ const tools = [
               <font-awesome-icon :icon="['fas', 'lemon']" class="h-5 w-5 text-lime-300" aria-hidden="true" :spin="loading" />
             </div>
 
-            <input @keydown.enter.exact.prevent="submit()" @keydown.enter.shift.exact.prevent="toggleLarge()" v-model="prompt" type="text" class="input-chat pl-10 pr-20" placeholder="Give me a goal!" />
+            <input @keydown.enter.exact.prevent="submit()" @keydown.enter.shift.exact.prevent="toggleMarkdown()" v-model="prompt" type="text" class="input-chat pl-10 pr-20" placeholder="Give me a goal!" />
             
             <div class="flex gap-3 pr-3 absolute inset-y-0 right-0 items-center">
               <div v-if="busy" @click="reset()" class="cursor-pointer">
                 <font-awesome-icon :icon="['fas', 'xmark']" class="h-5 w-5 text-gray-400" aria-hidden="true" />
               </div>
-              <div v-if="!busy && !showLarge&& !whisper.isRecording" @click="toggleShowFiles()"  class="cursor-pointer">
+              <div v-if="!busy && !showMarkdown&& !whisper.isRecording" @click="toggleUploadControl()"  class="cursor-pointer">
                 <font-awesome-icon :icon="['fas', 'upload']" class="h-5 w-5 fill-gradient-radial" aria-hidden="true" />
               </div>
-              <div v-if="!busy && !showLarge && !whisper.isRecording" @click="start()" class="cursor-pointer">
+              <div v-if="!busy && !showMarkdown && !whisper.isRecording" @click="start()" class="cursor-pointer">
                 <font-awesome-icon :icon="['fas', 'microphone']" class="h-5 w-5 fill-gradient-linear" aria-hidden="true" />
               </div>
               <div v-if="whisper.isRecording" @click="stop()" class="cursor-pointer">
@@ -181,13 +189,26 @@ const tools = [
           </div>
         </div>
 
-        <div class="rounded-lg bg-[#ecf1f3] dark:bg-[#1c1e1f] p-1 min-h-[64px]" title="Result">
+        <div class="rounded-lg bg-[#ecf1f3] dark:bg-[#1c1e1f] p-3 min-h-[64px]">
           <MdPreview v-model="result" previewTheme="github" theme="dark" language="en-US"></MdPreview>
-          <div id="sandbox"></div>
+          <div id="sandbox" ></div>
         </div>
-        <div class="rounded-lg bg-[#ecf1f3] dark:bg-[#1c1e1f] text-black dark:text-neutral-400 p-3 min-h-[64px]" title="Log">
+
+        <div class="text-black dark:text-neutral-400">
+          <SwitchGroup as="div" class="flex items-center">
+            <Switch v-model="showWork" :class="[showWork ? 'bg-indigo-600 dark:bg-indigo-800' : 'bg-gray-200 dark:bg-gray-600', 'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2']">
+              <span aria-hidden="true" :class="[showWork ? 'translate-x-5' : 'translate-x-0', 'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out']" />
+            </Switch>
+            <SwitchLabel as="span" class="ml-3 text-sm">
+              <span class="font-medium">Show Work</span>
+            </SwitchLabel>
+          </SwitchGroup>
+        </div>
+
+        <div v-if="showWork" class="rounded-lg bg-[#ecf1f3] dark:bg-[#1c1e1f] text-black dark:text-neutral-400 p-3 min-h-[64px]">
           <p v-for="log in thread.logs" class="break-all">{{log}}</p>
         </div>
+        <div v-else class="min-h-[64px]"></div>
       </div>
       <div v-else class="text-center">
         <button @click="login" class="button-login">
