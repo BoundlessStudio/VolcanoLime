@@ -1,79 +1,113 @@
 import { reactive } from 'vue'
-import { createEventHook } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { useAuth0 } from '@auth0/auth0-vue'
-import { uniqueNamesGenerator, colors, animals, type Config } from 'unique-names-generator'
 import * as signalR from '@microsoft/signalr'
-import {
-  Api,
-  type FeedDocument,
-  type FeedCreateDocument,
-  type FeedEditDocument,
-  type CommentCreateDocument,
-  type CommentDocument,
-  type FileDocument,
-  type SkillDocument
-} from '@/api/electric-raspberry'
+import { Api, type FileDocument, type GoalDocument } from '@/api/electric-raspberry'
 
 export interface ThreadState {
-  connected: Boolean
-}
-
-export interface FeedArgs {
-  feedId: string
-}
-export interface CommentArgs {
-  feedId: string
-}
-
-const config: Config = {
-  dictionaries: [colors, animals],
-  separator: '-',
-  length: 2
+  connectionId: string | null
+  connected: Boolean,
+  logs: string[]
 }
 
 export const useThreadStore = defineStore('thread', () => {
   const { getAccessTokenSilently } = useAuth0()
 
-  const state = reactive<ThreadState>({
-    connected: false
+  const thread = reactive<ThreadState>({
+    connectionId: null,
+    connected: false,
+    logs: []
   })
 
   const connection = new signalR.HubConnectionBuilder()
+    .withAutomaticReconnect()
     .withUrl(import.meta.env.VITE_API + '/hub/feed', {
       accessTokenFactory: getAccessTokenSilently
     })
     .build()
 
   connection.onclose(() => {
-    state.connected = false
+    thread.connected = false
   })
   connection.onreconnected(() => {
-    state.connected = true
+    thread.connected = true
+    thread.connectionId = connection.connectionId
   })
 
-  // const feedDeleted = createEventHook<FeedArgs>()
-  // connection.on("onFeedDeleted", (feedId) => {
-  //   feedDeleted.trigger({ feedId })
-  // })
-  // const feedChanged = createEventHook<FeedArgs>()
-  // connection.on("onFeedChanged", (feedId) => {
-  //   feedChanged.trigger({ feedId })
-  // })
-  const commentsChanged = createEventHook<CommentArgs>()
-  connection.on('onCommentsChanged', async (feedId) => {
-    commentsChanged.trigger({ feedId })
+  connection.on('AskQuestion', async (question) => {
+    let promise = new Promise((resolve, reject) => {
+      try {
+        let answer = prompt(question)
+        resolve(answer)
+      } catch (e) {
+        resolve(`Unable to answer: ${question}`)
+      }
+    });
+    return promise;
   })
 
-  async function start() {
+  connection.on('EvalCode', async (code) => {
+    let promise = new Promise(async (resolve, reject) => {
+
+      let _log = console.log
+      let _error = console.error
+      let response = {
+        result: '',
+        logs: [] as string[],
+        errors: [] as string[],
+      }
+
+      try {
+        const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
+
+        console.log = (m) => response.logs.push(JSON.stringify(m))
+        console.error = (m) => response.errors.push(JSON.stringify(m))
+        
+        let fn = new AsyncFunction(code)
+        let result = await fn()
+
+        response.result = result ? JSON.stringify(result) : "The function executed successfully."
+        resolve(JSON.stringify(response))
+      } catch (e) {
+        response.result = "The function throw an exception."
+        
+        if (e instanceof Error) {
+          response.errors.push(JSON.stringify({name: e.name, message: e.message}))
+        } else if (typeof e === "string") {
+          response.errors.push(e)
+        } else if (typeof e === "object") {
+          response.errors.push(e ? JSON.stringify(e) : "Unknown error.")
+        } else {
+          response.errors.push("Unknown error.")
+        }
+        
+        resolve(JSON.stringify(response))
+      } finally {
+        console.log = _log
+        console.error = _error
+      }
+    });
+    return promise;
+  })
+
+  connection.on('Log', (log) => {
+    try {
+      thread.logs.push(log)
+      setTimeout(() => window.scrollTo(0,9999), 500)
+    } finally {
+      // do nothing
+    }
+  })
+
+  async function initialize() {
     if (connection.state == signalR.HubConnectionState.Disconnected) {
       await connection.start()
-      state.connected = true
+      thread.connectionId = connection.connectionId
+      thread.connected = true
+      thread.logs = []
     }
   }
-  async function joinFeed(feedId: string): Promise<void> {
-    await connection.invoke('JoinFeed', feedId)
-  }
+
   async function getController(): Promise<Api<unknown>> {
     const token = await getAccessTokenSilently()
     const client = new Api({
@@ -84,74 +118,28 @@ export const useThreadStore = defineStore('thread', () => {
     })
     return client
   }
-  async function listSkills(): Promise<SkillDocument[]> {
-    const controller = await getController()
-    const response = await controller.api.listSkills()
-    return response.data || []
-  }
-  async function createFeed(template: string): Promise<FeedDocument> {
+  async function createGoal(goal: string): Promise<string> {
     const controller = await getController()
     const dto = {
-      name: uniqueNamesGenerator(config),
-      template: template
-    } as FeedCreateDocument
-    const { data: feed } = await controller.api.createFeed(dto)
-    return feed
+      goal: goal,
+      connectionId: thread.connectionId
+    } as GoalDocument
+    thread.logs = []
+    const { data: result } = await controller.api.goal(dto)
+    return result
   }
-  async function listFeeds(): Promise<FeedDocument[]> {
+  async function uploadFiles(files: File[]): Promise<FileDocument[]> {
     const controller = await getController()
-    const response = await controller.api.listFeeds()
-    return response.data || []
-  }
-  async function getFeed(id: string): Promise<FeedDocument> {
-    const controller = await getController()
-    const { data: feed } = await controller.api.getFeed(id)
-    return feed
-  }
-  async function editFeed(feed: FeedEditDocument): Promise<void> {
-    const controller = await getController()
-    await controller.api.editFeed(feed)
-  }
-  async function deleteFeed(id: string): Promise<void> {
-    const controller = await getController()
-    await controller.api.deleteFeed(id)
-  }
-  async function listComments(id: string) {
-    const controller = await getController()
-    const response = await controller.api.listComments(id)
-    return response.data || []
-  }
-  async function createComment(body: CommentCreateDocument): Promise<CommentDocument> {
-    const controller = await getController()
-    const { data: comment } = await controller.api.createComment(body)
-    return comment
-  }
-  async function deleteComment(id: string): Promise<void> {
-    const controller = await getController()
-    await controller.api.deleteComment(id)
-  }
-  async function uploadFiles(id: string, files: File[]): Promise<FileDocument[]> {
-    const controller = await getController()
-    const response = await controller.api.upload(id, {
+    const response = await controller.api.upload({
       files: files
     })
     return response.data
   }
 
   return {
-    state,
-    start,
-    listSkills,
-    createFeed,
-    listFeeds,
-    getFeed,
-    editFeed,
-    deleteFeed,
-    joinFeed,
-    listComments,
-    createComment,
-    deleteComment,
-    uploadFiles,
-    onCommentsChanged: commentsChanged.on
+    thread,
+    initialize,
+    createGoal,
+    uploadFiles
   }
 })

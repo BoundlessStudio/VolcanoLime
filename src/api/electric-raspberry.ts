@@ -9,78 +9,6 @@
  * ---------------------------------------------------------------
  */
 
-export interface AuthorDocument {
-  /** @minLength 1 */
-  picture: string
-  /** @minLength 1 */
-  name: string
-  /** @minLength 1 */
-  mention: string
-}
-
-export interface CommentCreateDocument {
-  /** @minLength 1 */
-  feedId: string
-  /** @default "comment" */
-  type?: string
-  /** @minLength 1 */
-  body: string
-}
-
-export interface CommentDocument {
-  /** @minLength 1 */
-  commentId: string
-  /** @minLength 1 */
-  type: string
-  /** @minLength 1 */
-  body: string
-  inContext: boolean
-  /** @format int32 */
-  tokens: number
-  /** @format double */
-  relevance: number
-  /** @minLength 1 */
-  feedId: string
-  author: AuthorDocument
-  /** @format date-time */
-  timestamp: string
-}
-
-/** @format int32 */
-export enum FeedAccess {
-  Private = 0,
-  Public = 1
-}
-
-export interface FeedCreateDocument {
-  /** @minLength 1 */
-  name: string
-  /** @minLength 1 */
-  template: string
-}
-
-export interface FeedDocument {
-  /** @minLength 1 */
-  feedId: string
-  /** @minLength 1 */
-  name: string
-  /** @minLength 1 */
-  description: string
-  access: FeedAccess
-  selectedSkills: string[]
-}
-
-export interface FeedEditDocument {
-  /** @minLength 1 */
-  feedId: string
-  /** @minLength 1 */
-  name: string
-  /** @minLength 1 */
-  description: string
-  access: FeedAccess
-  selectedSkills: string[]
-}
-
 export interface FileDocument {
   /** @minLength 1 */
   name: string
@@ -92,34 +20,19 @@ export interface FileDocument {
   size: number
 }
 
-export interface SkillDocument {
+export interface GoalDocument {
   /** @minLength 1 */
-  skillId: string
+  goal: string
   /** @minLength 1 */
-  name: string
-  /** @minLength 1 */
-  owner: string
-  type: SkillType
-  typeOf?: string | null
-  prompt?: string | null
-  description?: string | null
-  url?: string | null
-}
-
-/** @format int32 */
-export enum SkillType {
-  Unknown = 0,
-  Coded = 1,
-  Semantic = 2,
-  OpenApi = 3
+  connectionId: string
 }
 
 import axios, {
-  type AxiosInstance,
-  type AxiosRequestConfig,
-  type AxiosResponse,
-  type HeadersDefaults,
-  type ResponseType
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+  HeadersDefaults,
+  ResponseType
 } from 'axios'
 
 export type QueryParamsType = Record<string | number, any>
@@ -173,7 +86,7 @@ export class HttpClient<SecurityDataType = unknown> {
   }: ApiConfig<SecurityDataType> = {}) {
     this.instance = axios.create({
       ...axiosConfig,
-      baseURL: axiosConfig.baseURL || 'https://electric-raspberry.azurewebsites.net'
+      baseURL: axiosConfig.baseURL || 'https://electric-raspberry.ngrok.app'
     })
     this.secure = secure
     this.format = format
@@ -277,145 +190,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags CommentController
-     * @name ListComments
-     * @request GET:/api/comments/{feed_id}
-     * @secure
-     */
-    listComments: (feedId: string, params: RequestParams = {}) =>
-      this.request<CommentDocument[], void>({
-        path: `/api/comments/${feedId}`,
-        method: 'GET',
-        secure: true,
-        format: 'json',
-        ...params
-      }),
-
-    /**
-     * No description
-     *
-     * @tags CommentController
-     * @name CreateComment
-     * @request POST:/api/comment
-     * @secure
-     */
-    createComment: (data: CommentCreateDocument, params: RequestParams = {}) =>
-      this.request<CommentDocument, void | string>({
-        path: `/api/comment`,
-        method: 'POST',
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        format: 'json',
-        ...params
-      }),
-
-    /**
-     * No description
-     *
-     * @tags CommentController
-     * @name DeleteComment
-     * @request DELETE:/api/comment/{comment_id}
-     * @secure
-     */
-    deleteComment: (commentId: string, params: RequestParams = {}) =>
-      this.request<void, void>({
-        path: `/api/comment/${commentId}`,
-        method: 'DELETE',
-        secure: true,
-        ...params
-      }),
-
-    /**
-     * No description
-     *
-     * @tags FeedController
-     * @name ListFeeds
-     * @request GET:/api/feeds
-     * @secure
-     */
-    listFeeds: (params: RequestParams = {}) =>
-      this.request<FeedDocument[], void>({
-        path: `/api/feeds`,
-        method: 'GET',
-        secure: true,
-        format: 'json',
-        ...params
-      }),
-
-    /**
-     * No description
-     *
-     * @tags FeedController
-     * @name CreateFeed
-     * @request POST:/api/feed
-     * @secure
-     */
-    createFeed: (data: FeedCreateDocument, params: RequestParams = {}) =>
-      this.request<FeedDocument, void>({
-        path: `/api/feed`,
-        method: 'POST',
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        format: 'json',
-        ...params
-      }),
-
-    /**
-     * No description
-     *
-     * @tags FeedController
-     * @name EditFeed
-     * @request PUT:/api/feed
-     * @secure
-     */
-    editFeed: (data: FeedEditDocument, params: RequestParams = {}) =>
-      this.request<void, void>({
-        path: `/api/feed`,
-        method: 'PUT',
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        ...params
-      }),
-
-    /**
-     * No description
-     *
-     * @tags FeedController
-     * @name GetFeed
-     * @request GET:/api/feed/{feed_id}
-     * @secure
-     */
-    getFeed: (feedId: string, params: RequestParams = {}) =>
-      this.request<FeedDocument, void>({
-        path: `/api/feed/${feedId}`,
-        method: 'GET',
-        secure: true,
-        format: 'json',
-        ...params
-      }),
-
-    /**
-     * No description
-     *
-     * @tags FeedController
-     * @name DeleteFeed
-     * @request DELETE:/api/feed/{feed_id}
-     * @secure
-     */
-    deleteFeed: (feedId: string, params: RequestParams = {}) =>
-      this.request<void, void>({
-        path: `/api/feed/${feedId}`,
-        method: 'DELETE',
-        secure: true,
-        ...params
-      }),
-
-    /**
-     * No description
-     *
      * @tags FileController
      * @name Whisper
      * @request POST:/api/whisper
@@ -428,13 +202,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {}
     ) =>
-      this.request<string, void>({
+      this.request<any, string>({
         path: `/api/whisper`,
         method: 'POST',
         body: data,
         secure: true,
         type: ContentType.FormData,
-        format: 'json',
         ...params
       }),
 
@@ -443,18 +216,17 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags FileController
      * @name Upload
-     * @request POST:/api/upload/{feed_id}
+     * @request POST:/api/upload
      * @secure
      */
     upload: (
-      feedId: string,
       data: {
         files: File[]
       },
       params: RequestParams = {}
     ) =>
-      this.request<FileDocument[], void>({
-        path: `/api/upload/${feedId}`,
+      this.request<FileDocument[], FileDocument[]>({
+        path: `/api/upload`,
         method: 'POST',
         body: data,
         secure: true,
@@ -466,17 +238,18 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags SkillController
-     * @name ListSkills
-     * @request GET:/api/skills
+     * @tags GoalController
+     * @name Goal
+     * @request POST:/api/goal
      * @secure
      */
-    listSkills: (params: RequestParams = {}) =>
-      this.request<SkillDocument[], void>({
-        path: `/api/skills`,
-        method: 'GET',
+    goal: (data: GoalDocument, params: RequestParams = {}) =>
+      this.request<any, string>({
+        path: `/api/goal`,
+        method: 'POST',
+        body: data,
         secure: true,
-        format: 'json',
+        type: ContentType.Json,
         ...params
       })
   }

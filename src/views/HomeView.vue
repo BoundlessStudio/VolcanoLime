@@ -1,484 +1,249 @@
 <script setup lang="ts">
-import { uniqueNamesGenerator, names, type Config } from 'unique-names-generator'
+import { MdPreview, MdEditor, type ToolbarNames } from 'md-editor-v3'
 import { useAuth0 } from '@auth0/auth0-vue'
-import { useDark, useToggle } from '@vueuse/core'
-import { ref, watch, onMounted } from 'vue'
+import { useToggle, useDropZone, useFileDialog } from '@vueuse/core'
+import { useThreadStore } from '@/stores/thread'
+import { useWhisperStore } from '@/stores/whisper'
+import { onMounted, ref, watch } from 'vue'
 
-function spotlight<T>(a: Array<T>, n: number) {
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-      ;[a[i], a[j]] = [a[j], a[i]]
-  }
-  return a.slice(0, n)
-}
-const isDark = useDark()
-const toggleDark = useToggle(isDark)
-const { isAuthenticated, user } = useAuth0()
+// config({
+//   markdownItConfig: (md: MarkdownIt) => {
+//     var fence = md.renderer.rules.fence
+//     md.renderer.rules.fence = (tokens, idx, options, env, self) => {
+//       const token = tokens[idx]
+//       if (token.info == 'chart') {
+//         return `<img src="https://quickchart.io/chart?c=${encodeURIComponent(
+//           token.content
+//         )}" title="" alt="Chart" zoom="" class="medium-zoom-image">`
+//       } else {
+//         return fence ? fence(tokens, idx, options, env, self) : ''
+//       }
+//     }
+//   }
+// })
 
-const configBot: Config = {
-  separator: '.',
-  dictionaries: [names],
-  style: 'lowerCase'
-}
+// Who is the current president of the United States and what is their current age divided by 2?
+// Who is the current president of the United States and what is their current age divided by 2? Who is the current prime minister of Canada and what is their current age divided by 2? Finally, what is the ratio of results?
+// Draw a MTG token blue purple shadow demon.
+// Draw Nora (public relations) a profile picture in vector style.
+// Draw a fantasy bookshelves background
+// Draw a Viking cosplay, gorgeous woman, shield maiden, scandalous pose, cheeky, flirtatious, very short pleated leather skirt, low cut leather armor; 9:16; phone background;
+// Make up a dataset of the birth rates of cats and dogs for the last 10 years then chart the dataset.
+// Create a table in the sandbox for the following data: https://gist.githubusercontent.com/RGBKnights/66efdad3bfebc54f0d4a7c14d133e64e/raw/2fd540b11ca6837e0a1f5c60572cc1296478ed4f/MockData.csv
+// What are the columns names for the following csv: https://gist.githubusercontent.com/RGBKnights/66efdad3bfebc54f0d4a7c14d133e64e/raw/2fd540b11ca6837e0a1f5c60572cc1296478ed4f/MockData.csv
+// Count the types of genders in 'gender' column from this csv then show the counts in a pie chart: https://gist.githubusercontent.com/RGBKnights/66efdad3bfebc54f0d4a7c14d133e64e/raw/2fd540b11ca6837e0a1f5c60572cc1296478ed4f/MockData.csv
+// Show the following data on a timeline. https://gist.githubusercontent.com/RGBKnights/e8f02ba308e7b116fe3dbd8eef02e04d/raw/c1a07534203572fb303e60e2216d96b357b9d237/MockTimeline.json
+// https://tinyurl.com/5447hu36 What are the columns names in the file.
 
-const veterans = [
-  {
-    name: '@george',
-    role: 'Guide',
-    bio: 'is your charming conversationalist, excels at engaging with others through meaningful dialogues. He makes sure that even the most complex ideas are articulated and understood in an approachable way, bringing our team closer together.',
-    imageUrl: 'https://i.imgur.com/1d5btuI.png'
-  },
-  {
-    name: '@jeeves',
-    role: 'Mentats',
-    bio: 'is your chief knowledge curator. He helps you store, and retrieve memories, making sure we never lose a single valuable insight.',
-    imageUrl: 'https://i.imgur.com/EKrj5bE.png'
-  },
-  {
-    name: '@charles',
-    role: 'Writer',
-    bio: 'is your gifted storyteller, expertly weaving narratives that captivate and inspire our audience. Through his imaginative storytelling, he engages and transports us to new realms of possibilities.',
-    imageUrl: 'https://i.imgur.com/JCyTEXa.png'
-  },
-  // {
-  //   name: '@dalle',
-  //   role: 'Artist',
-  //   bio: 'is your resident artist, bringing creativity and imagination to everything they touch. Creating stunning visuals and captivating designs that bring your ideas to life.',
-  //   imageUrl: 'https://i.imgur.com/8PhftEq.png'
-  // },
-  {
-    name: "@leonardo",
-    role: 'Artist',
-    bio: 'is your master artist, bringing creativity and imagination to everything they touch. Creating stunning visuals and captivating designs that bring your ideas to life.',
-    imageUrl: 'https://i.imgur.com/wKbKtP1.png'
-  },
-  {
-    name: '@alex',
-    role: 'Diagrams & Charts',
-    bio: 'is your illustration master. they specializes in creating stunning visuals that bring data to life, transforming complex information into digestible, engaging, and striking diagrams and charts. Their skills are invaluable for conveying ideas and insights in a compelling and accessible way.',
-    imageUrl: 'https://i.imgur.com/bYMhUJE.png'
-  },
-  {
-    name: '@tesla',
-    role: 'Planer',
-    bio: 'is your exceptional strategist and problem solver. Gifted with exceptional analytical abilities, they bring organization and clarity to even the most complex goals.',
-    imageUrl: 'https://i.imgur.com/lW4OkVJ.png'
-  },
-  {
-    name: '@shuri',
-    role: 'Prompt Engineer',
-    bio: 'is your brilliant engineer, responsible for designing, building, and maintaining the skills used by others. Her technical expertise and innovative solutions drive our team towards success and new heights of excellence.',
-    imageUrl: 'https://i.imgur.com/C9xQbAy.png'
-  }
-  // {
-  //   name: '@mary',
-  //   role: 'Microsoft',
-  //   bio: 'is your integration specialist for Microsoft. She offers technical guidance to seamlessly link your account to Live Services. With her expertise, she brings the power of Calendar, Drive, Email, and Task skills to helps enhance that range of our goals.',
-  //   imageUrl: 'https://i.imgur.com/lAjAtEo.png',
-  // },
-]
-const rookies = [
-  // {
-  //   name: '@skyler',
-  //   role: 'Google',
-  //   bio: 'is your integration specialist for Google. Her technical guidance will help you link your account allowing access to range of Google Services. Because of her specialist, she brings the power of A, B, C, and D skills to helps enhance that range of our goals.',
-  //   imageUrl: 'https://i.imgur.com/J9TBPqP.png',
-  // },
-  // {
-  //   name: '@simon',
-  //   role: 'Slack',
-  //   bio: 'is your dedicated Slack specialist. His expert knowledge and understanding of Slack enables them to convert channels to memories allowing Jeeves to recall related slack messages. Simon exemplifies the power of seamless virtual teamwork, fostering interaction, and increasing productivity within our team.',
-  //   imageUrl: 'https://i.imgur.com/GwFa0UY.png',
-  // },
-  // {
-  //   name: '@nora',
-  //   role: 'Notion',
-  //   bio: 'is your proficient Notion wizard. She is a master at curating and organizing the wealth of information on Notion into memories. Her work empowers the team to to query a existing knowledge base for information.',
-  //   imageUrl: 'https://i.imgur.com/vd0svVO.png',
-  // },
-  {
-    name: '@ricky',
-    role: 'Convert',
-    bio: " is your efficient document converter. His skill lies in his ability to transform and reformat a variety of document types with ease and precision. Whether it's converting PDFs to Word documents, or transforming converting images, Ricky makes sure that your files remain accessible and easy to work with.",
-    imageUrl: 'https://i.imgur.com/yJqnqCy.png'
-  },
-  // {
-  //   name: '@carl',
-  //   role: 'Compute',
-  //   bio: ' is your dedicated REPL expert. He specializes creating code and instantly running said code in an isolated, secure environment, providing immediate feedback that helps guide his next move. His expertise lies in bring computability to the team.',
-  //   imageUrl: 'https://i.imgur.com/V7WaU6B.png',
-  // },
-  {
-    name: '@travis',
-    role: 'Cartographer',
-    bio: 'is your go-to expert for all things related to maps, routing, and distance calculations. He can skillfully interpret and utilize geo-spatial data, providing invaluable insights on optimal routes and real-time distances. With his expertise, you will never be lost. Travis is instrumental in connecting spaces and people, making geographical challenges a thing of the past for our team.',
-    imageUrl: 'https://i.imgur.com/YNCtu4z.png'
-  }
-]
+// Needs new Convert Skills
+// Convert this csv to excel: https://gist.githubusercontent.com/RGBKnights/66efdad3bfebc54f0d4a7c14d133e64e/raw/2fd540b11ca6837e0a1f5c60572cc1296478ed4f/MockData.csv
+// Convert this csv to json: https://gist.githubusercontent.com/RGBKnights/66efdad3bfebc54f0d4a7c14d133e64e/raw/2fd540b11ca6837e0a1f5c60572cc1296478ed4f/MockData.csv
 
-const images = [
-  "https://i.imgur.com/fCP7JjK.png",
-  "https://i.imgur.com/dJ7ARQq.png",
-  "https://i.imgur.com/27HhveU.png",
-  "https://i.imgur.com/qpZTPhm.png",
-];
-const active = ref(0)
+const { whisper, start, stop } = useWhisperStore()
+const { thread, initialize, createGoal, uploadFiles } = useThreadStore()
+const { isAuthenticated, loginWithRedirect } = useAuth0()
+const loading = ref(false)
+const busy = ref(false)
+const prompt = ref("")
+const result = ref("")
+const showLarge = ref(false)
+const toggleLarge = useToggle(showLarge)
+const showFiles = ref(false)
+const toggleShowFiles = useToggle(showFiles)
 
-onMounted(() => {
-  let i = 0;
-  setInterval(() => {
-    if (i > images.length - 1) {
-      i = 0;
-    }
-    active.value = i;
-    i++;
-  }, 10000);
+watch(() => whisper.transcription, (value) => {
+  prompt.value += ' ' + value
 })
 
-const navigation = {
-  solutions: [
-    { name: 'George', href: '/status/#george' },
-    { name: 'Dalle', href: '/status/#dalle' },
-    { name: 'Jeeves', href: '/status/#jeeves' },
-    { name: 'Shuri', href: '/status/#shuri' },
-    { name: 'Tesla', href: '/status/#tesla' },
-    { name: 'Charles', href: '/status/#charles' }
-  ],
-  system: [
-    { name: 'Welcome', href: '/welcome' },
-    { name: 'Feeds', href: '/history' }
-    // { name: 'Theme 🔆', href: '#' },
-  ],
-  support: [
-    { name: 'About', href: '/about' },
-    { name: 'Discord', href: 'https://discord.gg/8RKKsyT4Dk' },
-    // { name: 'Twitter', href: 'https://twitter.com/RGBKnights' }
-  ],
-  social: [
-    {
-      name: 'volcano-lime: the boring stuff',
-      href: 'https://github.com/RGBKnights/volcano-lime',
-      icon: 'fa-brands fa-github'
-    },
-    {
-      name: 'electric-raspberry: the interesting stuff',
-      href: 'https://github.com/RGBKnights/electric-raspberry',
-      icon: 'fa-brands fa-github'
-    }
-  ]
+const reset = () => {
+  document.getElementById('sandbox')?.replaceChildren()
+  prompt.value = ""
+  result.value = ""
+  thread.logs = []
+  busy.value = false
 }
+const login = async () => await loginWithRedirect()
+const submit = async () => {
+  if(busy.value) return
+  busy.value = true
+  loading.value = true
+  result.value = await createGoal(prompt.value)
+  loading.value = false
+}
+const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+const isDarkMode = ref(prefersDarkMode)
+window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+  isDarkMode.value = e.matches
+});
+
+const { open, onChange } = useFileDialog()
+const choiceFile = () => open()
+onChange(async (list: FileList | null) => {
+  var files = Array.from(list ?? [])
+  await handleFiles(files)
+})
+const dropZoneRef = ref<HTMLDivElement>()
+async function onDrop(files: File[] | null) {
+  await handleFiles(files ?? [])
+}
+async function handleFiles(files: File[]) {
+  var documents = await uploadFiles(files)
+  for (const file of documents) {
+    prompt.value += ' ' + file.url
+  }
+  showFiles.value = false
+}
+const { isOverDropZone } = useDropZone(dropZoneRef, onDrop)
+
+onMounted(async () => await initialize())
+
+const tools = [
+  'bold','underline','italic',
+  '-',
+  'title','sub','sup',
+  '-',
+  'unorderedList','orderedList','task','table',
+  '-',
+  'link',
+  '-',
+  'code','mermaid','katex',
+  '=',
+  'pageFullscreen',
+  'fullscreen',
+  'preview',
+] as ToolbarNames[];
 </script>
 
 <template>
-  <header class="flex justify-center bg-lime-600 text-neutral-100">
-    <div class="p-2">
-      <span>During the Alpha all data will be deleted when the server restarts.</span>
-    </div>
-  </header>
-
-  <div class="relative isolate overflow-hidden bg-whit">
-    <svg
-      class="absolute inset-0 -z-10 h-full w-full stroke-gray-200 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
-      aria-hidden="true">
-      <defs>
-        <pattern id="0787a7c5-978c-4f66-83c7-11c213f99cb7" width="200" height="200" x="50%" y="-1"
-          patternUnits="userSpaceOnUse">
-          <path d="M.5 200V.5H200" fill="none" />
-        </pattern>
-      </defs>
-      <rect width="100%" height="100%" stroke-width="0" fill="url(#0787a7c5-978c-4f66-83c7-11c213f99cb7)" />
-    </svg>
-    <div class="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:px-8 lg:py-10">
-      <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl lg:flex-shrink-0 lg:pt-8">
-        <div class="flex">
-          <img src="https://i.imgur.com/MpXedd3.png" class="w-48 h-48 rounded-full" alt="Volcano Lime" />
-          <span class="pt-4 md:pt-8 text-6xl text-lime-500 font-logo">Volcano Lime</span>
-        </div>
-        <div class="mt-24 sm:mt-32 lg:mt-16">
-          <div class="inline-flex space-x-6">
-            <span
-              class="rounded-full bg-indigo-600/10 px-3 py-1 text-sm font-semibold leading-6 text-indigo-600 ring-1 ring-inset ring-indigo-600/10">What's
-              new</span>
-            <span class="inline-flex items-center space-x-2 text-sm font-medium leading-6 text-gray-600">
-              <span>Alpha</span>
-            </span>
-          </div>
-        </div>
-        <p class="mt-6 text-lg leading-8 text-gray-600">
-          Introducing <span class="text-lime-500 font-bold text-lg">Volcano Lime</span> the
-          collaborative Feed where you can seamlessly engage with AI agents . Our intelligent team
-          members once invited are always ready to listen, think, and respond, ensuring a more
-          efficient and productive teamwork experience between you and each other. Elevate your
-          collaboration experience with our enhanced chat interface that supports markdown, images,
-          diagrams, charts, forms and more, providing you with a dynamic and visually appealing
-          workspace. But wait there is more, with memory capabilities, Agents can easily recall
-          information from long conversations, documents, pages, and various other sources, thanks
-          to our open source memory providers.
-        </p>
-        <div class="mt-10 flex items-center gap-x-6">
-          <a href="/welcome"
-            class="rounded-md bg-lime-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-lime-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-600">Get
-            started</a>
-          <a href="/history"
-            class="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Feeds</a>
-          <a href="/about" class="text-sm font-semibold leading-6 text-gray-900">About <span
-              aria-hidden="true">→</span></a>
-        </div>
-      </div>
-      <div class="mx-auto mt-16 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mr-0 lg:mt-32 lg:max-w-none lg:flex-none xl:ml-32">
-        <div class="max-w-3xl flex-none sm:max-w-5xl lg:max-w-none">
-          <div class="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4">
-            <div class="relative slide">
-              <div class="carousel-inner relative overflow-hidden w-full">
-                <div v-for="(img, i) in images" :id="`slide-${i}`" :key="i"
-                  :class="`${active === i ? 'active' : 'left-full'}`"
-                  class="carousel-item inset-0 relative w-full transform transition-all duration-500 ease-in-out">
-                  <img width="2432" height="1442" class="w-[76rem] rounded-md shadow-2xl ring-1 ring-gray-900/10"
-                    :src="img" alt="First slide" />
-                </div>
-              </div>
+  <div class="absolute h-screen w-full flex items-center justify-center bg-[url('https://i.imgur.com/MpXedd3.png')] bg-no-repeat bg-center dark:opacity-30">
+    <!--background -->
+  </div>
+  <div class="absolute min-h-screen w-full flex items-center justify-center bg-white/95 dark:bg-stone-950/95 py-5">
+    <div class="w-2/3 flex flex-col gap-10">
+      <div class="text-center">
+        <span v-if="busy" class="font-logo font-bold text-5xl text-lime-500 dark:text-lime-700">Volcano Lime</span>
+        <span v-else class="font-logo font-bold text-7xl text-lime-500 dark:text-lime-700">Volcano Lime</span>
+      </div>  
+      <div v-if="isAuthenticated" class="flex flex-col gap-3">
+        <div v-if="showLarge">
+          <div class="relative flex flex-grow items-stretch focus-within:z-10 h-64">
+            <MdEditor v-model="prompt" class="rounded-lg pr-10 pl-2" previewTheme="github" theme="dark" language="en-US" :toolbars="tools" :preview="false"></MdEditor>
+            <div @click="submit()" class="cursor-pointer absolute inset-y-0 right-0 flex items-center pr-2">
+              <font-awesome-icon :icon="['fas', 'play']" class="h-5 w-5 text-lime-500" aria-hidden="true" />
             </div>
           </div>
         </div>
+        <div v-else class="flex rounded-xl shadow-lg">
+          <div class="relative flex flex-grow items-stretch focus-within:z-10">
+            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+              <font-awesome-icon :icon="['fas', 'lemon']" class="h-5 w-5 text-lime-300" aria-hidden="true" :spin="loading" />
+            </div>
+
+            <input @keydown.enter.exact.prevent="submit()" @keydown.enter.shift.exact.prevent="toggleLarge()" v-model="prompt" type="text" class="input-chat pl-10 pr-20" placeholder="Give me a goal!" />
+            
+            <div class="flex gap-3 pr-3 absolute inset-y-0 right-0 items-center">
+              <div v-if="busy" @click="reset()" class="cursor-pointer">
+                <font-awesome-icon :icon="['fas', 'xmark']" class="h-5 w-5 text-gray-400" aria-hidden="true" />
+              </div>
+              <div v-if="!busy && !showLarge&& !whisper.isRecording" @click="toggleShowFiles()"  class="cursor-pointer">
+                <font-awesome-icon :icon="['fas', 'upload']" class="h-5 w-5 fill-gradient-radial" aria-hidden="true" />
+              </div>
+              <div v-if="!busy && !showLarge && !whisper.isRecording" @click="start()" class="cursor-pointer">
+                <font-awesome-icon :icon="['fas', 'microphone']" class="h-5 w-5 fill-gradient-linear" aria-hidden="true" />
+              </div>
+              <div v-if="whisper.isRecording" @click="stop()" class="cursor-pointer">
+                <font-awesome-icon :icon="['fas', 'circle']" class="h-5 w-5 text-red-600" aria-hidden="true" beat />
+              </div>
+              
+            </div>
+           
+          </div>
+        </div>
+
+        <div v-if="showFiles" class="py-3 h-28 rounded-lg bg-[#ecf1f3] dark:bg-[#1c1e1f]  text-black dark:text-neutral-400 p-1 min-h-[64px]">
+          <div ref="dropZoneRef" class="p-3 flex ">
+            <div class="text-gray-400 text-4xl pr-5 md:pt-2">
+              <font-awesome-icon icon="paperclip" :class="isOverDropZone ? 'text-lime-500' : ''" />
+            </div>
+            <div>
+              <div>
+                <span>Drag and Drop a file here</span>
+              </div>
+              <div class="">
+                <span>Limit 200MB</span>
+              </div>
+            </div>
+            <div class="flex-grow flex justify-end py-4">
+              <button @click="choiceFile" type="button" class="rounded bg-indigo-400 px-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                Choose file
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-lg bg-[#ecf1f3] dark:bg-[#1c1e1f] p-1 min-h-[64px]" title="Result">
+          <MdPreview v-model="result" previewTheme="github" theme="dark" language="en-US"></MdPreview>
+          <div id="sandbox"></div>
+        </div>
+        <div class="rounded-lg bg-[#ecf1f3] dark:bg-[#1c1e1f] text-black dark:text-neutral-400 p-3 min-h-[64px]" title="Log">
+          <p v-for="log in thread.logs" class="break-all">{{log}}</p>
+        </div>
+      </div>
+      <div v-else class="text-center">
+        <button @click="login" class="button-login">
+          <span class="font-semibold">Login</span>
+        </button>
       </div>
     </div>
   </div>
-
-  <div class="bg-white">
-    <div class="py-12 sm:py-24">
-      <div class="mx-auto grid max-w-7xl gap-x-8 gap-y-20 px-6 lg:px-8 xl:grid-cols-3">
-        <div class="max-w-2xl">
-          <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Meet the Team!
-          </h2>
-          <p class="mt-6 text-lg leading-8 text-gray-600">Our team is your team</p>
-          <p class="mt-6 text-lg leading-8 text-gray-600">
-            We are proud of our diverse, talented and fictional team, which is dedicated to
-            providing you the best possible services with their respective AI skills.
-          </p>
-          <p class="mt-6 text-lg leading-8 text-gray-600">
-            Our actors are designed to be your personal assistants each specialized with unique
-            skills, pinch of their own personality and are here to help.
-          </p>
-          <p class="mt-6 text-lg leading-8 text-gray-600">
-            We are always looking for more talented agents to join our team. See our github project
-            for open positions.
-          </p>
-        </div>
-        <ul role="list" class="grid gap-x-8 gap-y-12 sm:grid-cols-2 sm:gap-y-6 xl:col-span-2">
-          <li class="col-span-2">
-            <div class="relative">
-              <div class="absolute inset-0 flex items-center" aria-hidden="true">
-                <div class="w-full border-t border-gray-300" />
-              </div>
-              <div class="relative flex justify-center">
-                <span class="bg-white px-2 text-sm text-gray-500">Ai Veterans</span>
-              </div>
-            </div>
-          </li>
-          <li v-for="person in veterans" :key="person.name">
-            <div class="flex items-center gap-x-6">
-              <img class="h-16 w-16 rounded-full" :src="person.imageUrl" alt="" />
-              <div>
-                <h3 class="text-base font-semibold leading-7 tracking-tight text-gray-900">
-                  {{ person.name }}
-                </h3>
-                <p class="text-sm font-semibold leading-6 text-indigo-600">{{ person.role }}</p>
-                <p class="text-xs text-gray-400">{{ person.bio }}</p>
-              </div>
-            </div>
-          </li>
-
-          <li class="col-span-2">
-            <div class="relative">
-              <div class="absolute inset-0 flex items-center" aria-hidden="true">
-                <div class="w-full border-t border-gray-300" />
-              </div>
-              <div class="relative flex justify-center">
-                <span class="bg-white px-2 text-sm text-gray-500">Ai in Training</span>
-              </div>
-            </div>
-          </li>
-          <li v-for="person in rookies" :key="person.name">
-            <div class="flex items-center gap-x-6">
-              <img class="h-16 w-16 rounded-full" :src="person.imageUrl" alt="" />
-              <div>
-                <h3 class="text-base font-semibold leading-7 tracking-tight text-gray-900">
-                  {{ person.name }}
-                </h3>
-                <p class="text-sm font-semibold leading-6 text-indigo-600">{{ person.role }}</p>
-                <p class="text-xs text-gray-400">{{ person.bio }}</p>
-              </div>
-            </div>
-          </li>
-
-          <li class="col-span-2">
-            <div class="relative">
-              <div class="absolute inset-0 flex items-center" aria-hidden="true">
-                <div class="w-full border-t border-gray-300" />
-              </div>
-              <div class="relative flex justify-center">
-                <span class="bg-white px-2 text-sm text-gray-500">AI Made to Order</span>
-              </div>
-            </div>
-          </li>
-
-          <li class="col-span-2">
-            <span class="text-sm italic leading-6 text-gray-400">
-              No complex menus, no endless lists of commands, no custom builders and no code needed!
-              Just chat with <span class="text-lime-500">@shuri</span> and they will help you craft
-              new semantic skills or import functions from OpenAPI documents.
-              <span class="text-lime-500">@tesla</span> can use these new skills automatically in
-              the feed it was created in but you can enabled them in other feeds as well.
-            </span>
-          </li>
-          <li class="col-span-2">
-            <div class="relative">
-              <div class="absolute inset-0 flex items-center" aria-hidden="true">
-                <div class="w-full border-t border-gray-300" />
-              </div>
-              <div class="relative flex justify-center">
-                <span class="bg-white px-2 text-sm text-gray-500">Users</span>
-              </div>
-            </div>
-          </li>
-          <li>
-            <div v-if="isAuthenticated" class="flex items-center gap-x-6">
-              <img class="h-16 w-16 rounded-full" :src="user.picture" alt="" />
-              <div>
-                <h3 class="text-base font-semibold leading-7 tracking-tight text-gray-900">
-                  {{ user.name }}
-                </h3>
-                <p class="text-sm font-semibold leading-6 text-indigo-600">User</p>
-                <p class="text-xs text-gray-400">
-                  You, the user, are the most important part of the team. You are the reason we do
-                  what we do.
-                </p>
-              </div>
-            </div>
-            <div v-else class="flex items-center gap-x-6">
-              <img class="h-16 w-16 rounded-full" src="https://placehold.co/100X100?text=ME" alt="" />
-              <div>
-                <h3 class="text-base font-semibold leading-7 tracking-tight text-gray-900">Me</h3>
-                <p class="text-sm font-semibold leading-6 text-indigo-600">User</p>
-                <p class="text-xs text-gray-400">
-                  You, the user, are the most important part of the team. You are the reason we do
-                  what we do.
-                </p>
-              </div>
-            </div>
-          </li>
-          <li>
-            <span class="text-sm italic leading-6 text-gray-400">
-              By default, everything you create is private. You can switch a a feed to public and
-              share its link with other users and collaborator together with your team and ours.
-            </span>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <footer class="bg-white" aria-labelledby="footer-heading">
-    <h2 id="footer-heading" class="sr-only">Footer</h2>
-    <div class="mx-auto max-w-7xl px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:pt-32">
-      <div class="xl:grid xl:grid-cols-3 xl:gap-8">
-        <div class="space-y-4">
-          <div>
-            <img src="https://i.imgur.com/lPkdSu2.png" class="w-6 h-6 inline" /><img src="https://i.imgur.com/mYwoufP.png"
-              class="w-8 h-8 inline" />
-          </div>
-          <blockquote>
-            <p class="text-xs italic text-gray-600">
-              While we are still in the early stages of development, we are excited to share our
-              progress with you and hope you enjoy our work.
-            </p>
-          </blockquote>
-          <div class="flex space-x-6">
-            <ul>
-              <li v-for="item in navigation.social" :key="item.name">
-                <a :href="item.href" :title="item.name" target="_blank" class="text-gray-400 hover:text-gray-500">
-                  <font-awesome-icon :icon="item.icon" class="h-6 w-6" aria-hidden="true" />
-                  <span class="pl-2">{{ item.name }}</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
-          <div class="md:grid md:grid-cols-2 md:gap-8">
-            <div>
-              <h3 class="text-sm font-semibold leading-6 text-gray-900">Agents</h3>
-              <ul role="list" :class="['marker:text-lime-500','mt-6 space-y-4 list-disc transition-all duration-200']">
-                <li v-for="item in navigation.solutions" :key="item.name">
-                  <a :href="item.href" class="text-sm leading-6 text-gray-600 hover:text-gray-900">{{ item.name }}</a>
-                </li>
-              </ul>
-            </div>
-            <div class="mt-10 md:mt-0">
-              <h3 class="text-sm font-semibold leading-6 text-gray-900">Support</h3>
-              <ul role="list" class="mt-6 space-y-4">
-                <li v-for="item in navigation.support" :key="item.name">
-                  <a :href="item.href" class="text-sm leading-6 text-gray-600 hover:text-gray-900">{{ item.name }}</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="md:grid md:grid-cols-2 md:gap-8">
-            <div>
-              <h3 class="text-sm font-semibold leading-6 text-gray-900">System</h3>
-              <ul role="list" class="mt-6 space-y-4">
-                <li v-for="item in navigation.system" :key="item.name">
-                  <a :href="item.href" class="text-sm leading-6 text-gray-600 hover:text-gray-900">{{ item.name }}</a>
-                </li>
-              </ul>
-            </div>
-            <div class="mt-10 md:mt-0">
-              <h3 class="text-sm font-semibold leading-6 text-gray-900">Account</h3>
-              <ul role="list" class="mt-6 space-y-4">
-                <li v-if="isDark">
-                  <a @click="toggleDark()"
-                    class="cursor-pointer text-sm leading-6 text-gray-600 hover:text-gray-900">Theme 🌙</a>
-                </li>
-                <li v-else>
-                  <a @click="toggleDark()"
-                    class="cursor-pointer text-sm leading-6 text-gray-600 hover:text-gray-900">Theme 🔆</a>
-                </li>
-                <li v-if="isAuthenticated">
-                  <a href="/logoff" class="text-sm leading-6 text-gray-600 hover:text-gray-900">Logoff</a>
-                </li>
-                <li v-else>
-                  <a href="/login" class="text-sm leading-6 text-gray-600 hover:text-gray-900">Login</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="mt-16 border-t border-gray-900/10 pt-8 sm:mt-20 lg:mt-24">
-        <p class="text-xs leading-5 text-gray-500">
-          &copy; 2023 Venatio Studios. Working with AI before it was cool.
-        </p>
-      </div>
-    </div>
-  </footer>
+  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" class="svg-settings">
+    <defs>
+      <linearGradient id="linear">
+        <stop class="linear-stop1" offset="0%"></stop>
+        <stop class="linear-stop2" offset="100%"></stop>
+      </linearGradient>
+      <radialGradient id="radial">
+          <stop class="radial-stop1" offset="0%"></stop>
+          <stop class="radial-stop2" offset="100%"></stop>
+        </radialGradient>
+    </defs>
+  </svg>
 </template>
 
 <style>
-.left-full {
-  left: -100%;
+.button-login {
+  @apply rounded-md bg-lime-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-lime-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-600
 }
-
-.carousel-item {
-  float: left;
-  position: relative;
-  display: block;
-  width: 100%;
-  margin-right: -100%;
-  backface-visibility: hidden;
+.input-chat {
+  @apply block w-full rounded-xl dark:bg-stone-900 dark:text-neutral-100 border-0 py-3  text-stone-900 ring-1 ring-inset ring-lime-300 placeholder:text-gray-400 focus-visible:outline-none focus:ring-2 focus:ring-inset focus:ring-lime-600 sm:text-sm sm:leading-6
 }
-
-.carousel-item.active {
-  left: 0;
+.svg-settings {
+  /* Hiding this content since it's just settings. See - https://snook.ca/archives/html_and_css/hiding-content-for-accessibility */
+  position: absolute !important;
+  height: 1px; width: 1px;
+  overflow: hidden;
+  clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+  clip: rect(1px, 1px, 1px, 1px);
+}
+.fill-gradient-linear path {
+  fill: url(#linear);
+}
+/* setting colors for linear gradient */
+.linear-stop1 {
+  stop-color: #ffa94d;
+}
+.linear-stop2 {
+  stop-color: #e8590c;
+}
+/* radial gradient */
+.fill-gradient-radial path {
+  fill: url(#radial);
+}
+/* setting colors for radial gradient */
+.radial-stop1 {
+  stop-color: #879cf2 ;
+}
+.radial-stop2 {
+  stop-color: #4263eb;
 }
 </style>

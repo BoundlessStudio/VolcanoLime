@@ -1,16 +1,24 @@
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import { defineStore } from 'pinia'
 import { useAuth0 } from '@auth0/auth0-vue'
 import { Api } from '@/api/electric-raspberry'
+
+export interface WhisperState {
+  isRecording: Boolean,
+  transcription: string
+}
 
 export const useWhisperStore = defineStore('whisper', () => {
   const { getAccessTokenSilently } = useAuth0()
 
   const recorder = ref<MediaRecorder | undefined>(undefined)
-  const isRecording = ref(false)
-  const transcription = ref('')
 
-  async function getController(): Promise<Api<unknown>> {
+  const whisper = reactive<WhisperState>({
+    isRecording: false,
+    transcription: ''
+  })
+
+  async function start(): Promise<void> {
     const token = await getAccessTokenSilently()
     const client = new Api({
       headers: {
@@ -18,21 +26,16 @@ export const useWhisperStore = defineStore('whisper', () => {
       },
       baseURL: import.meta.env.VITE_API
     })
-    return client
-  }
-
-  async function start(): Promise<void> {
-    const controller = await getController()
-    transcription.value = ''
-    isRecording.value = true
+    whisper.transcription = ''
+    whisper.isRecording = true
     recorder.value?.stop()
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
     const options = { mimeType: 'audio/webm; codecs=opus' }
     recorder.value = new MediaRecorder(stream, options)
     recorder.value.addEventListener('dataavailable', async (evt) => {
       const file = new File([evt.data], 'recording.webm', { type: 'audio/webm' })
-      const { data: result } = await controller.api.whisper({ file: file })
-      transcription.value += result
+      const { data: result } = await client.api.whisper({ file: file })
+      whisper.transcription += result
     })
     recorder.value.start()
 
@@ -41,8 +44,8 @@ export const useWhisperStore = defineStore('whisper', () => {
 
   function stop() {
     recorder.value?.stop()
-    isRecording.value = false
+    whisper.isRecording = false
   }
 
-  return { isRecording, transcription, start, stop }
+  return { whisper, start, stop }
 })
