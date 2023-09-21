@@ -35,6 +35,7 @@ import { Switch, SwitchGroup, SwitchLabel } from '@headlessui/vue'
 // Show the following data on a timeline.  https://electricraspberry.blob.core.windows.net/windowslive-dec9c2bc7d3ff74d/timelines.json
 // Lets play a guess game. generate a random number between 1 and 10 and I have 3 guesses to get it right.
 // Find my location then show it on a map.
+// My location is N6A1A8 what is nearest coffee shop to that location then show directions from my location to that location on a map.
 
 // Has Issues...
 // https://tinyurl.com/5447hu36 What are the columns names in the file.
@@ -191,7 +192,7 @@ const tools = [
 
         <div class="rounded-lg bg-[#ecf1f3] dark:bg-[#1c1e1f] p-3 min-h-[64px]">
           <MdPreview v-model="result" previewTheme="github" theme="dark" language="en-US"></MdPreview>
-          <div id="sandbox" ></div>
+          <div id="sandbox" class="min-h-[400px]"></div>
         </div>
 
         <div class="text-black dark:text-neutral-400">
