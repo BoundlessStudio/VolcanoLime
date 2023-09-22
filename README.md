@@ -198,3 +198,28 @@ You are free to report issues, but please manage your expectations. It's possibl
 ## Acknowledgements
 
 [@Esustacha](https://github.com/Esustacha) Thanks for all the testing!
+
+## Testing
+Below are some working commands to test the system with. 
+Please note that the system is not perfect and will not always work. It is a work in progress.
+
+- Who is the current president of the United States and what is their current age divided by 2?
+- Who is the current president of the United States and what is their current age divided by 2? Who is the current prime minister of Canada and what is their current age divided by 2? Finally, what is the ratio of results?
+- Draw a MTG token blue purple shadow demon.
+- Draw Nora (public relations) a profile picture in vector style.
+- Draw a fantasy bookshelves background
+- Draw a Viking cosplay, gorgeous woman, shield maiden, scandalous pose, cheeky, flirtatious, very short pleated leather skirt, low cut leather armor; 9:16; phone background;
+- Make up a dataset of the birth rates of cats and dogs for the last 10 years then chart the dataset.
+- Create a table in the sandbox for the following data: https://gist.githubusercontent.com/RGBKnights/66efdad3bfebc54f0d4a7c14d133e64e/raw/2fd540b11ca6837e0a1f5c60572cc1296478ed4f/MockData.csv
+- What are the columns names for the following csv: https://gist.githubusercontent.com/RGBKnights/66efdad3bfebc54f0d4a7c14d133e64e/raw/2fd540b11ca6837e0a1f5c60572cc1296478ed4f/MockData.csv
+- Show the following data on a timeline.  https://electricraspberry.blob.core.windows.net/windowslive-dec9c2bc7d3ff74d/timelines.json
+- Lets play a guess game. generate a random number between 1 and 10 and I have 3 guesses to get it right.
+- Find my location then show it on a map.
+
+### Has Issues...
+- https://tinyurl.com/5447hu36 What are the columns names in the file.
+- Count the types of genders in 'gender' column from this csv then create a pie chart of the counts: https://gist.githubusercontent.com/RGBKnights/66efdad3bfebc54f0d4a7c14d133e64e/raw/2fd540b11ca6837e0a1f5c60572cc1296478ed4f/MockData.csv
+
+#### Needs new Convert Skills
+- Convert this csv to excel: https://gist.githubusercontent.com/RGBKnights/66efdad3bfebc54f0d4a7c14d133e64e/raw/2fd540b11ca6837e0a1f5c60572cc1296478ed4f/MockData.csv
+- Convert this csv to json: https://gist.githubusercontent.com/RGBKnights/66efdad3bfebc54f0d4a7c14d133e64e/raw/2fd540b11ca6837e0a1f5c60572cc1296478ed4f/MockData.csv

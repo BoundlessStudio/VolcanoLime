@@ -6,48 +6,13 @@ import { useThreadStore } from '@/stores/thread'
 import { useWhisperStore } from '@/stores/whisper'
 import { onMounted, ref, watch } from 'vue'
 import { Switch, SwitchGroup, SwitchLabel } from '@headlessui/vue'
-
-// config({
-//   markdownItConfig: (md: MarkdownIt) => {
-//     var fence = md.renderer.rules.fence
-//     md.renderer.rules.fence = (tokens, idx, options, env, self) => {
-//       const token = tokens[idx]
-//       if (token.info == 'chart') {
-//         return `<img src="https://quickchart.io/chart?c=${encodeURIComponent(
-//           token.content
-//         )}" title="" alt="Chart" zoom="" class="medium-zoom-image">`
-//       } else {
-//         return fence ? fence(tokens, idx, options, env, self) : ''
-//       }
-//     }
-//   }
-// })
-
-// Who is the current president of the United States and what is their current age divided by 2?
-// Who is the current president of the United States and what is their current age divided by 2? Who is the current prime minister of Canada and what is their current age divided by 2? Finally, what is the ratio of results?
-// Draw a MTG token blue purple shadow demon.
-// Draw Nora (public relations) a profile picture in vector style.
-// Draw a fantasy bookshelves background
-// Draw a Viking cosplay, gorgeous woman, shield maiden, scandalous pose, cheeky, flirtatious, very short pleated leather skirt, low cut leather armor; 9:16; phone background;
-// Make up a dataset of the birth rates of cats and dogs for the last 10 years then chart the dataset.
-// Create a table in the sandbox for the following data: https://gist.githubusercontent.com/RGBKnights/66efdad3bfebc54f0d4a7c14d133e64e/raw/2fd540b11ca6837e0a1f5c60572cc1296478ed4f/MockData.csv
-// What are the columns names for the following csv: https://gist.githubusercontent.com/RGBKnights/66efdad3bfebc54f0d4a7c14d133e64e/raw/2fd540b11ca6837e0a1f5c60572cc1296478ed4f/MockData.csv
-// Show the following data on a timeline.  https://electricraspberry.blob.core.windows.net/windowslive-dec9c2bc7d3ff74d/timelines.json
-// Lets play a guess game. generate a random number between 1 and 10 and I have 3 guesses to get it right.
-// Find my location then show it on a map.
-// My location is N6A1A8 what is nearest coffee shop to that location then show directions from my location to that location on a map.
-
-// Has Issues...
-// https://tinyurl.com/5447hu36 What are the columns names in the file.
-// Count the types of genders in 'gender' column from this csv then create a pie chart of the counts: https://gist.githubusercontent.com/RGBKnights/66efdad3bfebc54f0d4a7c14d133e64e/raw/2fd540b11ca6837e0a1f5c60572cc1296478ed4f/MockData.csv
-
-// Needs new Convert Skills
-// Convert this csv to excel: https://gist.githubusercontent.com/RGBKnights/66efdad3bfebc54f0d4a7c14d133e64e/raw/2fd540b11ca6837e0a1f5c60572cc1296478ed4f/MockData.csv
-// Convert this csv to json: https://gist.githubusercontent.com/RGBKnights/66efdad3bfebc54f0d4a7c14d133e64e/raw/2fd540b11ca6837e0a1f5c60572cc1296478ed4f/MockData.csv
+import { useRoute } from 'vue-router'
 
 const { whisper, start, stop } = useWhisperStore()
 const { thread, initialize, createGoal, uploadFiles } = useThreadStore()
 const { isAuthenticated, loginWithRedirect } = useAuth0()
+const route = useRoute()
+
 const loading = ref(false)
 const busy = ref(false)
 const prompt = ref("")
@@ -58,7 +23,6 @@ const showFiles = ref(false)
 const toggleUploadControl = useToggle(showFiles)
 
 const showWork = ref(false)
-const toggleLog = useToggle(showWork)
 
 watch(() => whisper.transcription, (value) => {
   prompt.value += ' ' + value
@@ -74,10 +38,15 @@ const reset = () => {
 const login = async () => await loginWithRedirect()
 const submit = async () => {
   if(busy.value) return
-  busy.value = true
-  loading.value = true
-  result.value = await createGoal(prompt.value)
-  loading.value = false
+  try {
+    busy.value = true
+    loading.value = true
+    result.value = await createGoal(prompt.value)
+  } catch (e) {
+    console.error(e)
+  } finally {
+    loading.value = false
+  }
 }
 const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
 const isDarkMode = ref(prefersDarkMode)
@@ -104,7 +73,16 @@ async function handleFiles(files: File[]) {
 }
 const { isOverDropZone } = useDropZone(dropZoneRef, onDrop)
 
-onMounted(async () => await initialize())
+onMounted(async () => {
+  await initialize()
+  const g = route.query.g?.slice(0).toString()
+  const w = route.query.w
+  if(g) {
+    prompt.value = g
+    showWork.value = w ? true : false 
+    await submit()
+  }
+})
 
 const tools = [
   'bold','underline','italic',

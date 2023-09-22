@@ -1,4 +1,5 @@
 import { reactive } from 'vue'
+import { nextTick } from 'vue'
 import { defineStore } from 'pinia'
 import { useAuth0 } from '@auth0/auth0-vue'
 import * as signalR from '@microsoft/signalr'
@@ -92,8 +93,17 @@ export const useThreadStore = defineStore('thread', () => {
 
   connection.on('Log', (log) => {
     try {
+      const passive = window.innerHeight + window.scrollY >= document.body.offsetHeight
+
       thread.logs.push(log)
-      setTimeout(() => window.scrollTo(0,9999), 500)
+
+      if(log.includes("Function execution finished")) {
+        setTimeout(() => window.scrollTo({top: 0, left: 0, behavior: 'smooth'}), 500)
+        return
+      }
+      if(passive) {
+        setTimeout(() => window.scrollTo({top: 999999, left: 0, behavior: 'smooth'}), 500)
+      }
     } finally {
       // do nothing
     }
