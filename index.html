@@ -5,8 +5,7 @@
     <link rel="icon" href="/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Volcano Lime</title>
-    <meta name="content-language" content="en-US" />
-    
+    <meta name="content-language" content="en-US" />  
     <!-- SEO Meta Tags -->
     <meta name="description" content="Introducing Volcano Lime the collaborative Feed where you can seamlessly engage with AI agents">
     <meta name="keywords" content="volcano, lime, ai, assistant, agent, visualization">
@@ -22,21 +21,30 @@
     <meta name="twitter:title" content="Introducing Volcano Lime the collaborative Feed where you can seamlessly engage with AI agents." />
     <meta name="twitter:description" content="Our intelligent team members once invited are always ready to listen, think, and respond, ensuring a more efficient and productive teamwork experience between you and each other. Elevate your collaboration experience with our enhanced chat interface that supports markdown, images, diagrams, charts, forms and more, providing you with a dynamic and visually appealing workspace. But wait there is more, with memory capabilities, Agents can easily recall information from long conversations, documents, pages, and various other sources, thanks to our open source memory providers." />
     <meta name="twitter:image" content="https://i.imgur.com/MpXedd3.png" />
-
+    <!-- Font-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rubik+Vinyl">
+    <!-- Danfo.js -->
+    <script src="https://cdn.jsdelivr.net/npm/danfojs@0.3.4/lib/bundle.min.js"></script>
+    <!-- NumJS -->
+    <script src="https://cdn.jsdelivr.net/gh/nicolaspanel/numjs@0.15.1/dist/numjs.min.js"></script>
+    <!-- Grid.js -->
+    <link href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
+    <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
+    <!-- Google Maps JavaScript API (Needs API Key) -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOAZXG6oUytz443_MGHgH5htqVw9uJRkc&v=weekly&callback=initMap" defer ></script>   
+    <script>function initMap() {}</script>  
+    <!-- Day.js -->
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js"></script>
+    <!-- Plotly -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <!-- JsBarcode -->
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
+    <!-- vis-timeline -->
     <link href="https://unpkg.com/vis-timeline@latest/styles/vis-timeline-graph2d.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/vis-timeline@latest/standalone/umd/vis-timeline-graph2d.min.js"></script>
   </head>
   <body>
-    <div id="app"></div>
-    <script src="https://cdn.plot.ly/plotly-1.2.0.min.js"></script> 
-    <script src="https://cdn.jsdelivr.net/npm/danfojs@0.3.4/lib/bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
-    <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
-    <script src="https://unpkg.com/vis-timeline@latest/standalone/umd/vis-timeline-graph2d.min.js"></script>
-    <script>function initMap() {}</script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOAZXG6oUytz443_MGHgH5htqVw9uJRkc&v=weekly&callback=initMap" defer ></script>
-    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOAZXG6oUytz443_MGHgH5htqVw9uJRkc&callback=initMap&v=weekly" defer ></script> -->
-    <!-- <script>(g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({key: "AIzaSyDOAZXG6oUytz443_MGHgH5htqVw9uJRkc", v: "weekly"});</script> -->
+    <div id="app"></div>  
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

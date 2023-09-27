@@ -11,6 +11,52 @@ export interface ThreadState {
   logs: string[]
 }
 
+const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
+
+function handleAnyType(result: any): string {
+  if (result === null) {
+    return "null";
+  }
+
+  if (typeof result === "undefined") {
+    return "undefined";
+  }
+
+  if (result instanceof Error) {
+    return `${result.name}: ${result.message}`;
+  }
+
+  if (typeof result === "string") {
+    return result;
+  }
+
+  if (typeof result === "number" || typeof result === "boolean") {
+    return result.toString();
+  }
+
+  if (Array.isArray(result)) {
+    return JSON.stringify(result);
+  }
+
+  if (result instanceof Date) {
+    return result.toISOString();
+  }
+
+  if (typeof result === "object") {
+    return JSON.stringify(result);
+  }
+
+  if (typeof result === "function") {
+    return result.toString();
+  }
+
+  if (typeof result === "symbol") {
+    return result.toString();
+  }
+
+  return "Unknown type";
+}
+
 export const useThreadStore = defineStore('thread', () => {
   const { getAccessTokenSilently } = useAuth0()
 
@@ -21,6 +67,7 @@ export const useThreadStore = defineStore('thread', () => {
   })
 
   const connection = new signalR.HubConnectionBuilder()
+    .configureLogging(signalR.LogLevel.None)
     .withAutomaticReconnect()
     .withUrl(import.meta.env.VITE_API + '/hub/feed', {
       accessTokenFactory: getAccessTokenSilently
@@ -29,10 +76,12 @@ export const useThreadStore = defineStore('thread', () => {
 
   connection.onclose(() => {
     thread.connected = false
+    console.log("connection:closed", thread.connectionId)
   })
   connection.onreconnected(() => {
     thread.connected = true
     thread.connectionId = connection.connectionId
+    console.log("connection:reconnected", thread.connectionId)
   })
 
   connection.on('AskQuestion', async (question) => {
@@ -48,47 +97,21 @@ export const useThreadStore = defineStore('thread', () => {
   })
 
   connection.on('EvalCode', async (code) => {
+    console.log("Code:", code)
     let promise = new Promise(async (resolve, reject) => {
-
-      let _log = console.log
-      let _error = console.error
-      let response = {
-        result: '',
-        logs: [] as string[],
-        errors: [] as string[],
-      }
-
       try {
-        const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
-
-        console.log = (m) => response.logs.push(JSON.stringify(m))
-        console.error = (m) => response.errors.push(JSON.stringify(m))
-        
         let fn = new AsyncFunction(code)
         let result = await fn()
-
-        response.result = result ? JSON.stringify(result) : "The function executed successfully."
-        resolve(JSON.stringify(response))
+        let response = handleAnyType(result)
+        resolve(response)
+        console.log("Result:", response)
       } catch (e) {
-        response.result = "The function throw an exception."
-        
-        if (e instanceof Error) {
-          response.errors.push(JSON.stringify({name: e.name, message: e.message}))
-        } else if (typeof e === "string") {
-          response.errors.push(e)
-        } else if (typeof e === "object") {
-          response.errors.push(e ? JSON.stringify(e) : "Unknown error.")
-        } else {
-          response.errors.push("Unknown error.")
-        }
-        
-        resolve(JSON.stringify(response))
-      } finally {
-        console.log = _log
-        console.error = _error
+        console.error("Error:", e)
+        let response = handleAnyType(e)
+        reject(response)
       }
     });
-    return promise;
+    return promise
   })
 
   connection.on('Log', (log) => {
