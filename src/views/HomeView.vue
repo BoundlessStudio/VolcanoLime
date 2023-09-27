@@ -22,8 +22,6 @@ const toggleMarkdown = useToggle(showMarkdown)
 const showFiles = ref(false)
 const toggleUploadControl = useToggle(showFiles)
 
-const showWork = ref(false)
-
 watch(() => whisper.transcription, (value) => {
   prompt.value += ' ' + value
 })
@@ -76,10 +74,8 @@ const { isOverDropZone } = useDropZone(dropZoneRef, onDrop)
 onMounted(async () => {
   await initialize()
   const g = route.query.g?.slice(0).toString()
-  const w = route.query.w
   if(g) {
     prompt.value = g
-    showWork.value = w ? true : false 
     await submit()
   }
 })
@@ -172,22 +168,7 @@ const tools = [
           <MdPreview v-model="result" previewTheme="github" theme="dark" language="en-US"></MdPreview>
           <div id="sandbox" class="min-h-[400px]"></div>
         </div>
-
-        <div class="text-black dark:text-neutral-400">
-          <SwitchGroup as="div" class="flex items-center">
-            <Switch v-model="showWork" :class="[showWork ? 'bg-indigo-600 dark:bg-indigo-800' : 'bg-gray-200 dark:bg-gray-600', 'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2']">
-              <span aria-hidden="true" :class="[showWork ? 'translate-x-5' : 'translate-x-0', 'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out']" />
-            </Switch>
-            <SwitchLabel as="span" class="ml-3 text-sm">
-              <span class="font-medium">Show Work</span>
-            </SwitchLabel>
-          </SwitchGroup>
-        </div>
-
-        <div v-if="showWork" class="rounded-lg bg-[#ecf1f3] dark:bg-[#1c1e1f] text-black dark:text-neutral-400 p-3 min-h-[64px]">
-          <p v-for="log in thread.logs" class="break-all">{{log}}</p>
-        </div>
-        <div v-else class="min-h-[64px]"></div>
+              
       </div>
       <div v-else class="text-center">
         <button @click="login" class="button-login">
