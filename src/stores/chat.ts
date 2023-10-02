@@ -1,14 +1,13 @@
-import { reactive } from 'vue'
-import { nextTick } from 'vue'
+import { nextTick, reactive } from 'vue'
 import { defineStore } from 'pinia'
 import { useAuth0 } from '@auth0/auth0-vue'
 import * as signalR from '@microsoft/signalr'
-import { Api, type FileDocument, type GoalDocument } from '@/api/electric-raspberry'
+import { Api, Role, type GoalDocument, type MessageDocument } from '@/api/electric-raspberry'
 
-export interface ThreadState {
-  connectionId: string | null
-  connected: Boolean,
-  logs: string[]
+
+export interface ChatState {
+  isLoading: boolean,
+  messages: MessageDocument[]
 }
 
 const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
@@ -57,32 +56,20 @@ function handleAnyType(result: any): string {
   return "Unknown type";
 }
 
-export const useThreadStore = defineStore('thread', () => {
+export const useChatStore = defineStore('chat', () => {
   const { getAccessTokenSilently } = useAuth0()
 
-  const thread = reactive<ThreadState>({
-    connectionId: null,
-    connected: false,
-    logs: []
+  const chat = reactive<ChatState>({
+    isLoading: false,
+    messages: []
   })
 
   const connection = new signalR.HubConnectionBuilder()
     .configureLogging(signalR.LogLevel.None)
-    .withAutomaticReconnect()
     .withUrl(import.meta.env.VITE_API + '/hub/feed', {
       accessTokenFactory: getAccessTokenSilently
     })
     .build()
-
-  connection.onclose(() => {
-    thread.connected = false
-    console.log("connection:closed", thread.connectionId)
-  })
-  connection.onreconnected(() => {
-    thread.connected = true
-    thread.connectionId = connection.connectionId
-    console.log("connection:reconnected", thread.connectionId)
-  })
 
   connection.on('AskQuestion', async (question) => {
     let promise = new Promise((resolve, reject) => {
@@ -100,6 +87,7 @@ export const useThreadStore = defineStore('thread', () => {
     console.log("Code:", code)
     let promise = new Promise(async (resolve, reject) => {
       try {
+        document.getElementById("sandbox")?.replaceChildren()
         let fn = new AsyncFunction(code)
         let result = await fn()
         let response = handleAnyType(result)
@@ -114,33 +102,6 @@ export const useThreadStore = defineStore('thread', () => {
     return promise
   })
 
-  connection.on('Log', (log) => {
-    try {
-      const passive = window.innerHeight + window.scrollY >= document.body.offsetHeight
-
-      thread.logs.push(log)
-
-      if(log.includes("Function execution finished")) {
-        setTimeout(() => window.scrollTo({top: 0, left: 0, behavior: 'smooth'}), 500)
-        return
-      }
-      if(passive) {
-        setTimeout(() => window.scrollTo({top: 999999, left: 0, behavior: 'smooth'}), 500)
-      }
-    } finally {
-      // do nothing
-    }
-  })
-
-  async function initialize() {
-    if (connection.state == signalR.HubConnectionState.Disconnected) {
-      await connection.start()
-      thread.connectionId = connection.connectionId
-      thread.connected = true
-      thread.logs = []
-    }
-  }
-
   async function getController(): Promise<Api<unknown>> {
     const token = await getAccessTokenSilently()
     const client = new Api({
@@ -151,28 +112,39 @@ export const useThreadStore = defineStore('thread', () => {
     })
     return client
   }
-  async function createGoal(goal: string): Promise<string> {
-    const controller = await getController()
-    const dto = {
-      goal: goal,
-      connectionId: thread.connectionId
-    } as GoalDocument
-    thread.logs = []
-    const { data: result } = await controller.api.goal(dto)
-    return result
+  function scrollToBottom() {
+    setTimeout(() => {
+      document.getElementById('anchor')?.scrollIntoView({ behavior: 'smooth' })
+    }, 100)
   }
-  async function uploadFiles(files: File[]): Promise<FileDocument[]> {
-    const controller = await getController()
-    const response = await controller.api.upload({
-      files: files
-    })
-    return response.data
+  async function submit(goal: string): Promise<void> {
+    try {
+      chat.messages.push({
+        role: Role.User,
+        content: goal,
+        logs: [],
+        show: false,
+      })
+      scrollToBottom()
+      chat.isLoading = true
+      const controller = await getController()
+      await connection.start()
+      const dto = {
+        messages: chat.messages.slice(0, -1),
+        goal: goal,
+        connectionId: connection.connectionId
+      } as GoalDocument
+      const { data: msg } = await controller.api.goal(dto)
+      chat.messages.push(msg)
+      scrollToBottom()
+      await connection.stop()
+    } finally {
+      chat.isLoading = false
+    }
   }
 
   return {
-    thread,
-    initialize,
-    createGoal,
-    uploadFiles
+    chat,
+    submit
   }
 })

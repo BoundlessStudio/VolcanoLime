@@ -217,10 +217,13 @@ Please note that the system is not perfect and will not always work. It is a wor
 - Count the types of genders in 'gender' column from this csv then create a pie chart of the counts: https://gist.githubusercontent.com/RGBKnights/66efdad3bfebc54f0d4a7c14d133e64e/raw/2fd540b11ca6837e0a1f5c60572cc1296478ed4f/MockData.csv
 - Show the following data on a timeline.  https://electricraspberry.blob.core.windows.net/windowslive-dec9c2bc7d3ff74d/timelines.json
 - Lets play a guess game. generate a random number between 1 and 10 and I have 3 guesses to get it right.
-- Find my location and show it on a map.
 - Create a Barcode for cb95a36b73fef
+- Write a story about a dragon and a knight.
+- Find my location then show it on a map using a pin.
 
 ### Has Issues...
+- Access my location. Then search for nearest coffee shops to my location. Then show both locations on a map using pins. Then directions between the two locations.
+- Directions from 130 King St, London, ON N6A 1C5 to 520 Hutton Pl, London, ON N6H 4S6
 - https://tinyurl.com/5447hu36 What are the columns names in the file.
 
 #### Needs new Convert Skills

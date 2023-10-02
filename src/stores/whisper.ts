@@ -1,7 +1,7 @@
 import { ref, reactive } from 'vue'
 import { defineStore } from 'pinia'
 import { useAuth0 } from '@auth0/auth0-vue'
-import { Api } from '@/api/electric-raspberry'
+import { Api, type FileDocument } from '@/api/electric-raspberry'
 
 export interface WhisperState {
   isRecording: Boolean,
@@ -45,6 +45,20 @@ export const useWhisperStore = defineStore('whisper', () => {
   function stop() {
     recorder.value?.stop()
     whisper.isRecording = false
+  }
+
+  async function upload(files: File[]): Promise<FileDocument[]> {
+    const token = await getAccessTokenSilently()
+    const client = new Api({
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      baseURL: import.meta.env.VITE_API
+    })
+    const response = await client.api.upload({
+      files: files
+    })
+    return response.data
   }
 
   return { whisper, start, stop }

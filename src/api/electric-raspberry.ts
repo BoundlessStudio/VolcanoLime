@@ -23,8 +23,30 @@ export interface FileDocument {
 export interface GoalDocument {
   /** @minLength 1 */
   goal: string
+  messages: MessageDocument[]
   /** @minLength 1 */
   connectionId: string
+}
+
+export interface MessageDocument {
+  role: Role
+  /** @minLength 1 */
+  content: string
+  logs?: StepDocument[]
+  show: boolean
+}
+
+/** @format int32 */
+export enum Role {
+  System = 1,
+  Assistant = 2,
+  User = 3
+}
+
+export interface StepDocument {
+  thought?: string
+  action?: string
+  observation?: string
 }
 
 import axios, {
@@ -244,12 +266,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     goal: (data: GoalDocument, params: RequestParams = {}) =>
-      this.request<any, string>({
+      this.request<MessageDocument, MessageDocument>({
         path: `/api/goal`,
         method: 'POST',
         body: data,
         secure: true,
         type: ContentType.Json,
+        format: 'json',
         ...params
       })
   }
